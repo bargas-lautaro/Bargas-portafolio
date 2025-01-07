@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Cubes</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            background-color: white;
+        }
+
+        .scene {
+            width: 200px;
+            height: 200px;
+            perspective: 600px;
+        }
+
+        .cube, .inner-cube {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: rotate 10s infinite linear;
+        }
+
+        .cube {
+            border: 0px solid red; 
+        }
+
+        .inner-cube {
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border: 0px solid blue;
+            animation: rotate-inner 5s infinite linear;
+        }
+
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: green;
+            border: 1px solid red;
+            opacity: 0.4;
+        }
+      .face1 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: red;
+            border: 1px solid red;
+            opacity: 0.4;}
+        .soga {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: blue;
+            border: 1px solid red;
+            opacity: 0.0;
+        }
+        .cube .face {
+            border: 2px solid red;
+        }
+
+        .inner-cube .face {
+            border: 2px solid blue;
+        }
+        .soga:nth-child(1) { transform: rotateY(45deg) translateZ(-69px); }
+
+     .face:nth-child(1)
+         { transform:      rotateY(0deg) translateZ(100px   );
+          }
+        .face:nth-child(2) { transform: rotateY(90deg) translateZ(100px); }
+        .face:nth-child(3) { transform: rotateY(180deg) translateZ(100px); }
+        .face:nth-child(4) { transform: rotateY(-90deg) translateZ(100px); }
+        .face:nth-child(5) { transform: rotateX(90deg) translateZ(100px); }
+        .face:nth-child(6) { transform: rotateX(-90deg) translateZ(100px); }
+        .face1:nth-child(1) { transform: rotateY(0deg) translateZ(
+                0px); 
+                   }
+                 .face1:nth-child(2) { transform: rotateY(90deg) translateZ(50px); }
+                 
+                 .face1:nth-child(3) { transform: rotateY(180deg) translateZ(50px); }
+                   .face1:nth-child(4) { transform: rotateY(-90deg) translateZ(50px); }
+                   
+                    .face1:nth-child(5) { transform: rotateX(90deg) translateZ(50px); }
+                   .face1:nth-child(6) { transform: rotateX(-90deg) translateZ(50px); }
+
+        @keyframes rotate {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to { transform: rotateX(0deg) rotateY(360deg); }
+        }
+
+        @keyframes rotate-inner {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to { transform: rotateX(0deg) rotateY(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene">
+        <div class="cube">
+          
+            <div class="soga" >
+          
+            </div>
+            <div class="face" ></div>
+            <div class="face"></div>
+            <div class="face"></div>
+            <div class="face"></div>
+            <div class="face"></div>
+            <div class="face"></div>
+            <div class="inner-cube">
+                <div class="face1" ></div>
+                <div class="face1">
+                </div>
+                <div class="face1"></div>
+                <div class="face1"></div>
+                <div class="face1"></div>
+                <div class="face1"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
