@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BargasLautaro - Calculadora de Tensiones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .highlight {
+            color: red;
+            font-weight: bold;
+        }
+        h4 {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            background-color: black;
+            color: white;
+            padding: 5px;
+            border-top: 3px solid green;
+        }
+        .step-controls {
+            position: fixed;
+            top: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+      
+        <h2>Calculadora de Tensiones</h2>
+        <img src="https://i.imgur.com/IQbSgEi.jpeg" alt="cuerpo en equilibrio" style="width:300px; height:auto;">
+        <div class="input-group">
+            <label for="masa">Masa del cuerpo (kg):</label>
+            <input type="number" id="masa" required>
+        </div>
+        <div class="input-group">
+            <label for="alfa">Ángulo Alfa (grados):</label>
+            <input type="number" id="alfa" required>
+        </div>
+        <div class="input-group">
+            <label for="beta">Ángulo Beta (grados):</label>
+            <input type="number" id="beta" required>
+        </div>
+        <button onclick="calcularTensiones()">Calcular</button>
+        <div class="result" id="result"></div>
+    </div>
+    <div class="step-controls" style="display:none; width:50%; height:10%;">
+        <button onclick="prevStep()" style="left:0%;">Anterior</button>
+        <button onclick="nextStep()">Siguiente</button>
+    </div>
+    <h4>Bargas Nehuen Lautaro</h4>
+    <script>
+        const gravedad = 9.8;
+        let pasos = [];
+        let pasoActual = 0;
+
+        function formatNumber(num) {
+            return num.toLocaleString('es-ES', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+        }
+
+        function calcularTensiones() {
+            const masa = parseFloat(document.getElementById('masa').value);
+            const alfa = parseFloat(document.getElementById('alfa').value);
+            const beta = parseFloat(document.getElementById('beta').value);
+
+            if (isNaN(masa) || isNaN(alfa) || isNaN(beta)) {
+                alert("Por favor, ingrese valores válidos.");
+                return;
+            }
+
+            const alfa_rad = alfa * Math.PI / 180;
+            const beta_rad = beta * Math.PI / 180;
+            const peso = masa * gravedad;
+
+            // Calcular los valores de senos y cosenos
+            const senAlfa = Math.sin(alfa_rad);
+            const cosAlfa = Math.cos(alfa_rad);
+            const senBeta = Math.sin(beta_rad);
+            const cosBeta = Math.cos(beta_rad);
+
+            // Calcular las tensiones
+            const T1 = peso / (senAlfa + senBeta * cosAlfa / cosBeta);
+            const T2 = T1 * cosAlfa / cosBeta;
+            const T1y = T1 * senAlfa;
+            const T2y = T2 * senBeta;
+            const T1x = T1 * cosAlfa;
+            const T2x = T2 * cosBeta;
+
+            pasos = [
+                `Masa del cuerpo: ${formatNumber(masa)} kg`,
+                `Ángulo Alfa: ${formatNumber(alfa)} grados`,
+                `Ángulo Beta: ${formatNumber(beta)} grados`,
+                `Peso del cuerpo: masa . gravedad = ${formatNumber(masa)} . ${formatNumber(gravedad)} = <span class="highlight">${formatNumber(peso)} N</span>`,
+                `1. Ecuación de equilibrio vertical:<br> T1 . sin(Alfa) + T2 . sin(Beta) = Peso`,
+                `2. Ecuación de equilibrio horizontal:<br> T1 . cos(Alfa) = T2 . cos(Beta)`,
+                `3. Sustitución de valores numéricos:<br>`,
+                `3.1. Ecuación de equilibrio vertical:<br> T1 . sin(${formatNumber(alfa)}) + T2 . sin(${formatNumber(beta)}) = ${formatNumber(peso)} N`,
+                `3.2. Ecuación de equilibrio horizontal:<br> T1 . cos(${formatNumber(alfa)}) = T2 . cos(${formatNumber(beta)})`,
+                `4. Desarrollo de senos y cosenos:<br>`,
+                `4.1. sin(Alfa) = sin(${formatNumber(alfa)}) = ${formatNumber(senAlfa)}`,
+                `4.2. cos(Alfa) = cos(${formatNumber(alfa)}) = ${formatNumber(cosAlfa)}`,
+                `4.3. sin(Beta) = sin(${formatNumber(beta)}) = ${formatNumber(senBeta)}`,
+                `4.4. cos(Beta) = cos(${formatNumber(beta)}) = ${formatNumber(cosBeta)}`,
+                `5. Sustitución en las ecuaciones:<br>`,
+                `5.1. T1 . ${formatNumber(senAlfa)} + T2 . ${formatNumber(senBeta)} = ${formatNumber(peso)} N`,
+                `5.2. T1 . ${formatNumber(cosAlfa)} = T2 . ${formatNumber(cosBeta)}`,
+                `6. Despeje paso a paso de T1:<br>`,
+                `6.1. Inicialmente: T1 . ${formatNumber(senAlfa)} + T2 . ${formatNumber(senBeta)} = ${formatNumber(peso)} N`,
+                `6.2. T2 en función de T1 usando la ecuación horizontal:<br> T2 = T1 . ${formatNumber(cosAlfa)} / ${formatNumber(cosBeta)}`,
+                `6.3. Sustituyendo T2 en la ecuación vertical:<br> T1 . ${formatNumber(senAlfa)} + (T1 . ${formatNumber(cosAlfa)} / ${formatNumber(cosBeta)}) . ${formatNumber(senBeta)} = ${formatNumber(peso)} N`,
+                `6.4. Simplificando la ecuación:<br> T1 . ${formatNumber(senAlfa)} + T1 . ${formatNumber(senBeta)} . ${formatNumber(cosAlfa)} / ${formatNumber(cosBeta)} = ${formatNumber(peso)} N`,
+                `6.5. Resolviendo la multiplicación:<br> T1 . (${formatNumber(senAlfa)} + ${formatNumber(senBeta * cosAlfa / cosBeta)} = ${formatNumber(peso)} N`,
+                `6.6. Factor común de T1:<br> T1 . (${formatNumber(senAlfa + senBeta * cosAlfa / cosBeta)}) = ${formatNumber(peso)} N`,
+                `7. Despeje de T1:<br> T1 = ${formatNumber(peso)} / (${formatNumber(senAlfa + senBeta * cosAlfa / cosBeta)})`,
+                `T1 = <span class="highlight">${formatNumber(T1)} N</span>`,
+                `8. Despeje de T2:<br> T2 = T1 . ${formatNumber(cosAlfa)} / ${formatNumber(cosBeta)}`,
+                `T2 = ${formatNumber(T1)} . ${formatNumber(cosAlfa)} / ${formatNumber(cosBeta)}`,
+                `T2 = <span class="highlight">${formatNumber(T2)} N</span>`,
+                `9. Descomposición de T1:<br>T1y = T1 . ${formatNumber(senAlfa)} = ${formatNumber(T1)} . ${formatNumber(senAlfa)} = <span class="highlight">${formatNumber(T1y)} N</span>`,
+                `10. Descomposición de T2:<br>T2y = T2 . ${formatNumber(senBeta)} = ${formatNumber(T2)} . ${formatNumber(senBeta)} = <span class="highlight">${formatNumber(T2y)} N</span>`,
+                `T2x = T2 . ${formatNumber(cosBeta)} = ${formatNumber(T2)} . ${formatNumber(cosBeta)} = <span class="highlight">${formatNumber(T2x)} N</span>`,
+                `11. Ecuaciones desarrolladas:`,
+                `11.1. T2y + T1y = Peso<br>${formatNumber(T2y)} + ${formatNumber(T1y)} = ${formatNumber(peso)} N`,
+                `11.2. T1x = T2x<br>${formatNumber(T1x)} N = ${formatNumber(T2x)} N`
+            ];
+
+            pasoActual = 0;
+            document.getElementById('result').innerHTML = `<p>${pasos.slice(0, pasoActual + 1).join('</p><p>')}</p>`;
+            document.querySelector('.step-controls').style.display = 'block';
+        }
+
+        function nextStep() {
+            if (pasoActual < pasos.length - 1) {
+                pasoActual++;
+                document.getElementById('result').innerHTML = `<p>${pasos.slice(0, pasoActual + 1).join('</p><p>')}</p>`;
+            }
+        }
+
+        function prevStep() {
+            if (pasoActual > 0) {
+                pasoActual--;
+                document.getElementById('result').innerHTML = `<p>${pasos.slice(0, pasoActual + 1).join('</p><p>')}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
