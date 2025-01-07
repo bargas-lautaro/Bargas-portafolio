@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funciones Lineales</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            height: 30%;
+            border: 1px solid #000;
+            margin-bottom: 5px;
+            box-sizing: border-box;
+            padding: 10px;
+            cursor: pointer;
+        }
+        #info, .details {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            background-color: #f9f9f9;
+            border: 1px solid #000;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1 onclick="showInfo()">Funciones Lineales</h1>
+
+    <div id="info">
+        <h2>Explicación de las Funciones Lineales</h2>
+        <p>Las funciones lineales siempre tienen la forma y = mx + b 
+        <br></br>donde m es la pendiente y b es la intersección con el eje y (ordenada de origen).</p>
+        <div>
+            <p><strong>Ejemplo:</strong> y = 2x + 3</p>
+            <p>Resolución:</p>
+            <p>La pendiente m = 2 y la ordenada de origen b = 3.</p>
+            <p>Pregunta 1: ¿Cuál es la pendiente de la función?</p>
+            <p>Respuesta: La pendiente es 2.</p>
+            <p>Pregunta 2: ¿Dónde cruza la función el eje y?</p>
+            <p>Respuesta: La función cruza el eje y en (0, 3).</p>
+            <p>Pregunta 3: ¿Qué valor tiene y cuando x = 2?</p>
+            <p>Respuesta: Sustituyendo x = 2 en la ecuación, y = 2(2) + 3 = 4 + 3 = 7.</p>
+        </div>
+        <button class="close-btn" onclick="hideInfo()">Cerrar</button>
+    </div>
+
+    <div class="container" onclick="showDetails('details1')">
+        <p>Problema: Un auto se aleja de su casa a una velocidad constante de 60 km/h y parte de una posición de 10 km de su casa</p>
+    </div>
+    <div id="details1" class="details">
+        <p>Función: y = 60x + 10</p>
+        <p>Pregunta 1: ¿Cuál es la pendiente de la función?</p>
+        <p>Pregunta 2: ¿Qué significa la pendiente en este contexto?</p>
+        <p>Pregunta 3: ¿Qué representa la ordenada de origen en este problema?</p>
+        <p>Pregunta 4: ¿Cuántos kilómetros habrá recorrido el auto en 2 horas?</p>
+        <button class="close-btn" onclick="hideDetails('details1')">Cerrar</button>
+    </div>
+
+    <div class="container" onclick="showDetails('details2')">
+        <p>Problema: Un tanque se llena con agua a razón de 5 litros por minuto y ya tiene 20 litros.</p>
+    </div>
+    <div id="details2" class="details">
+        <p>Función: y = 5x + 20</p>
+        <p>Pregunta 1: ¿Cuál es la pendiente de la función?</p>
+        <p>Pregunta 2: ¿Qué significa la pendiente en este contexto?</p>
+        <p>Pregunta 3: ¿Qué representa la ordenada de origen en este problema?</p>
+        <p>Pregunta 4: ¿Cuántos litros habrá en el tanque después de 10 minutos?</p>
+        <button class="close-btn" onclick="hideDetails('details2')">Cerrar</button>
+    </div>
+
+    <div class="container" onclick="showDetails('details3')">
+        <p>Problema: Un trabajador gana 20 dólares por hora de trabajo y recibe una bonificación inicial de 50 dólares.</p>
+    </div>
+    <div id="details3" class="details">
+        <p>Función: y = 20x + 50</p>
+        <p>Pregunta 1: ¿Cuál es la pendiente de la función?</p>
+        <p>Pregunta 2: ¿Qué significa la pendiente en este contexto?</p>
+        <p>Pregunta 3: ¿Qué representa la ordenada de origen en este problema?</p>
+        <p>Pregunta 4: ¿Cuánto ganará el trabajador después de 5 horas?</p>
+        <button class="close-btn" onclick="hideDetails('details3')">Cerrar</button>
+    </div>
+
+    <div class="container" onclick="showDetails('details4')">
+        <p>Problema: Una planta crece a razón de 3 cm por día y mide 15 cm al inicio.</p>
+    </div>
+    <div id="details4" class="details">
+        <p>Función: y = 3x + 15</p>
+        <p>Pregunta 1: ¿Cuál es la pendiente de la función?</p>
+        <p>Pregunta 2: ¿Qué significa la pendiente en este contexto?</p>
+        <p>Pregunta 3: ¿Qué representa la ordenada de origen en este problema?</p>
+        <p>Pregunta 4: ¿Cuántos centímetros habrá crecido la planta después de 7 días?</p>
+        <button class="close-btn" onclick="hideDetails('details4')">Cerrar</button>
+    </div>
+
+    <div class="container" onclick="showDetails('details5')">
+        <p>Problema: Una cuenta bancaria acumula 50 dólares de interés por año y ya tiene un saldo inicial de 200 dólares.</p>
+    </div>
+    <div id="details5" class="details">
+        <p>Función: y = 50x + 200</p>
+        <p>Pregunta 1: ¿Cuál es la pendiente de la función?</p>
+        <p>Pregunta 2: ¿Qué significa la pendiente en este contexto?</p>
+        <p>Pregunta 3: ¿Qué representa la ordenada de origen en este problema?</p>
+        <p>Pregunta 4: ¿Cuánto interés se habrá acumulado después de 3 años?</p>
+        <button class="close-btn" onclick="hideDetails('details5')">Cerrar</button>
+    </div>
+
+    <script>
+        function showInfo() {
+            document.getElementById('info').style.display = 'block';
+        }
+
+        function hideInfo() {
+            document.getElementById('info').style.display = 'none';
+        }
+
+        function showDetails(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function hideDetails(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
