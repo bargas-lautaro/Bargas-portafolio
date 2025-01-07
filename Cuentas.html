@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Cuentas</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #gameBoard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 10px;
+            width: 80%;
+            height: 80%;
+        }
+        .gameButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            height: 100%;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .gameButton.hidden {
+            visibility: hidden;
+        }
+        .gameButton.incorrect {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameBoard"></div>
+    
+    <script>
+        const gameBoard = document.getElementById('gameBoard');
+        
+        // Define operations and unique results
+        const pairs = [
+            { operation: '3 + 2', result: 5 },
+            { operation: '3 + 15', result: 18 }, // Updated pair
+            { operation: '10 - 4', result: 6 },
+            { operation: '7 + 1', result: 8 },
+            { operation: '9 - 2', result: 7 },
+            { operation: '5 + 10', result: 15 }, // Updated pair
+            { operation: '6 + 3', result: 9 },
+            { operation: '5 + 6', result: 11 }
+        ];
+
+        // Generate buttons array from pairs
+        const buttons = pairs.flatMap((pair, index) => [
+            { id: index * 2 + 1, text: pair.operation, type: 'operation', pairId: index },
+            { id: index * 2 + 2, text: pair.result, type: 'result', pairId: index }
+        ]);
+
+        // Shuffle buttons array
+        buttons.sort(() => 0.5 - Math.random());
+
+        // Create buttons
+        buttons.forEach(button => {
+            const btn = document.createElement('button');
+            btn.classList.add('gameButton');
+            btn.innerText = button.text;
+            btn.dataset.pairId = button.pairId;
+            btn.onclick = handleButtonClick;
+            gameBoard.appendChild(btn);
+        });
+
+        let firstSelected = null;
+
+        function handleButtonClick(event) {
+            const selectedButton = event.target;
+            if (!firstSelected) {
+                firstSelected = selectedButton;
+                selectedButton.classList.add('selected');
+            } else {
+                if (firstSelected.dataset.pairId === selectedButton.dataset.pairId && firstSelected !== selectedButton) {
+                    firstSelected.classList.add('hidden');
+                    selectedButton.classList.add('hidden');
+                } else {
+                    firstSelected.classList.add('incorrect');
+                    selectedButton.classList.add('incorrect');
+                    setTimeout(() => {
+                        firstSelected.classList.remove('incorrect');
+                        selectedButton.classList.remove('incorrect');
+                    }, 500);
+                }
+                firstSelected.classList.remove('selected');
+                firstSelected = null;
+            }
+        }
+    </script>
+</body>
+</html>
