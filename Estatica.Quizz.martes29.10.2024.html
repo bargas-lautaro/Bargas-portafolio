@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BargasLautaro-8BotonesSecuenciales</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: black;
+        }
+        .button {
+            width: 100%;
+            height: calc(100vh / 9);
+            display: none;
+            background-color: black;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid white;
+            outline: none;
+        }
+        .button:active {
+            background-color: #0056b3;
+        }
+        #button1 {
+            display: block;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 1);
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 44px;
+            margin: 10px;
+            color: white;
+            cursor: pointer;
+        }
+        .close-btn{
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            right: 50px;
+        }
+        .complete-btn {
+            background-color: silver;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            bottom: 60px;
+            position: relative;
+        
+        .moment-floating-botton {
+            position: absolute;
+            top: 10px;
+            left: 0px;
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 0px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+      p{
+          color: white;
+        }
+        }
+        .moment-modal {
+            position: fixed;
+            top: 20%;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background-color: white;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px;
+            color: white;
+            z-index: 999;
+            border-radius: 20px;
+            border: 3px solid green;
+        }
+        .moment-close-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .moment-calculate-btn {
+            padding: 10px;
+            font-size: 16px;
+        }
+        img {
+          width: 95vw;
+          
+        }
+        p{
+          color: white;
+          width: 90%;
+          font-size: 10vw;
+          
+          
+        }
+        .ayuda-momento{
+          color: black};
+          position: absolute;
+          top:0%;
+          
+          
+        }
+    </style>
+</head>
+<body>
+    <button style="position: relative; left:-160px; top:10px; background-color:orange; color:black;" class="moment-floating-botton" onclick="showMomentDiv()">Ayuaaada</button>
+    <div id="momentDiv" class="moment-modal">
+        <button class="moment-close-btn" onclick="hideMomentDiv()">Cerrar</button>
+        <div class="ayuda-momento">
+            <h2>Momento de Giro</h2>
+
+
+<p style="font-size: 18px; font-weight: bold; color: #2E8B57; background-color: #F0F8FF; padding: 10px; border-radius: 8px;">
+    En la clase de estática, el silencio es total,<br>
+    con ecuaciones de fuerza, en riguroso ritual.<br>
+    El profesor se levanta, con mirada severa,<br>
+    y anuncia el quiz con firmeza, de manera sincera.<br><br>
+
+    "Si desean llorar, busquen campo o iglesia,<br>
+    pero aquí en estática, no se acepta tristeza.<br>
+    Este es el momento, de demostrar su saber,<br>
+    sin lamentos ni quejas, sin miedo a caer."<br><br>
+
+    El momento de giro, el torque inclemente,<br>
+    se vuelve el desafío en la mente presente.<br>
+    <code>&tau; = F &middot; r</code>, murmura la clase,<br>
+    repasan con prisa, sin margen ni pase.<br><br>
+
+    Con fuerza aplicada y brazo extendido,<br>
+    buscan el punto, el valor preciso.<br>
+    Saben que el error no puede quedar,<br>
+    que en la ley de equilibrio no hay lugar para fallar.<br><br>
+
+    Así enfrentan el quiz, con sudor en la frente,<br>
+    con lápiz en mano, calculando valiente.<br>
+    El profesor observa, con gesto seguro,<br>
+    sabe que en la estática no hay espacio para apuro.<br><br>
+
+    Y aunque el miedo ronda, cual sombra fugaz,<br>
+    el momento de giro no se va hacia atrás.<br>
+    Al final de la prueba, con ecuaciones en flor,<br>
+    la clase respira… ¡lo lograron, con honor!
+</p>
+
+
+            <input type="number" id="momentForceInput" placeholder="Fuerza (N)">
+            <input type="number" id="momentDistanceInput" placeholder="Distancia (m)">
+            <button class="moment-calculate-btn" onclick="calculateMoment()">Calcular Momento</button>
+            <p id="momentResult"></p>
+        </div>
+    </div>
+    <h1 id="quizTitle">Quiz estática</h1>
+    <button id="button1" class="button" onclick="openModal(1)">Ejercicio 1</button>
+    <button id="button2" class="button" onclick="openModal(2)">Ejercicio 2</button>
+    <button id="button3" class="button" onclick="openModal(3)">Ejercicio 3</button>
+    <button id="button4" class="button" onclick="openModal(4)">Ejercicio 4</button>
+    <button id="button5" class="button" onclick="openModal(5)">Ejercicio 5</button>
+    <button id="button6" class="button" onclick="openModal(6)">Ejercicio 6</button>
+<button id="button7" class="button" onclick="openModal(7)" style="display: none;">Ejercicio 7</button>
+<button id="button8" class="button" onclick="openModal(8)" style="display: none;">Ejercicio 8</button>
+
+<div id="modal7" class="modal">
+    <button class="close-btn" onclick="closeModal(7)">Cerrar</button>
+    <img src="https://i.imgur.com/QCccvHw.jpeg" alt="Imagen 7">
+           <p>Cuanto vale Fa?</p>
+            <p>Cuanto vale Fb?</p>
+</div>
+
+<div id="modal8" class="modal">
+    <button class="close-btn" onclick="closeModal(8)">Cerrar</button>
+    <img src="https://i.imgur.com/Z38fh3d.jpeg" alt="Imagen 8">
+           <p>Cuanto vale Fa?</p>
+            <p>Cuanto vale Fb?</p>
+</div>
+
+    <div id="modal1" class="modal">
+        <button class="close-btn" onclick="closeModal(1)">Cerrar</button>
+        <div class="content">
+          <h1>Ejercicio 1</h1>
+            <img src="https://i.imgur.com/4zesAhG.jpeg" alt="Imagen 1">
+            <p>Cuanto vale Fa?</p>
+            <p>Cuanto vale Fb?</p>
+        </div>
+        <button class="complete-btn" onclick="unlockNext(2)">Terminé el ejercicio</button>
+    </div>
+    <div id="modal2" class="modal">
+        <button class="close-btn" onclick="closeModal(2)">Cerrar</button>
+        <div class="content">
+            <h1>Ejercicio 2</h1>
+            <img src="https://i.imgur.com/w3X34lt.jpeg" alt="Imagen 2">
+            <p>Cuanto vale Fa?</p>
+            <p>Cuanto vale Fb?</p> 
+        </div>
+        <button class="complete-btn" onclick="unlockNext(3)">Terminé el ejercicio</button>
+    </div>
+    <div id="modal3" class="modal">
+        <button class="close-btn" onclick="closeModal(3)">Cerrar</button>
+        <div class="content">
+            <img src="https://i.imgur.com/eksEnRE.jpeg" alt="Imagen 3">           
+            <p>Cuanto vale Fa?</p>
+            <p>Cuanto vale Fb?</p>
+
+        </div>
+        <button class="complete-btn" onclick="unlockNext(4)">Terminé el ejercicio</button>
+    </div>
+    <div id="modal4" class="modal">
+        <button class="close-btn" onclick="closeModal(4)">Cerrar</button>
+        <div class="content">
+            <img src="https://i.imgur.com/p2Xk8df.jpeg" alt="Imagen 4">       
+            <p>Cuanto vale Fa?</p>
+            <p>Cuanto vale Fb?</p>
+
+        </div>
+        <button class="complete-btn" onclick="unlockNext(5)">Terminé el ejercicio</button>
+    </div>
+    <div id="modal5" class="modal">
+        <button class="close-btn" onclick="closeModal(5)">Cerrar</button>
+        <div class="content">
+            <img src="https://i.imgur.com/0XI7VL5.jpeg" alt="Imagen 5">
+            <p>Cuanto vale Fa?</p>
+            <p>Cuanto vale Fb?</p>
+        </div>
+        <button class="complete-btn" onclick="unlockNext(6)">Terminé el ejercicio</button>
+    </div>
+    <div id="modal6" class="modal">
+        <button class="close-btn" onclick="closeModal(6)">Cerrar</button>
+        <div class="content">
+            <img src="https://i.imgur.com/g3TNMfs.jpeg" alt="Imagen 6">
+            <p>Cuanto vale Fa?</p>
+            <p>Cuanto vale Fb?</p>
+
+        </div>
+    </div>
+<script>
+    function openModal(number) {
+        document.getElementById(`modal${number}`).style.display = 'flex';
+    }
+
+    function closeModal(number) {
+        document.getElementById(`modal${number}`).style.display = 'none';
+    }
+
+    function unlockNext(nextButton) {
+        document.getElementById(`button${nextButton}`).style.display = 'block';
+        closeModal(nextButton - 1);
+    }
+  let clickCount = 0;
+    const title = document.getElementById("quizTitle");
+    const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFC300", "#DAF7A6", "#581845", "#900C3F", "#C70039", "#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFC300", "#DAF7A6", "#581845", "#900C3F", "#C70039", "#FF5733", "#33FF57"];
+
+    
+    title.addEventListener("click", function() {
+        if (clickCount < 20) {
+            title.style.color = colors[clickCount];
+            clickCount++;
+            if (clickCount === 20) {
+                document.getElementById("button7").style.display = "block";
+                document.getElementById("button8").style.display = "block";
+            }
+        }
+    });
+    function openModal(buttonNumber) {
+        document.getElementById(`modal${buttonNumber}`).style.display = 'flex';
+    }
+
+    function closeModal(buttonNumber) {
+        document.getElementById(`modal${buttonNumber}`).style.display = 'none';
+    }
+
+    function showMomentDiv() {
+        document.getElementById('momentDiv').style.display = 'flex';
+    }
+
+    function hideMomentDiv() {
+        document.getElementById('momentDiv').style.display = 'none';
+    }
+
+    function calculateMoment() {
+        const force = parseFloat(document.getElementById('momentForceInput').value);
+        const distance = parseFloat(document.getElementById('momentDistanceInput').value);
+        if (!isNaN(force) && !isNaN(distance)) {
+            const moment = force * distance;
+            document.getElementById('momentResult').textContent = `El momento es: ${moment} NM`;
+        } else {
+            document.getElementById('momentResult').textContent = "Por favor, ingrese valores válidos.";
+        }
+    }
+</script>
+
+
+</body>
+</html>
