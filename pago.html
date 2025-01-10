@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar con Mercado Pago</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 50px;
+        }
+        
+    
+        .titulo-neon {
+            display: inline-block;
+            font-size: 3.5vh;
+            font-weight: bold;
+            padding: 20px;
+            border: 5px solid; /* Borde visible */
+            width: 80%;
+            left: 10%;
+            border-radius: 15px;
+            background-color: black;
+            animation: cambioBorde 3s infinite linear; /* Animación del borde */
+        }
+
+
+        .titulo-neon span, {
+            display: inline-block;
+            animation: cambioColor 1.5s infinite alternate;
+        }
+
+        /* Colores iniciales para las letras */
+        .titulo-neon span:nth-child(1) { color: #39ff14; animation-delay: 0s; }
+        .titulo-neon span:nth-child(2) { color: #FF10F0; animation-delay: 0.2s; }
+        .titulo-neon span:nth-child(3) { color: #00FFFF; animation-delay: 0.4s; }
+        .titulo-neon span:nth-child(4) { color: #FF4500; animation-delay: 0.6s; }
+        .titulo-neon span:nth-child(5) { color: #FFFF00; animation-delay: 0.8s; }
+        .titulo-neon span:nth-child(6) { color: #FF00FF; animation-delay: 1s; }
+        .titulo-neon span:nth-child(7) { color: #00FF00; animation-delay: 1.2s; }
+        .titulo-neon span:nth-child(8) { color: #00CED1; animation-delay: 1.4s; }
+        .titulo-neon span:nth-child(9) { color: #FF1493; animation-delay: 1.6s; }
+        .titulo-neon span:nth-child(10) { color: #FF6347; animation-delay: 1.8s; }
+        .titulo-neon span:nth-child(11) { color: #7CFC00; animation-delay: 2s; }
+        .titulo-neon span:nth-child(12) { color: #4682B4; animation-delay: 2.2s; }
+        .titulo-neon span:nth-child(13) { color: #FFD700; animation-delay: 2.4s; }
+        .titulo-neon span:nth-child(14) { color: #9932CC; animation-delay: 2.6s; }
+        .titulo-neon span:nth-child(15) { color: #ADFF2F; animation-delay: 2.8s; }
+        .titulo-neon span:nth-child(16) { color: #FF4500; animation-delay: 3s; }
+        .titulo-neon span:nth-child(17) { color: #00FF7F; animation-delay: 3.2s; }
+        .titulo-neon span:nth-child(18) { color: #FF69B4; animation-delay: 3.4s; }
+        .titulo-neon span:nth-child(19) { color: #1E90FF; animation-delay: 3.6s; }
+        .titulo-neon span:nth-child(20) { color: #FFDAB9; animation-delay: 3.8s; }
+        .titulo-neon span:nth-child(21) { color: #FF8C00; animation-delay: 4s; }
+
+        /* Animación de cambio de color */
+        @keyframes cambioColor {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Animación de cambio de borde */
+
+        
+        
+        
+        .perro { 
+          background-color:black;
+          color: green;
+          align-items: left;
+          text-align: left;
+          width: 70%;
+          border: 2px solid green;
+          
+          
+        }
+        .gato {
+          display: flex;
+         flex-direction: row;
+          
+          width: 70%;
+          position: relative;
+          left: 15%;
+        
+        }
+                #resultado {
+          font-size: 5vw;
+            color: #39ff14;
+animation-delay: 0s;
+            animation: cambioColor 1.5s infinite alternate;}
+        @keyframes cambioBorde {
+            0% { border-color: #39ff14; }
+            25% { border-color: #FF10F0; }
+            50% { border-color: #00FFFF; }
+            75% { border-color: #FF4500; }
+            100% { border-color: #FFFF00; }
+        }
+@media (min-aspect-ratio: 1/1) {
+    /* Estilos para pantallas más anchas que altas */
+    
+    
+    #resultado {
+      
+          font-size: 3vw;}
+    
+    .titulo-neon {
+        font-size: 4rem; /* Ejemplo: aumentar tamaño de fuente */
+        padding: 30px; /* Ejemplo: mayor espacio interno */
+        border-width: 6px; /* Ejemplo: bordes más gruesos */
+        
+    }
+    .papal{ display: none;}
+    body {
+        background-color: #101010; /* Ejemplo: cambiar fondo */
+    }
+}
+
+        .abutton {
+            padding: 10px 10px;
+            font-size: 7vw;
+            height: 20vw;
+            width: 50%;
+            font-family: 'Roboto', sans-serif;
+            position: absolute;
+            top: 70%;
+            left: 25%;
+            letter-spacing: 2px;
+            color: black;
+            background-color: transparent;
+            color: #39ff14;
+            border: 3px solid #39ff14;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .abutton:hover {
+            background-color: black;
+            color: #FF10F0;
+        }
+        .abutton:active {
+            border-color: #FF10F0;
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+      <h1 class="titulo-neon">
+        <span>P</span>
+        <span>a</span>
+        <span>g</span>
+        <span>a</span>
+        <span>r</span>
+        <span>_</span>
+      <span> </span>
+        <span>c</span>
+        <span>o</span>
+        <span>n </span><br class="papal">
+        <span> </span>
+        <span>M</span>
+        <span>e</span>
+        <span>r</span>
+        <span>c</span>
+        <span>a</span>
+        <span>d</span>
+        <span>o</span>
+        <span>P</span>
+        <span>a</span>
+        <span>g</span>
+          <span>o</span>
+    </h1>
+
+
+
+   
+    
+    <a href="https://link.mercadopago.com.ar/particularfisicaymat" target="_blank">
+        <button class="abutton">Pagar ahora</button>
+    </a>
+
+
+
+
+   <h1>¿Cuánto va a salir la clase de apoyo?</h1>
+    <p style="color:#FF00FF;">Selecciona la cantidad de horas y tu localidad para calcular el costo total:</p>
+    
+    <div class="gato">
+    
+    <div   style="text-align: right; align-items: right; width:50%;" for="localidad">
+    <label for="horas">Horas de clase:</label>
+    <br>
+    <label  for="localidad">Localidad:</label>
+    </div>
+    <div>
+    <select class="perro" id="horas">
+        <option value="8">1 hora </option>
+        <option value="12.5">2 horas </option>
+        <option value="17">3 horas </option>
+    </select> <br>
+    <select   class="perro" id="localidad">
+        <option value="0">El Hoyo</option>
+        <option value="2">El Bolsón/Puelo </option>
+        <option value="3">Epuyén </option>
+        <option value="4">Cholila/Maitén</option>
+    </select>
+    </div>
+    </div>
+    <br>
+    <button style="border-radius: 5px; border: 3px solid #ff00ff; color: #ff00ff;
+text-shadow: 0 0 2px #ff00ff, 0 0 4px #ff00ff, 0 0 10px #ff00ff;; background-color :black; font-size: 2.5vh;" onclick="calcularCosto()">Calcular Costo</button>
+    <p id="resultado"><br>El costo aparecerá aquí.</p>
+    
+       <audio id="sound-effect">
+        <source src="https://raw.githubusercontent.com/bargas-lautaro/sonidos.mp3/main/monedas_2.mp3" type="audio/mpeg">
+        
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    
+    
+    
+
+<footer style="background-color: #000; color: #fff; text-align: center; padding: 10px 0; position: fixed; bottom: 0; width: 100%; border-top: 3px solid #00ff00;">
+    <p style="margin: 0;">Bargas Nehuen Lautaro</p>
+    <p style="margin: 0;">
+        WhatsApp: 
+        <a href="https://wa.me/542944116995?text=¡Hola!%20Me%20gustaría%20contactarme%20contigo." 
+           style="color: #00ff00; text-decoration: none;">
+           +54 2944 116995
+        </a>
+    </p>
+</footer>
+    
+    
+    <script>
+      
+      
+      async function calcularCosto() {
+            
+            
+                
+            
+            
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/USD'); // API para obtener tasa de cambio
+                const data = await response.json();
+                const tipoDeCambio = data.rates.ARS; // Tasa de USD a ARS
+
+
+const sound = document.getElementById("sound-effect");
+                sound.play(); // Reproducir sonido al hacer clic
+
+
+
+
+
+                // Obtener valores seleccionados
+                const horas = parseFloat(document.getElementById("horas").value);
+                const localidadExtra = parseFloat(document.getElementById("localidad").value);
+
+                // Calcular costo total en dólares
+                const costoTotalUSD = horas + localidadExtra;
+
+                // Convertir a pesos argentinos
+                const costoEnPesos = costoTotalUSD * tipoDeCambio;
+
+                // Mostrar resultado
+                document.getElementById("resultado").innerText = `El costo total es de ${costoEnPesos.toFixed(2)} Pesos.`;
+            } catch (error) {
+                document.getElementById("resultado").innerText = 'Error al obtener el tipo de cambio. Intenta nuevamente.';
+                console.error('Error:', error);
+            }
+        }
+      
+      
+        async function convertirDolares() {
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/USD'); // Cambiar URL si es necesario
+                const data = await response.json();
+                const tipoDeCambio = data.rates.ARS; // Tasa de USD a ARS
+                const monto = 6; // Monto en dólares
+                const resultado = monto * tipoDeCambio;
+
+                document.getElementById('resultado').innerText = `6 USD son aproximadamente ${resultado.toFixed(2)} ARS.`;
+            } catch (error) {
+                document.getElementById('resultado').innerText = 'Error al obtener el tipo de cambio. Intenta nuevamente.';
+                console.error('Error:', error);
+            }
+        }
+        
+        
+        function openDip(dipId) {
+            document.getElementById(dipId).style.display = 'block';
+        }
+        function closeDip(dipId) {
+            document.getElementById(dipId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
