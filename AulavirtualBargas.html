@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -9,34 +9,83 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #1d1d1d;
+            overflow: hidden; /* Oculta scroll horizontal */
         }
         h1 {
             text-align: center;
             margin-top: 20px;
+            font-size: 4vh;
+            color: #39ff14;
+            animation: colorChange 4s infinite; /* Animación de cambio de color */
         }
+
+        /* Animación del título */
+        @keyframes colorChange {
+            0% { color: #39ff14; }
+            25% { color: #ff5722; }
+            50% { color: #2196f3; }
+            75% { color: #ffeb3b; }
+            100% { color: #39ff14; }
+        }
+
         #fileList {
             margin: 20px auto;
-            max-width: 800px;
-            padding: 10px;
-            background-color: #fff;
-            border: 1px solid #ddd;
+            max-width: 400px;
+            height: 80vh; /* Ocupa el 80% de la pantalla */
+            overflow-y: scroll; /* Agrega barra de desplazamiento vertical */
+            background-color: #000000;
+            border: 1px solid #ff00ee;
             border-radius: 5px;
+            color: white;
+            padding: 10px;
+            scrollbar-width: thin; /* Barra de desplazamiento delgada */
+            scrollbar-color: #39ff14 #1d1d1d; /* Colores del scroll */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centra verticalmente */
+            align-items: center; /* Centra horizontalmente */
+        }
+        #fileList::-webkit-scrollbar {
+            width: 8px;
+        }
+        #fileList::-webkit-scrollbar-thumb {
+            background: #39ff14;
+            border-radius: 4px;
+        }
+        #fileList::-webkit-scrollbar-track {
+            background: #1d1d1d;
         }
         ul {
             list-style: none;
             padding: 0;
+            
+            margin: 0;
+            width: 80%; /* Asegura que los elementos ocupen todo el ancho */
         }
         li {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
+            display: block;
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(45deg, #000000, #1d1d1d);
+            border: 2px solid #39ff14;
+            border-radius: 10px;
+            color: white;
+            font-size: 2vh;
+            transform: scale(1); /* Tamaño inicial */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            transform-origin: center center; /* Para el efecto 3D */
+            
         }
-        li:last-child {
-            border-bottom: none;
+        li:hover {
+            transform: scale(1.3) rotateX(10deg) rotateY(10deg); /* Efecto 3D */
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.8);
         }
         a {
             text-decoration: none;
-            color: #007BFF;
+            color: #89efff;
         }
         a:hover {
             text-decoration: underline;
@@ -44,13 +93,28 @@
         .error {
             color: red;
         }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            border-top: 2px solid #39ff14;
+        }
     </style>
 </head>
 <body>
-    <h1>Visor de Archivos HTML del Repositorio</h1>
+    <h1>Aula Virtual</h1>
     <div id="fileList">
         <h3>Cargando archivos HTML...</h3>
     </div>
+
+    <footer>
+        Bargas Nehuen Lautaro - 2025
+    </footer>
 
     <script>
         const owner = "bargas-lautaro";
@@ -74,9 +138,9 @@
                     return;
                 }
 
-                fileList.innerHTML = `<h3>Archivos HTML en el repositorio ${repo}:</h3><ul>${htmlFiles.map(file => `
+                fileList.innerHTML = `<ul>${htmlFiles.map(file => `
                     <li>
-                        <a href="${previewBaseUrl}/${owner}/${repo}/main/${file.name}" target="">${file.name}</a>
+                        <a href="${previewBaseUrl}/${owner}/${repo}/main/${file.name}" target="_blank">${file.name}</a>
                     </li>`).join('')}</ul>`;
             } catch (error) {
                 const fileList = document.getElementById('fileList');
@@ -88,3 +152,4 @@
     </script>
 </body>
 </html>
+
