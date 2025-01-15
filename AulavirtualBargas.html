@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BargasLautaro - Visor de HTMLs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #fileList {
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Visor de Archivos HTML del Repositorio</h1>
+    <div id="fileList">
+        <h3>Cargando archivos HTML...</h3>
+    </div>
+
+    <script>
+        const owner = "bargas-lautaro";
+        const repo = "Bargas-portafolio";
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents`;
+        const previewBaseUrl = "https://htmlpreview.github.io/?https://raw.githubusercontent.com";
+
+        async function fetchFiles() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`Error al obtener los archivos: ${response.status}`);
+                }
+
+                const files = await response.json();
+                const htmlFiles = files.filter(file => file.name.endsWith('.html'));
+                const fileList = document.getElementById('fileList');
+
+                if (htmlFiles.length === 0) {
+                    fileList.innerHTML = `<p class="error">No se encontraron archivos HTML en este repositorio.</p>`;
+                    return;
+                }
+
+                fileList.innerHTML = `<h3>Archivos HTML en el repositorio ${repo}:</h3><ul>${htmlFiles.map(file => `
+                    <li>
+                        <a href="${previewBaseUrl}/${owner}/${repo}/main/${file.name}" target="">${file.name}</a>
+                    </li>`).join('')}</ul>`;
+            } catch (error) {
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+
+        fetchFiles();
+    </script>
+</body>
+</html>
