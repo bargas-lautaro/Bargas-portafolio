@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Igualdades</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            color: white;
+            width: 100%;
+            height: 100%;
+        }
+
+        #operations, #level{ background-color: rgb(49, 0, 49);
+                    color: #38c3ff;
+                    font-size: 1.4em;
+                    border: 3px solid rgb(115, 12, 106);
+
+
+        }
+        #footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: black;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+        border-top: 3px solid green;
+    }
+
+        #game-container {
+            margin: 20px auto;
+            padding: 20px;
+            background: black;
+            border-radius: 40px;
+            width: 80%;
+            border: 3px solid rgb(34, 244, 255);
+            height: 100%;
+            box-shadow: 0 4px 8px rgba(0, 255, 0, 0.2);
+        }
+
+        .header {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        button:hover{background-color: rgb(40, 27, 105);
+            scale: 1.1;
+            
+            
+            color: #ff00e6;}
+
+        #level, #operations {
+            margin: 10px;
+        }
+
+        .game-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
+            height: auto;
+        }
+
+        button {
+            width: calc(50% - 10px);
+            height: calc(100% - 30px);
+            margin: 5px;
+            font-size: 2em;
+            cursor: pointer;
+            border: 2px solid #00ff00;
+            background-color: black;
+            color: rgb(30, 255, 142);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        button.correct {
+            animation: correct-animation 1s;
+        }
+
+        button.incorrect {
+            animation: incorrect-animation 1s;
+        }
+
+        @keyframes correct-animation {
+            0% { background-color: #00ff00; color: black; }
+            50% { background-color: #00ffff; color: black; }
+            100% { background-color: black; color: white; }
+        }
+
+        @keyframes incorrect-animation {
+            0% { background-color: #ff0000; color: black; }
+            50% { background-color: #ff9900; color: black; }
+            100% { background-color: black; color: white; }
+        }
+
+        #game-area {
+            display: none;
+        }
+
+        #records {
+            margin-top: 20px;
+            padding: 10px;
+            background: #000000;
+            display: none;
+            color: #e100ff;
+            border-radius: 40px;
+            border: 3px solid rgb(255, 115, 45);
+        }
+
+        #records-list {
+            list-style: none;
+            padding: 0;
+        }
+        #records-list li:hover {  
+            background-color: aqua ;
+            color: #000000;
+            font-size: 2em;
+        
+        
+        }
+        #records-list li {
+            padding: 5px;
+            background: #000000;
+            width: auto ;
+            margin: 5px 0;
+            border: 3px solid rgb(81, 101, 255);
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="start-menu">
+            <div class="header"><p style="width: 95%; color: #ff9900; font-size: 4vh;">Encontrar a su igual</p></div>
+
+            <div>
+                <label for="level">Select Level:</label> 
+                <select id="level">
+                    <option value="1">1 (Easy)</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10 (Hard)</option>
+                </select>
+                <br>
+                <label for="operations">Número de operaciones:</label>
+                <input type="number" id="operations" value="5" min="2" max="20">
+                <br>
+                <button onclick="startGame()" id="pepe">Start Game</button>
+                <button onclick="showRecords()">View Top Scores</button>
+            </div>
+        </div>
+
+        <div id="game-area">
+            <div class="game-row" id="buttons-container"></div>
+            <button onclick="endGame()">End Game</button>
+        </div>
+
+        <div id="records">
+            <div class="header">Top Records</div>
+            <ul id="records-list"></ul>
+            <button onclick="hideRecords()">Close Records</button>
+        </div>
+    </div>
+
+
+
+  
+
+<footer>
+    <div id="footer">
+        Bargas Nehuen Lautaro - <span id="current-date"></span>
+    </div>
+</footer>
+
+
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedRecords = localStorage.getItem('topScores');
+    if (savedRecords) {
+        records = JSON.parse(savedRecords);
+    }
+});
+
+let selectedButton1 = null;
+let selectedButton2 = null;
+let matches = 0;
+let totalMatches = 0;
+let score = 0;
+let records = [];
+
+function saveRecords() {
+    localStorage.setItem('topScores', JSON.stringify(records));
+}
+
+function startGame() {
+    const level = parseInt(document.getElementById('level').value); // Asegúrate de que sea un número
+    const operationsCount = parseInt(document.getElementById('operations').value);
+
+    document.getElementById('start-menu').style.display = 'none';
+    document.getElementById('game-area').style.display = 'block';
+    document.getElementById('buttons-container').innerHTML = '';
+
+    const operations = [];
+    const answers = [];
+
+    for (let i = 0; i < operationsCount; i++) {
+        const a = Math.floor(Math.random() * 10 * level); // Números basados en nivel
+        const b = Math.floor(Math.random() * 10 * level);
+        let operation, answer;
+
+        if (level < 3) {
+            operation = `${a} + ${b}`;
+            answer = a + b;
+        } else if (level < 7) {
+            operation = `${a} x ${b}`;
+            answer = a * b;
+        } else {
+            operation = `${a} - ${b}`;
+            answer = a - b;
+        }
+
+        operations.push(operation);
+        answers.push(answer);
+    }
+
+    totalMatches = operations.length;
+    matches = 0;
+    score = 0;
+    const items = [...operations, ...answers];
+    shuffleArray(items);
+
+    items.forEach(item => {
+        const btn = document.createElement('button');
+        btn.textContent = item;
+        btn.setAttribute('data-value', item);
+        btn.addEventListener('click', () => handleButtonClick(btn));
+        document.getElementById('buttons-container').appendChild(btn);
+    });
+}
+
+function handleButtonClick(button) {
+    if (!selectedButton1) {
+        selectedButton1 = button;
+        button.style.borderColor = '#00ffff';
+        return;
+    } else if (!selectedButton2 && button !== selectedButton1) {
+        selectedButton2 = button;
+        button.style.borderColor = '#00ffff';
+
+        checkMatch();
+    }
+}
+
+function checkMatch() {
+    const value1 = selectedButton1.getAttribute('data-value');
+    const value2 = selectedButton2.getAttribute('data-value');
+
+    if (isMatch(value1, value2)) {
+        selectedButton1.classList.add('correct');
+        selectedButton2.classList.add('correct');
+        matches++;
+        score += 10;
+
+        setTimeout(() => {
+            selectedButton1.remove();
+            selectedButton2.remove();
+            redistributeButtons();
+            resetSelection();
+
+            if (matches === totalMatches) {
+                endGame();
+            }
+        }, 1000);
+    } else {
+        selectedButton1.classList.add('incorrect');
+        selectedButton2.classList.add('incorrect');
+        score -= 5;
+
+        setTimeout(() => {
+            resetSelection();
+        }, 1000);
+    }
+}
+
+function redistributeButtons() {
+    const buttons = document.querySelectorAll('#buttons-container button');
+    buttons.forEach(btn => {
+        btn.style.width = `calc(${100 / Math.sqrt(buttons.length)}% - 10px)`;
+        btn.style.height = `calc(${100 / Math.sqrt(buttons.length)}% - 10px)`;
+    });
+}
+
+function isMatch(value1, value2) {
+    if (value1.includes('+') || value1.includes('x') || value1.includes('-')) {
+        return eval(value1.replace('x', '*')) == value2;
+    }
+    if (value2.includes('+') || value2.includes('x') || value2.includes('-')) {
+        return eval(value2.replace('x', '*')) == value1;
+    }
+    return false;
+}
+
+function resetSelection() {
+    if (selectedButton1) selectedButton1.style.borderColor = '#00ff00';
+    if (selectedButton2) selectedButton2.style.borderColor = '#00ff00';
+
+    selectedButton1 = null;
+    selectedButton2 = null;
+}
+
+function endGame() {
+    alert(`Felicidades, tu puntuación es ${score}`);
+
+    if (isHighScore(score)) {
+        const name = prompt('¡Estás en el top 20! Ingresa tu nombre:');
+        if (name) {
+            records.push({ name, score });
+            records.sort((a, b) => b.score - a.score);
+            if (records.length > 20) records.pop();
+            saveRecords();
+        }
+    }
+
+    document.getElementById('game-area').style.display = 'none';
+    document.getElementById('start-menu').style.display = 'block';
+}
+
+function isHighScore(score) {
+    if (records.length < 20) return true;
+    return score > records[records.length - 1].score;
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function showRecords() {
+    const recordsList = document.getElementById('records-list');
+    recordsList.innerHTML = '';
+
+    records.forEach((record, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${index + 1}. ${record.name} - ${record.score} puntos`;
+        recordsList.appendChild(li);
+    });
+
+    document.getElementById('records').style.display = 'block';
+}
+
+function hideRecords() {
+    document.getElementById('records').style.display = 'none';
+}
+
+
+
+    </script>
+</body>
+</html>
