@@ -1,0 +1,397 @@
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Fuerzas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #000;
+      margin: 0;
+      position: relative;
+    }
+    #perros{
+      
+      background-color: black;
+      color: white;
+      border: 3px solid lightgreen;
+    }
+    .container {
+      text-align: center;
+      background-color: #000;
+      color: aqua;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .buttons {
+      margin: 20px 0;
+    }
+    .buttons button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 25px;
+      background-color: black;
+      border: 3px solid lightgreen;
+      color: red;
+      transition: background-color 0.3s, color 0.3s, border 0.3s;
+    }
+    button:hover {
+      background-color: aqua;
+      color: black;
+      border: 3px solid orangered;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 2px solid lightgreen;
+      background-color: black;
+      color: aqua;
+    }
+    #restart {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 25px;
+      background-color: black;
+      border: 3px solid lightgreen;
+      color: red;
+      transition: background-color 0.3s, color 0.3s, border 0.3s;
+    }
+    #restart:hover {
+      background-color: aqua;
+      color: black;
+      border: 3px solid orangered;
+    }
+    #records-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #records-content {
+      background-color: #000;
+      color: aqua;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+      position: relative;
+    }
+    #records-content h2 {
+      margin-bottom: 10px;
+    }
+    #records-content ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    #records-content li {
+      margin: 5px 0;
+    }
+    #close-records {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: transparent;
+      border: none;
+      color: red;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    #open-records {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: black;
+      border: 3px solid lightgreen;
+      color: red;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 0 0 0 10px;
+    }
+    #open-records:hover {
+      background-color: aqua;
+      color: black;
+      border: 3px solid orangered;
+    }
+    #timer {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Simulador de Fuerzas</h1>
+    <div id="setup">
+      <label for="playerName">Nombre:</label>
+      <input type="text" id="playerName" placeholder="Ingresa tu nombre" required>
+      <label for="questions">Número de preguntas (2-20):</label>
+      <input type="number" id="questions" min="2" max="20" value="5">
+      <button id="perros" onclick="startGame()">Comenzar</button>
+    </div>
+    <div id="game" class="hidden">
+      <div id="timer">Tiempo restante: 10:00</div>
+      <div class="buttons" id="forces"></div>
+      <div class="buttons" id="masses"></div>
+      <div class="buttons" id="gravities"></div>
+      <button onclick="checkAnswer()">Verificar</button>
+      <div class="result" id="result"></div>
+      <div id="score">Puntuación: 0</div>
+      <button id="restart" onclick="restartGame()" class="hidden">Reiniciar</button>
+    </div>
+  </div>
+
+  <!-- Botón para abrir los récords -->
+  <button id="open-records" onclick="openRecords()">Ver Récords</button>
+
+  <!-- Div superpuesto para los récords -->
+  <div id="records-overlay">
+    <div id="records-content">
+      <button id="close-records" onclick="closeRecords()">×</button>
+      <h2>Récords</h2>
+      <ul id="records-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    let selectedForce = null;
+    let selectedMass = null;
+    let selectedGravity = null;
+    let currentQuestion = 0;
+    let totalQuestions = 0;
+    let correctAnswers = 0;
+    let score = 0;
+    let timeLeft = 600; // 10 minutos en segundos
+    let timerInterval = null;
+    const gravities = [1.62, 9.8, 3.71]; // Gravedades de la Luna, Tierra y Marte
+    const masses = [1, 2, 5]; // Masas en kg
+
+    // Cargar récords desde localStorage
+    let records = JSON.parse(localStorage.getItem('records')) || [];
+    updateRecordsList();
+
+    // Abrir el div de récords
+    function openRecords() {
+      document.getElementById('records-overlay').style.display = 'flex';
+    }
+
+    // Cerrar el div de récords
+    function closeRecords() {
+      document.getElementById('records-overlay').style.display = 'none';
+    }
+
+    // Iniciar el juego
+    function startGame() {
+      const playerName = document.getElementById('playerName').value.trim();
+      const numQuestions = parseInt(document.getElementById('questions').value);
+
+      if (!playerName) {
+        alert("Por favor, ingresa tu nombre.");
+        return;
+      }
+      if (numQuestions < 2 || numQuestions > 20) {
+        alert("Por favor, elige un número de preguntas entre 2 y 20.");
+        return;
+      }
+
+      totalQuestions = numQuestions;
+
+      document.getElementById('setup').classList.add('hidden');
+      document.getElementById('game').classList.remove('hidden');
+      document.getElementById('restart').classList.add('hidden');
+      currentQuestion = 0;
+      correctAnswers = 0;
+      score = 0;
+      timeLeft = 600;
+      updateScore();
+      startTimer();
+      generateQuestion();
+    }
+
+    // Generar una pregunta
+    function generateQuestion() {
+      selectedForce = null;
+      selectedMass = null;
+      selectedGravity = null;
+
+      // Seleccionar una gravedad y masa aleatorias
+      const gravity = gravities[Math.floor(Math.random() * gravities.length)];
+      const mass = masses[Math.floor(Math.random() * masses.length)];
+      // Calcular la fuerza correcta (redondeada a 2 decimales)
+      const force = parseFloat((mass * gravity).toFixed(2));
+
+      // Generar opciones de fuerza (una correcta y dos incorrectas)
+      const forces = [force];
+      while (forces.length < 3) {
+        const randomForce = parseFloat((masses[Math.floor(Math.random() * masses.length)] * gravities[Math.floor(Math.random() * gravities.length)]).toFixed(2));
+        if (!forces.includes(randomForce)) forces.push(randomForce);
+      }
+      forces.sort(() => Math.random() - 0.5); // Mezclar las fuerzas
+
+      // Generar opciones de masa (una correcta y dos incorrectas)
+      const massOptions = [mass];
+      while (massOptions.length < 3) {
+        const randomMass = masses[Math.floor(Math.random() * masses.length)];
+        if (!massOptions.includes(randomMass)) massOptions.push(randomMass);
+      }
+      massOptions.sort(() => Math.random() - 0.5); // Mezclar las masas
+
+      // Generar opciones de gravedad (una correcta y dos incorrectas)
+      const gravityOptions = [gravity];
+      while (gravityOptions.length < 3) {
+        const randomGravity = gravities[Math.floor(Math.random() * gravities.length)];
+        if (!gravityOptions.includes(randomGravity)) gravityOptions.push(randomGravity);
+      }
+      gravityOptions.sort(() => Math.random() - 0.5); // Mezclar las gravedades
+
+      // Mostrar las opciones de fuerza
+      const forcesDiv = document.getElementById('forces');
+      forcesDiv.innerHTML = forces.map(f => `<button onclick="selectForce(${f})">Fuerza (${f} N)</button>`).join('');
+
+      // Mostrar las opciones de masa
+      const massesDiv = document.getElementById('masses');
+      massesDiv.innerHTML = massOptions.map(m => `<button onclick="selectMass(${m})">Masa (${m} kg)</button>`).join('');
+
+      // Mostrar las opciones de gravedad
+      const gravitiesDiv = document.getElementById('gravities');
+      gravitiesDiv.innerHTML = gravityOptions.map(g => `<button onclick="selectGravity(${g})">Gravedad (${g} m/s²)</button>`).join('');
+
+      document.getElementById('result').textContent = '';
+    }
+
+    // Seleccionar fuerza
+    function selectForce(force) {
+      selectedForce = force;
+      document.querySelectorAll('#forces button').forEach(button => {
+        button.style.backgroundColor = '';
+      });
+      event.target.style.backgroundColor = '#4CAF50';
+    }
+
+    // Seleccionar masa
+    function selectMass(mass) {
+      selectedMass = mass;
+      document.querySelectorAll('#masses button').forEach(button => {
+        button.style.backgroundColor = '';
+      });
+      event.target.style.backgroundColor = '#4CAF50';
+    }
+
+    // Seleccionar gravedad
+    function selectGravity(gravity) {
+      selectedGravity = gravity;
+      document.querySelectorAll('#gravities button').forEach(button => {
+        button.style.backgroundColor = '';
+      });
+      event.target.style.backgroundColor = '#4CAF50';
+    }
+
+    // Verificar la respuesta
+    function checkAnswer() {
+      if (selectedForce !== null && selectedMass !== null && selectedGravity !== null) {
+        const calculatedForce = parseFloat((selectedMass * selectedGravity).toFixed(2));
+        if (selectedForce === calculatedForce) {
+          document.getElementById('result').textContent = "¡Correcto! Las fuerzas son iguales.";
+          score += 200; // +200 puntos por respuesta correcta
+          correctAnswers++;
+        } else {
+          document.getElementById('result').textContent = `Incorrecto. La fuerza correcta es ${calculatedForce} N.`;
+          score -= 5; // -5 puntos por respuesta incorrecta
+        }
+        score += timeLeft; // +1 punto por cada segundo restante
+        updateScore();
+        currentQuestion++;
+        if (currentQuestion < totalQuestions) {
+          setTimeout(generateQuestion, 2000); // Siguiente pregunta después de 2 segundos
+        } else {
+          endGame();
+        }
+      } else {
+        document.getElementById('result').textContent = "Selecciona todos los valores antes de verificar.";
+      }
+    }
+
+    // Actualizar la puntuación
+    function updateScore() {
+      document.getElementById('score').textContent = `Puntuación: ${score}`;
+    }
+
+    // Finalizar el juego
+    function endGame() {
+      clearInterval(timerInterval);
+      document.getElementById('result').textContent = `Juego terminado. Puntuación final: ${score}`;
+      document.getElementById('restart').classList.remove('hidden');
+      saveRecord(score);
+    }
+
+    // Guardar récord
+    function saveRecord(score) {
+      const playerName = document.getElementById('playerName').value.trim();
+      const record = {
+        name: playerName,
+        score: score,
+        date: new Date().toLocaleString()
+      };
+      records.push(record);
+      records.sort((a, b) => b.score - a.score); // Ordenar por puntuación
+      if (records.length > 5) records = records.slice(0, 5); // Mantener solo los 5 mejores récords
+      localStorage.setItem('records', JSON.stringify(records));
+      updateRecordsList();
+    }
+
+    // Actualizar la lista de récords
+    function updateRecordsList() {
+      const recordsList = document.getElementById('records-list');
+      recordsList.innerHTML = records.map((record, index) => `
+        <li>${index + 1}. ${record.name} - ${record.score} puntos - ${record.date}</li>
+      `).join('');
+    }
+
+    // Reiniciar el juego
+    function restartGame() {
+      document.getElementById('setup').classList.remove('hidden');
+      document.getElementById('game').classList.add('hidden');
+      document.getElementById('restart').classList.add('hidden');
+    }
+
+    // Iniciar el temporizador
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = `Tiempo restante: ${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          endGame();
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>      
