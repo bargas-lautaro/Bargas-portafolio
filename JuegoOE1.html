@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego de Trivia</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #39ff14;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background-color: #111;
+      border: 2px solid #39ff14;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 700px;
+      padding: 25px;
+      box-shadow: 0 0 25px #39ff14;
+    }
+
+    .question {
+      font-size: 1.4em;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .option {
+      background-color: #222;
+      border: 2px solid #555;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+      color: #fff;
+    }
+
+    .option:hover {
+      background-color: #39ff14;
+      color: #000;
+    }
+
+    .option.correct {
+      background-color: lime;
+      color: black;
+    }
+
+    .option.incorrect {
+      background-color: red;
+      color: white;
+    }
+
+    .option.respuesta-correcta {
+      background-color: #00e5ff;
+      color: black;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.1em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .info {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    #nextBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #39ff14;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #nextBtn:hover {
+      background-color: #76ff03;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="position:absolute; top:10%; width:80%; left:10%; text-align:center;"> Juego de trivias</h1>
+  <div class="card">
+    <div class="question" id="questionText">Cargando pregunta...</div>
+    <div class="options" id="optionsContainer"></div>
+    <div class="result" id="resultText"></div>
+    <div class="info">
+      Aciertos: <span id="aciertos">0</span> | Errores: <span id="errores">0</span> | Tiempo: <span id="tiempo">10</span>s
+    </div>
+    <button id="nextBtn" onclick="siguientePregunta()">Siguiente</button>
+  </div>
+<footer style="
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  background-color: black;
+  color: white;
+  border-top: 3px solid lime;
+  text-align: center;
+  padding: 5px;
+  font-size: 0.9em;
+  z-index: 999;
+">
+  Bargas Nehuen Lautaro - Creado el 30/03/2025
+</footer>
+  <!-- Cargamos las preguntas -->
+  <script src="trivia.js"></script>
+
+  <script>
+  const questionText = document.getElementById("questionText");
+  const optionsContainer = document.getElementById("optionsContainer");
+  const resultText = document.getElementById("resultText");
+  const aciertosSpan = document.getElementById("aciertos");
+  const erroresSpan = document.getElementById("errores");
+  const tiempoSpan = document.getElementById("tiempo");
+  const nextBtn = document.getElementById("nextBtn");
+
+  let aciertos = 0;
+  let errores = 0;
+  let timer;
+  let tiempo = 30;
+  let respondido = false;
+  let preguntaActual = null;
+
+  // Barajar las preguntas al inicio
+  let preguntasRestantes = [...preguntas];
+
+  function cargarPregunta() {
+    clearInterval(timer);
+    tiempo = 30;
+    tiempoSpan.textContent = tiempo;
+    respondido = false;
+    nextBtn.style.display = "none";
+    resultText.textContent = "";
+
+    if (preguntasRestantes.length === 0) {
+      questionText.textContent = "Juego terminado";
+      optionsContainer.innerHTML = "";
+      resultText.textContent = `Aciertos: ${aciertos} - Errores: ${errores}`;
+      nextBtn.style.display = "none";
+      tiempoSpan.textContent = "-";
+      return;
+    }
+
+    const indice = Math.floor(Math.random() * preguntasRestantes.length);
+    preguntaActual = preguntasRestantes.splice(indice, 1)[0];
+
+    questionText.textContent = preguntaActual.pregunta;
+    optionsContainer.innerHTML = "";
+
+    preguntaActual.opciones.forEach((opcion, i) => {
+      const btn = document.createElement("div");
+      btn.className = "option";
+      btn.textContent = opcion;
+      btn.onclick = () => {
+        if (!respondido) verificarRespuesta(i, btn);
+      };
+      optionsContainer.appendChild(btn);
+    });
+
+    timer = setInterval(() => {
+      tiempo--;
+      tiempoSpan.textContent = tiempo;
+      if (tiempo === 0 && !respondido) {
+        verificarRespuesta(null, null);
+      }
+    }, 1000);
+  }
+
+  function verificarRespuesta(indiceSeleccionado, botonSeleccionado) {
+    respondido = true;
+    clearInterval(timer);
+    const correcta = preguntaActual.correcta;
+
+    const botones = document.querySelectorAll(".option");
+    botones.forEach((btn, i) => {
+      if (i === correcta) btn.classList.add("respuesta-correcta");
+    });
+
+    if (indiceSeleccionado === correcta) {
+      botonSeleccionado?.classList.add("correct");
+      resultText.textContent = "¡Correcto!";
+      resultText.style.color = "lime";
+      aciertos++;
+      aciertosSpan.textContent = aciertos;
+    } else {
+      if (indiceSeleccionado !== null) {
+        botonSeleccionado?.classList.add("incorrect");
+        resultText.textContent = "Incorrecto.";
+        resultText.style.color = "red";
+      } else {
+        resultText.textContent = "¡Tiempo agotado!";
+        resultText.style.color = "orange";
+      }
+      errores++;
+      erroresSpan.textContent = errores;
+    }
+
+    nextBtn.style.display = "inline-block";
+  }
+
+  function siguientePregunta() {
+    cargarPregunta();
+  }
+
+  // Iniciar con una pregunta aleatoria
+  cargarPregunta();
+</script>
+</body>
+</html>
