@@ -21,14 +21,13 @@
       border: 2px solid #39ff14;
       border-radius: 12px;
       width: 90%;
-      height:60%;
       max-width: 700px;
       padding: 25px;
       box-shadow: 0 0 25px #39ff14;
     }
 
     .question {
-      font-size: 3em;
+      font-size: 1.4em;
       text-align: center;
       margin-bottom: 25px;
     }
@@ -44,7 +43,6 @@
       border: 2px solid #555;
       padding: 15px;
       border-radius: 8px;
-      font-size:2em;
       cursor: pointer;
       text-align: center;
       transition: all 0.3s ease;
@@ -73,7 +71,7 @@
 
     .result {
       margin-top: 20px;
-      font-size: 2em;
+      font-size: 1.1em;
       font-weight: bold;
       text-align: center;
     }
@@ -126,1004 +124,1227 @@
   Bargas Nehuen Lautaro - Creado el 30/03/2025
 </footer>
   <!-- Cargamos las preguntas -->
-  <script src="trivia.js"></script>
+  <script src="triviaOE1.js"></script>
 
   <script>
 
 const preguntas = [
-  {
-    "pregunta": "¿Cómo se clasifica una empresa que cuenta con menos de 10 empleados?",
-    "opciones": [
-      "Gran empresa",
-      "Mediana empresa",
-      "Microempresa",
-      "Multinacional"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa se caracteriza por operar en varios países?",
-    "opciones": [
-      "Nacional",
-      "Pública",
-      "Multinacional",
-      "Microempresa"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de las siguientes características define a una empresa pública?",
-    "opciones": [
-      "Es propiedad del Estado",
-      "Cotiza en bolsa",
-      "Tiene fines de lucro",
-      "Opera en varios países"
-    ]
-  },
-  {
-    "pregunta": "¿Cómo se clasifica una empresa según el origen de su capital si combina recursos públicos y privados?",
-    "opciones": [
-      "Mixta",
-      "Privada",
-      "Cooperativa",
-      "Multinacional"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa se enfoca en la producción de bienes tangibles?",
-    "opciones": [
-      "De servicios",
-      "Industrial",
-      "Comercial",
-      "Financiera"
-    ]
-  },
-  {
-    "pregunta": "Una empresa que vende productos sin transformarlos es una:",
-    "opciones": [
-      "Industrial",
-      "Comercial",
-      "Extractiva",
-      "Pública"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el criterio que se utiliza para clasificar una empresa como pequeña, mediana o grande?",
-    "opciones": [
-      "Antigüedad",
-      "Nivel educativo de los empleados",
-      "Cantidad de empleados y volumen de ventas",
-      "Cantidad de productos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa tiene como objetivo principal el bienestar de sus miembros y no la obtención de ganancias?",
-    "opciones": [
-      "Multinacional",
-      "Cooperativa",
-      "Privada",
-      "Industrial"
-    ]
-  },
-  {
-    "pregunta": "¿Cómo se clasifica una empresa que brinda servicios como educación o salud?",
-    "opciones": [
-      "Industrial",
-      "Extractiva",
-      "De servicios",
-      "Mixta"
-    ]
-  },
-  {
-    "pregunta": "¿Qué caracteriza a una empresa privada?",
-    "opciones": [
-      "Pertenece al Estado",
-      "Está financiada por el gobierno",
-      "Es de propiedad de particulares",
-      "No genera ingresos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué característica define a una empresa informal?",
-    "opciones": [
-      "Está registrada legalmente",
-      "No paga impuestos ni tiene permisos oficiales",
-      "Opera en varios países",
-      "Tiene más de 100 empleados"
-    ]
-  },
-  {
-    "pregunta": "¿Qué sector agrupa a las empresas que prestan atención médica, educación y recreación?",
-    "opciones": [
-      "Sector primario",
-      "Sector industrial",
-      "Sector de servicios",
-      "Sector comercial"
-    ]
-  },
-  {
-    "pregunta": "¿Cómo se llaman las empresas que están compuestas por varios socios que invierten capital y comparten responsabilidades?",
-    "opciones": [
-      "Sociedad Anónima",
-      "Sociedad Colectiva",
-      "Empresa Unipersonal",
-      "Empresa Pública"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de estas empresas pertenece al sector primario?",
-    "opciones": [
-      "Una empresa agrícola",
-      "Una tienda de electrodomésticos",
-      "Un banco",
-      "Una fábrica de autos"
-    ]
-  },
-  {
-    "pregunta": "Una empresa que transforma madera en muebles se clasifica como:",
-    "opciones": [
-      "Comercial",
-      "De servicios",
-      "Industrial",
-      "Financiera"
-    ]
-  },
-  {
-    "pregunta": "¿Qué se entiende por empresa unipersonal?",
-    "opciones": [
-      "Una empresa de un solo empleado",
-      "Una empresa con capital extranjero",
-      "Una empresa con un solo propietario",
-      "Una empresa pública"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el principal objetivo de una empresa con fines de lucro?",
-    "opciones": [
-      "Satisfacer necesidades sociales",
-      "Promover la cultura",
-      "Obtener ganancias económicas",
-      "Brindar servicios sin cobrar"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa actúa como intermediaria entre productor y consumidor?",
-    "opciones": [
-      "De servicios",
-      "Comercial",
-      "Extractiva",
-      "Mixta"
-    ]
-  },
-  {
-    "pregunta": "¿Qué distingue a una sociedad anónima de otras formas de empresa?",
-    "opciones": [
-      "Sus acciones se pueden comprar y vender en la bolsa",
-      "Está gestionada por una familia",
-      "No busca generar ganancias",
-      "Opera solo en el campo"
-    ]
-  },
-  {
-    "pregunta": "Una empresa que produce energía eléctrica pertenece al sector:",
-    "opciones": [
-      "Primario",
-      "Secundario",
-      "Terciario",
-      "Cuaternario"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de estas funciones NO forma parte de la organización interna de una empresa?",
-    "opciones": [
-      "Producción",
-      "Finanzas",
-      "Publicidad",
-      "Investigación judicial"
-    ]
-  },
-  {
-    "pregunta": "¿Qué significa que una empresa tenga responsabilidad social?",
-    "opciones": [
-      "Que maximiza las ganancias",
-      "Que solo contrata familiares",
-      "Que se preocupa por el impacto en la sociedad y el ambiente",
-      "Que opera en la informalidad"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa actúa entre las actividades primarias y las terciarias, transformando recursos?",
-    "opciones": [
-      "Financiera",
-      "Industrial",
-      "Informal",
-      "Pública"
-    ]
-  },
-  {
-    "pregunta": "Una empresa que realiza actividades de minería pertenece al sector:",
-    "opciones": [
-      "Terciario",
-      "Secundario",
-      "Primario",
-      "Cuaternario"
-    ]
-  },
-  {
-    "pregunta": "¿Qué criterio se utiliza para clasificar a una empresa como internacional?",
-    "opciones": [
-      "Vende sus productos en el exterior",
-      "Opera en varias provincias",
-      "Tiene menos de 10 empleados",
-      "Recibe subsidios estatales"
-    ]
-  },
-  {
-    "pregunta": "¿Qué ventaja tiene una empresa grande sobre una pequeña?",
-    "opciones": [
-      "Menores costos por unidad producida",
-      "Menor acceso al crédito",
-      "Mayor dependencia de proveedores",
-      "Menor capacidad de producción"
-    ]
-  },
-  {
-    "pregunta": "¿Qué significa que una empresa sea sustentable?",
-    "opciones": [
-      "Busca generar ganancias rápidas",
-      "Opera sin regulaciones",
-      "Equilibra lo económico, social y ambiental",
-      "Evita toda forma de producción"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa está más orientada al desarrollo de conocimiento, software y tecnología?",
-    "opciones": [
-      "Del sector primario",
-      "Del sector cuaternario",
-      "Industrial",
-      "Comercial"
-    ]
-  },
-  {
-    "pregunta": "¿Qué nombre recibe una empresa que opera solo con recursos del Estado?",
-    "opciones": [
-      "Privada",
-      "Pública",
-      "Mixta",
-      "Cooperativa"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es un ejemplo de empresa del sector terciario?",
-    "opciones": [
-      "Una empresa minera",
-      "Una empresa de turismo",
-      "Una fábrica de bicicletas",
-      "Una empresa forestal"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de las siguientes empresas pertenece al sector cuaternario?",
-    "opciones": [
-      "Una empresa de telecomunicaciones",
-      "Una empresa de transporte",
-      "Una empresa pesquera",
-      "Una empresa agrícola"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa se caracteriza por reinvertir sus utilidades en vez de repartirlas entre socios?",
-    "opciones": [
-      "Multinacional",
-      "Pública",
-      "Cooperativa",
-      "Privada"
-    ]
-  },
-  {
-    "pregunta": "¿Qué se necesita para formalizar una empresa legalmente?",
-    "opciones": [
-      "Tener más de cinco empleados",
-      "Vender productos en línea",
-      "Registrar la empresa y pagar impuestos",
-      "Tener una sede central"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el nombre del documento que establece cómo se organiza una sociedad comercial?",
-    "opciones": [
-      "Contrato de locación",
-      "Estatuto social",
-      "Factura de compra",
-      "Certificado de origen"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa pertenece al sector financiero?",
-    "opciones": [
-      "Un banco",
-      "Una empresa constructora",
-      "Una empresa de turismo",
-      "Una empresa textil"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de responsabilidad tienen los dueños en una empresa unipersonal?",
-    "opciones": [
-      "Responsabilidad compartida",
-      "Responsabilidad limitada",
-      "Responsabilidad solidaria",
-      "Responsabilidad ilimitada"
-    ]
-  },
-  {
-    "pregunta": "¿Qué sector productivo es el primero en la cadena económica?",
-    "opciones": [
-      "Cuaternario",
-      "Secundario",
-      "Terciario",
-      "Primario"
-    ]
-  },
-  {
-    "pregunta": "Una empresa que diseña aplicaciones para celulares pertenece al sector:",
-    "opciones": [
-      "Primario",
-      "Cuaternario",
-      "Terciario",
-      "Secundario"
-    ]
-  },
-  {
-    "pregunta": "¿Qué empresa combina capital público y privado en su funcionamiento?",
-    "opciones": [
-      "Privada",
-      "Mixta",
-      "Unipersonal",
-      "Cooperativa"
-    ]
-  },
-  {
-    "pregunta": "¿Qué característica distingue a una empresa artesanal de una industrial?",
-    "opciones": [
-      "Utiliza alta tecnología",
-      "Produce en serie",
-      "La producción es manual y personalizada",
-      "Opera en varios países"
-    ]
-  },
-  {
-    "pregunta": "¿Qué significa que una empresa sea escalable?",
-    "opciones": [
-      "Se puede vender fácilmente",
-      "Tiene capacidad de crecer sin perder eficiencia",
-      "Funciona en un edificio alto",
-      "Puede operar sin trabajadores"
-    ]
-  },
-  {
-    "pregunta": "¿Qué ventaja suele tener una empresa pequeña frente a una grande?",
-    "opciones": [
-      "Mayor burocracia",
-      "Más capacidad de adaptación",
-      "Menor contacto con el cliente",
-      "Más empleados"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de estas no es una clasificación común para una empresa?",
-    "opciones": [
-      "Por tipo de producto",
-      "Por color del logotipo",
-      "Por tamaño",
-      "Por forma jurídica"
-    ]
-  },
-  {
-    "pregunta": "¿Qué es el capital humano en una empresa?",
-    "opciones": [
-      "La cantidad de dinero invertido",
-      "Los edificios y oficinas",
-      "El conjunto de conocimientos y habilidades del personal",
-      "El dinero ganado por ventas"
-    ]
-  },
-  {
-    "pregunta": "Una empresa que se dedica a fabricar celulares está en el sector:",
-    "opciones": [
-      "Terciario",
-      "Primario",
-      "Secundario",
-      "Cuaternario"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es una desventaja común de las empresas informales?",
-    "opciones": [
-      "Alta carga impositiva",
-      "Dificultad para acceder a créditos y beneficios legales",
-      "Mayor tecnología",
-      "Alta visibilidad pública"
-    ]
-  },
-  {
-    "pregunta": "¿Qué forma legal de empresa permite cotizar en la bolsa de valores?",
-    "opciones": [
-      "Cooperativa",
-      "Sociedad de Responsabilidad Limitada",
-      "Sociedad Anónima",
-      "Empresa unipersonal"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el objetivo principal de una empresa social?",
-    "opciones": [
-      "Ganar dinero a toda costa",
-      "Lograr impacto social positivo",
-      "Reducir sueldos",
-      "Exportar productos"
-    ]
-  },
-  {
-    "pregunta": "¿Cómo se llama el documento que autoriza el funcionamiento de una empresa formal?",
-    "opciones": [
-      "Factura",
-      "Licencia o habilitación",
-      "Presupuesto",
-      "Contrato verbal"
-    ]
-  },
-  {
-    "pregunta": "Una empresa que ofrece servicios como limpieza y mantenimiento se clasifica como:",
-    "opciones": [
-      "Extractiva",
-      "Industrial",
-      "De servicios",
-      "Mixta"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa suele tener estructuras jerárquicas más simples?",
-    "opciones": [
-      "Multinacional",
-      "Gran empresa",
-      "Microempresa",
-      "Pública"
-    ]
-  },
-  {
-    "pregunta": "¿Qué significa que una empresa tenga integración vertical?",
-    "opciones": [
-      "Controla varias etapas del proceso productivo",
-      "Opera en varios países",
-      "Tiene múltiples socios",
-      "Depende de subsidios estatales"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de las siguientes funciones forma parte del área de recursos humanos?",
-    "opciones": [
-      "Fabricación de productos",
-      "Reclutamiento y selección de personal",
-      "Distribución de mercancías",
-      "Diseño de logotipos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué define a una franquicia empresarial?",
-    "opciones": [
-      "Una empresa informal",
-      "Un modelo en el que se otorga el derecho de uso de una marca",
-      "Una empresa pública",
-      "Una empresa de tipo artesanal"
-    ]
-  },
-  {
-    "pregunta": "¿Qué sector incluye a las empresas dedicadas a la explotación forestal?",
-    "opciones": [
-      "Terciario",
-      "Primario",
-      "Secundario",
-      "Financiero"
-    ]
-  },
-  {
-    "pregunta": "¿Qué característica tienen las sociedades de responsabilidad limitada (SRL)?",
-    "opciones": [
-      "Solo pueden operar en zonas rurales",
-      "Los socios responden con todo su patrimonio",
-      "La responsabilidad está limitada al capital aportado",
-      "Solo prestan servicios educativos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué elemento NO forma parte de la identidad de una empresa?",
-    "opciones": [
-      "Misión",
-      "Visión",
-      "Valores",
-      "Rendimiento académico"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa se caracteriza por desarrollar investigación y patentes?",
-    "opciones": [
-      "De servicios",
-      "Del sector primario",
-      "Del sector cuaternario",
-      "Informal"
-    ]
-  },
-  {
-    "pregunta": "¿Qué es el mercado objetivo de una empresa?",
-    "opciones": [
-      "El lugar donde produce",
-      "El conjunto de clientes a quienes dirige sus productos o servicios",
-      "La competencia directa",
-      "Los proveedores externos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué departamento de una empresa es responsable del control financiero?",
-    "opciones": [
-      "Marketing",
-      "Producción",
-      "Contabilidad",
-      "Recursos Humanos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué significa el término 'PYME'?",
-    "opciones": [
-      "Persona y Medios Empresariales",
-      "Pequeña y Mediana Empresa",
-      "Producción y Marketing Empresarial",
-      "Programa Y Manejo Empresarial"
-    ]
-  },
-  {
-    "pregunta": "¿Qué diferencia a una empresa estatal de una privada?",
-    "opciones": [
-      "Que se dedica solo a servicios",
-      "Que tiene más empleados",
-      "Que pertenece al gobierno",
-      "Que no tiene ganancias"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de estas es una desventaja de una empresa muy grande?",
-    "opciones": [
-      "Mayor flexibilidad",
-      "Dificultad para adaptarse rápidamente a cambios",
-      "Menor visibilidad de marca",
-      "Poca diversificación"
-    ]
-  },
-  {
-    "pregunta": "¿Qué característica define a una empresa de economía social?",
-    "opciones": [
-      "Opera sin legalidad",
-      "Está basada en el lucro total",
-      "Busca el bienestar colectivo sobre el interés individual",
-      "No puede crecer"
-    ]
-  },
-  {
-    "pregunta": "¿Qué significa que una empresa tenga 'responsabilidad limitada'?",
-    "opciones": [
-      "Solo puede contratar un número limitado de empleados",
-      "Solo puede funcionar en ciertas regiones",
-      "Los socios no arriesgan su patrimonio personal más allá del capital aportado",
-      "Tiene limitaciones tecnológicas"
-    ]
-  },
-  {
-    "pregunta": "¿Qué es una empresa familiar?",
-    "opciones": [
-      "Aquella donde trabajan miembros de una misma familia",
-      "Una empresa que se dedica a productos infantiles",
-      "Una empresa sin fines de lucro",
-      "Una empresa estatal"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es una ventaja de la tercerización en empresas?",
-    "opciones": [
-      "Mayor control interno",
-      "Reducción de costos y especialización de tareas",
-      "Menor productividad",
-      "Aumento de personal fijo"
-    ]
-  },
-  {
-    "pregunta": "¿Qué implica la globalización para las empresas?",
-    "opciones": [
-      "Que deben trabajar solo con proveedores locales",
-      "Que no pueden vender al extranjero",
-      "Que se enfrentan a mercados internacionales y mayor competencia",
-      "Que deben ser estatales"
-    ]
-  },
-  {
-    "pregunta": "¿Qué función tiene el área de marketing en una empresa?",
-    "opciones": [
-      "Contratar empleados",
-      "Gestionar proveedores",
-      "Promover y posicionar productos o servicios",
-      "Fabricar los productos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa puede tener acciones que se compran en la bolsa de valores?",
-    "opciones": [
-      "Sociedad anónima",
-      "Cooperativa",
-      "Sociedad colectiva",
-      "Empresa informal"
-    ]
-  },
-  {
-    "pregunta": "¿Qué área de la empresa se encarga de planificar y controlar la producción?",
-    "opciones": [
-      "Marketing",
-      "Producción",
-      "Contabilidad",
-      "Logística"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa está más vinculada al uso intensivo de mano de obra y poca tecnología?",
-    "opciones": [
-      "Industrial",
-      "Informal",
-      "Artesanal",
-      "Mixta"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es una característica de las empresas exportadoras?",
-    "opciones": [
-      "Solo venden a nivel local",
-      "Requieren autorización para operar en zonas rurales",
-      "Venden productos o servicios al extranjero",
-      "Solo trabajan con cooperativas"
-    ]
-  },
-  {
-    "pregunta": "¿Qué característica distingue a una sociedad colectiva?",
-    "opciones": [
-      "Tiene responsabilidad limitada",
-      "Los socios responden con su patrimonio personal",
-      "Solo opera en internet",
-      "Requiere más de 50 empleados"
-    ]
-  },
-  {
-    "pregunta": "¿Qué empresas trabajan principalmente con información, innovación y conocimiento?",
-    "opciones": [
-      "Del sector secundario",
-      "Del sector cuaternario",
-      "Informales",
-      "Comerciales"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa suele trabajar con materias primas directamente extraídas de la naturaleza?",
-    "opciones": [
-      "Comercial",
-      "Cuaternaria",
-      "Primaria",
-      "Industrial"
-    ]
-  },
-  {
-    "pregunta": "¿Qué es una empresa sin fines de lucro?",
-    "opciones": [
-      "Una empresa que busca maximizar ganancias",
-      "Una organización que reinvierte todo para cumplir objetivos sociales",
-      "Una sociedad anónima internacional",
-      "Una empresa familiar"
-    ]
-  },
-  {
-    "pregunta": "¿Qué es una fusión empresarial?",
-    "opciones": [
-      "Un despido masivo",
-      "La compra de materia prima",
-      "La unión de dos o más empresas para formar una nueva",
-      "La venta de acciones al público"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de las siguientes NO es una forma jurídica común de una empresa?",
-    "opciones": [
-      "Sociedad anónima",
-      "Sociedad limitada",
-      "Empresa invisible",
-      "Empresa unipersonal"
-    ]
-  },
-  {
-    "pregunta": "¿Qué es una startup?",
-    "opciones": [
-      "Una empresa antigua y tradicional",
-      "Una empresa nueva, innovadora y con potencial de crecimiento rápido",
-      "Una empresa estatal",
-      "Una cooperativa agraria"
-    ]
-  },
-  {
-    "pregunta": "¿Qué elemento es fundamental para que una empresa planifique sus objetivos?",
-    "opciones": [
-      "Dinero en efectivo",
-      "Competencia desleal",
-      "Misión y visión empresarial",
-      "Más empleados"
-    ]
-  },
-  {
-    "pregunta": "¿Qué diferencia a una empresa formal de una informal?",
-    "opciones": [
-      "El tipo de productos que vende",
-      "La cantidad de empleados",
-      "El cumplimiento de requisitos legales",
-      "Su ubicación geográfica"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresas suelen tener más dificultad para acceder a créditos bancarios?",
-    "opciones": [
-      "Multinacionales",
-      "Empresas del Estado",
-      "Microempresas",
-      "Sociedades anónimas"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de las siguientes funciones pertenece al área logística de una empresa?",
-    "opciones": [
-      "Diseño de publicidad",
-      "Control de transporte y almacenamiento de productos",
-      "Selección de personal",
-      "Planificación fiscal"
-    ]
-  },
-  {
-    "pregunta": "¿Qué sector incluye empresas como bancos, aseguradoras y financieras?",
-    "opciones": [
-      "Primario",
-      "Secundario",
-      "Financiero",
-      "Cuaternario"
-    ]
-  },
-  {
-    "pregunta": "¿Qué significa que una empresa sea global?",
-    "opciones": [
-      "Opera solo en su país de origen",
-      "Está limitada por leyes locales",
-      "Tiene presencia en varios países y mercados",
-      "Solo opera con productos digitales"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el rol principal del área de administración en una empresa?",
-    "opciones": [
-      "Vender productos",
-      "Organizar recursos para cumplir objetivos",
-      "Transportar mercancías",
-      "Diseñar productos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué tipo de empresa se organiza como comunidad de productores y consumidores?",
-    "opciones": [
-      "Pública",
-      "Privada",
-      "Cooperativa",
-      "Unipersonal"
-    ]
-  },
-  {
-    "pregunta": "¿Qué empresas están sujetas a normas impositivas y laborales?",
-    "opciones": [
-      "Solo las grandes",
-      "Solo las extranjeras",
-      "Las empresas formales",
-      "Las empresas ilegales"
-    ]
-  },
-  {
-    "pregunta": "¿Qué permite el análisis FODA en una empresa?",
-    "opciones": [
-      "Diseñar el logotipo",
-      "Evaluar fortalezas, oportunidades, debilidades y amenazas",
-      "Contratar personal",
-      "Comprar insumos al por mayor"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el principal impacto de la economía de escala en una gran empresa?",
-    "opciones": [
-      "Aumenta los costos unitarios",
-      "Reduce los precios y mejora la competitividad",
-      "Reduce el control de calidad",
-      "Disminuye la capacidad de producción"
-    ]
-  },
-  {
-    "pregunta": "¿Qué implica una estructura organizacional matricial?",
-    "opciones": [
-      "Una jerarquía rígida sin cruces de funciones",
-      "Asignación de empleados a proyectos específicos bajo dos jefaturas",
-      "Organización por zonas geográficas únicamente",
-      "Separación absoluta entre administración y producción"
-    ]
-  },
-  {
-    "pregunta": "¿Qué función cumple el análisis del entorno PESTEL en una empresa?",
-    "opciones": [
-      "Determinar el precio de venta de un producto",
-      "Analizar factores externos: políticos, económicos, sociales, tecnológicos, ecológicos y legales",
-      "Seleccionar proveedores confiables",
-      "Diseñar campañas publicitarias"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el riesgo de depender excesivamente de un solo proveedor en una empresa industrial?",
-    "opciones": [
-      "Incremento de la diversificación",
-      "Reducción de los costos operativos",
-      "Vulnerabilidad ante fallas externas",
-      "Mejor cumplimiento de plazos"
-    ]
-  },
-  {
-    "pregunta": "¿Qué indicador se utiliza comúnmente para medir la rentabilidad de una empresa?",
-    "opciones": [
-      "Liquidez corriente",
-      "Retorno sobre el capital (ROE)",
-      "Activo no corriente",
-      "Rotación de inventarios"
-    ]
-  },
-  {
-    "pregunta": "¿Qué implica la diversificación empresarial horizontal?",
-    "opciones": [
-      "Ingresar a un nuevo sector no relacionado con su rubro principal",
-      "Expandir el negocio ofreciendo productos complementarios o similares",
-      "Aumentar la inversión en maquinaria pesada",
-      "Reducir el número de productos"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el objetivo principal de una auditoría interna en una empresa?",
-    "opciones": [
-      "Aumentar el stock de productos",
-      "Evaluar el cumplimiento de procedimientos y detectar irregularidades",
-      "Atraer nuevos inversores",
-      "Analizar el diseño de productos"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál de estos es un ejemplo de empresa oligopólica?",
-    "opciones": [
-      "Una única empresa que domina el mercado",
-      "Varias empresas compitiendo libremente",
-      "Un grupo reducido de empresas que domina un mercado específico",
-      "Empresas familiares rurales"
-    ]
-  },
-  {
-    "pregunta": "¿Qué característica presenta una empresa que cotiza en bolsa?",
-    "opciones": [
-      "Sus acciones pueden ser compradas por el público en el mercado financiero",
-      "Solo produce a gran escala",
-      "Tiene únicamente capital privado",
-      "Opera informalmente"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el principal objetivo de una empresa en etapa de internacionalización?",
-    "opciones": [
-      "Reducir su tamaño",
-      "Diversificar riesgos y ampliar su mercado",
-      "Reducir costos de personal",
-      "Depender de subsidios estatales"
-    ]
-  },
-  {
-    "pregunta": "¿Qué se busca al implementar un sistema ERP en una empresa?",
-    "opciones": [
-      "Incentivar el trabajo informal",
-      "Integrar la gestión de todas las áreas en un solo sistema",
-      "Reducir la cantidad de trabajadores",
-      "Evitar pagar impuestos"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es una ventaja competitiva sostenible en una empresa?",
-    "opciones": [
-      "Un descuento temporal",
-      "Un precio bajo ocasional",
-      "Una innovación difícil de imitar por otras empresas",
-      "Una campaña publicitaria agresiva"
-    ]
-  },
-  {
-    "pregunta": "¿Qué implica una estrategia de liderazgo en costos?",
-    "opciones": [
-      "Incrementar el precio de venta",
-      "Reducir costos para ofrecer precios más bajos que la competencia",
-      "Invertir más en recursos humanos",
-      "Ampliar la estructura jerárquica"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el beneficio principal de una empresa certificada como B (de triple impacto)?",
-    "opciones": [
-      "Reduce impuestos automáticamente",
-      "Demuestra compromiso social, económico y ambiental",
-      "Solo exporta sus productos",
-      "Opera exclusivamente sin fines de lucro"
-    ]
-  },
-  {
-    "pregunta": "¿Qué problema puede causar una alta rotación de personal en una empresa?",
-    "opciones": [
-      "Aumento de la innovación",
-      "Mayor estabilidad operativa",
-      "Costos de capacitación elevados y pérdida de conocimiento",
-      "Mayor flexibilidad organizacional"
-    ]
-  },
-  {
-    "pregunta": "¿Qué representa el índice de liquidez corriente?",
-    "opciones": [
-      "La ganancia total de la empresa",
-      "La relación entre activos corrientes y pasivos corrientes",
-      "El nivel de endeudamiento total",
-      "La cantidad de ventas anuales"
-    ]
-  },
-  {
-    "pregunta": "¿Qué es una ventaja de una empresa familiar bien estructurada?",
-    "opciones": [
-      "Mayor informalidad",
-      "Confianza interna y toma de decisiones ágil",
-      "Dificultad para delegar",
-      "Poca identificación de los empleados"
-    ]
-  },
-  {
-    "pregunta": "¿Qué puede generar un entorno macroeconómico inestable en las empresas locales?",
-    "opciones": [
-      "Mayor inversión extranjera inmediata",
-      "Previsibilidad en los precios",
-      "Dificultad para planificar a largo plazo",
-      "Estabilidad en el tipo de cambio"
-    ]
-  },
-  {
-    "pregunta": "¿Qué es la cultura organizacional de una empresa?",
-    "opciones": [
-      "El tipo de producto que vende",
-      "Las normas, valores y formas de comportamiento compartidas por sus miembros",
-      "La cantidad de trabajadores",
-      "El nivel de ventas"
-    ]
-  },
-  {
-    "pregunta": "¿Cuál es el riesgo de una integración vertical inversa?",
-    "opciones": [
-      "Pérdida de clientes",
-      "Complejidad en la gestión de insumos y materias primas",
-      "Reducción del control logístico",
-      "Mayor dependencia del Estado"
-    ]
-  },
-  
-  
-];
+{
+  pregunta: "¿Qué representa el EBITDA en el análisis financiero de una empresa?",
+  opciones: [
+    "Las ganancias antes de intereses, impuestos, depreciaciones y amortizaciones",
+    "La cantidad de ventas realizadas",
+    "El monto destinado a salarios",
+    "El valor de los activos fijos"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué riesgo representa una alta dependencia del entorno externo?",
+  opciones: [
+    "Mayor control sobre la producción",
+    "Mayor flexibilidad comercial",
+    "Vulnerabilidad ante cambios políticos, legales o económicos",
+    "Acceso a más empleados calificados"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué estrategia aplica una empresa que adapta su producto a cada país donde opera?",
+  opciones: [
+    "Estandarización global",
+    "Penetración de mercado",
+    "Diversificación vertical",
+    "Adaptación local o multidoméstica"
+  ],
+  correcta: 3
+},
+{
+  pregunta: "¿Cuál es la función del benchmarking en la gestión empresarial?",
+  opciones: [
+    "Copiar productos de la competencia",
+    "Establecer precios máximos",
+    "Comparar procesos propios con los de empresas líderes para mejorar",
+    "Controlar el horario del personal"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué ventaja competitiva ofrece la integración horizontal?",
+  opciones: [
+    "Acceso a materias primas",
+    "Control de distribución",
+    "Eliminación de competidores al adquirir empresas del mismo rubro",
+    "Reducción de horas laborales"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es una desventaja del financiamiento por deuda en empresas pequeñas?",
+  opciones: [
+    "Aumenta el capital propio",
+    "Reduce el nivel de inversión",
+    "Genera obligaciones fijas difíciles de afrontar",
+    "Permite crecer sin riesgos"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué es una alianza estratégica entre empresas?",
+  opciones: [
+    "Una compra definitiva",
+    "Un acuerdo temporal de cooperación sin perder independencia jurídica",
+    "Una fusión de capitales",
+    "Una competencia encubierta"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es el rol del análisis FODA en la toma de decisiones?",
+  opciones: [
+    "Aumentar la producción",
+    "Controlar gastos",
+    "Evaluar factores internos y externos que afectan a la empresa",
+    "Contratar más personal"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué puede provocar un mal diseño organizacional en una empresa?",
+  opciones: [
+    "Mayor productividad",
+    "Reducción de gastos",
+    "Duplicación de tareas y baja eficiencia",
+    "Acceso a nuevos mercados"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué representa el capital de trabajo?",
+  opciones: [
+    "La inversión en maquinaria pesada",
+    "Los recursos disponibles para operaciones cotidianas",
+    "Los activos inmobiliarios",
+    "El total de pasivos de largo plazo"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es el impacto positivo del análisis de la cadena de valor?",
+  opciones: [
+    "Disminuye la burocracia legal",
+    "Permite identificar actividades que generan ventaja competitiva",
+    "Reduce los costos fiscales",
+    "Evita la rotación del personal"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa que una empresa tenga una estructura funcional?",
+  opciones: [
+    "Está dividida según regiones",
+    "Agrupa empleados por funciones como producción, ventas, finanzas",
+    "Opera sin jerarquías",
+    "Cada unidad trabaja de forma autónoma sin interacción"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué característica tiene una empresa orientada al cliente?",
+  opciones: [
+    "Solo produce según sus capacidades",
+    "Desarrolla productos basados en necesidades y satisfacción del cliente",
+    "Reduce costos operativos a cualquier precio",
+    "Evita invertir en marketing"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué se analiza al calcular el punto de equilibrio de una empresa?",
+  opciones: [
+    "El momento en que los ingresos igualan a los costos totales",
+    "La deuda acumulada",
+    "La cantidad de productos en stock",
+    "El salario promedio"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué implica una estrategia de nicho en el mercado?",
+  opciones: [
+    "Atacar a todos los consumidores por igual",
+    "Dirigirse a un segmento específico con productos muy enfocados",
+    "Reducir la calidad de los productos",
+    "Vender solo en línea"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es un organigrama?",
+  opciones: [
+    "Una lista de tareas por día",
+    "Un mapa comercial",
+    "Una representación gráfica de la estructura de una organización",
+    "Un sistema contable"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué medida puede aplicar una empresa para reducir su huella de carbono?",
+  opciones: [
+    "Aumentar la importación de productos",
+    "Utilizar energías renovables y optimizar procesos",
+    "Eliminar reciclaje",
+    "Subcontratar sin control ambiental"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué impacto tiene la automatización sobre el empleo en empresas manufactureras?",
+  opciones: [
+    "Aumenta la necesidad de mano de obra no calificada",
+    "Disminuye costos pero puede reducir empleos tradicionales",
+    "Reduce la innovación",
+    "Impide cumplir con normativas legales"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es una ventaja comparativa entre empresas de diferentes países?",
+  opciones: [
+    "Tener más empleados",
+    "Poder producir un bien a menor costo relativo que otro país",
+    "Vender más caro",
+    "Importar más productos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué función cumple un plan de negocios?",
+  opciones: [
+    "Describir de forma estructurada los objetivos, estrategias y recursos de una empresa",
+    "Reemplazar los contratos laborales",
+    "Administrar los gastos diarios",
+    "Controlar el ingreso de clientes"
+  ],
+  correcta: 0
+},
+
+{
+  pregunta: "¿Qué representa el coeficiente de apalancamiento financiero en una empresa?",
+  opciones: [
+    "El nivel de rotación de inventario",
+    "La proporción de deuda respecto al capital propio",
+    "El ingreso por empleado",
+    "El valor de las ventas netas"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué implica la tercerización de procesos (outsourcing)?",
+  opciones: [
+    "Contratar personal sin capacitación",
+    "Delegar procesos específicos a empresas externas para mejorar eficiencia",
+    "Reducir el control interno sin supervisión",
+    "Aumentar los costos operativos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es el análisis costo-beneficio?",
+  opciones: [
+    "Una forma de evaluar solamente las pérdidas",
+    "La comparación entre lo invertido y los beneficios obtenidos",
+    "Una auditoría de personal",
+    "El control del precio de venta"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es un monopolio natural?",
+  opciones: [
+    "Una empresa que domina un mercado sin competencia legal",
+    "Un mercado donde los costos fijos son tan altos que una sola empresa es más eficiente",
+    "Un tipo de fraude comercial",
+    "Un modelo de producción artesanal"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa que una empresa tenga alta liquidez pero baja rentabilidad?",
+  opciones: [
+    "Tiene muchas ventas, pero pocos activos",
+    "Puede pagar sus deudas a corto plazo, pero no genera ganancias significativas",
+    "Está en bancarrota",
+    "Tiene buen posicionamiento en bolsa"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué ventaja genera un análisis DAFO-FODA cruzado?",
+  opciones: [
+    "Combina fortalezas con oportunidades y debilidades con amenazas para tomar decisiones estratégicas",
+    "Reemplaza todos los informes financieros",
+    "Permite definir las normas ISO",
+    "Establece el diseño gráfico de una marca"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué función cumple la logística inversa en una empresa?",
+  opciones: [
+    "Planifica despidos",
+    "Administra el retorno de productos y residuos para reciclaje o disposición final",
+    "Evita la tercerización",
+    "Genera nuevos clientes"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué representa el término ROI?",
+  opciones: [
+    "Retorno sobre la inversión",
+    "Rotación organizativa internacional",
+    "Rendimiento de operaciones internas",
+    "Recurso operativo inmediato"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué es una holding empresarial?",
+  opciones: [
+    "Una empresa que fabrica maquinaria pesada",
+    "Una sociedad que posee la mayoría accionaria de otras empresas",
+    "Una franquicia de servicios públicos",
+    "Una estructura cooperativa informal"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es el objetivo principal de una reingeniería de procesos?",
+  opciones: [
+    "Agregar más controles a los trabajadores",
+    "Reducir costos eliminando pasos innecesarios y rediseñando actividades clave",
+    "Evitar cambios estructurales",
+    "Disminuir los sueldos del personal"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es el riesgo de operar con baja diversificación de productos?",
+  opciones: [
+    "Mayor adaptabilidad",
+    "Dependencia excesiva de un solo producto o mercado",
+    "Crecimiento sostenido",
+    "Menor inversión en activos fijos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es la ventaja absoluta según Adam Smith?",
+  opciones: [
+    "Poder producir todo tipo de bienes a menor precio",
+    "La capacidad de un país de producir un bien utilizando menos recursos que otro",
+    "Tener mayor nivel de exportación que importación",
+    "Importar bienes con menor arancel"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué indicador se usa para conocer la eficiencia con la que una empresa utiliza sus activos?",
+  opciones: [
+    "Tasa interna de retorno",
+    "Rentabilidad sobre activos (ROA)",
+    "Endeudamiento operativo",
+    "Índice de liquidez inmediata"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué estrategia representa una fusión horizontal?",
+  opciones: [
+    "Unión entre dos empresas del mismo sector y nivel productivo",
+    "Compra de clientes para reducir la demanda",
+    "Integración de procesos de transporte y logística",
+    "Expansión a nuevos mercados financieros"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué es la cultura organizacional tóxica?",
+  opciones: [
+    "Ambiente laboral que fomenta la innovación",
+    "Entorno donde predominan actitudes negativas, estrés, conflictos y falta de liderazgo",
+    "Sistema abierto a la diversidad",
+    "Política de responsabilidad social"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué determina el análisis del ciclo operativo de una empresa?",
+  opciones: [
+    "El tiempo que tarda en transformar insumos en efectivo nuevamente",
+    "La duración de la jornada laboral",
+    "La tasa de retención de clientes",
+    "La duración del ciclo de vida del producto"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué es una unidad estratégica de negocios (UEN)?",
+  opciones: [
+    "Una parte de la empresa que se gestiona como si fuera independiente",
+    "El equipo de ventas",
+    "Un producto en fase de desarrollo",
+    "Una empresa sin capital propio"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál es una causa común del fracaso de emprendimientos?",
+  opciones: [
+    "Demasiada planificación",
+    "Falta de análisis de mercado y mala gestión financiera",
+    "Acceso a demasiadas fuentes de financiamiento",
+    "Exceso de capacitación"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué se entiende por cadena de suministro?",
+  opciones: [
+    "Red de procesos que cubre desde la obtención de materias primas hasta la entrega del producto final",
+    "Lista de empleados por área",
+    "Sistema contable",
+    "Control legal del producto"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué son los costos hundidos?",
+  opciones: [
+    "Gastos futuros presupuestados",
+    "Costos irrecuperables ya invertidos, que no deben influir en decisiones futuras",
+    "Costos de reposición de inventario",
+    "Costos asociados a exportación"
+  ],
+  correcta: 1
+},
+
+
+{
+  pregunta: "¿Qué es una ventaja competitiva sostenible según Michael Porter?",
+  opciones: [
+    "Una promoción temporal que aumenta ventas",
+    "Un atributo difícil de imitar que mantiene a la empresa en ventaja en el largo plazo",
+    "Una rebaja de precios agresiva",
+    "Un aumento en la producción sin innovación"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué objetivo tiene un sistema de gestión de calidad ISO 9001?",
+  opciones: [
+    "Mejorar la calidad solo en productos terminados",
+    "Establecer procesos sistemáticos para asegurar la mejora continua y satisfacción del cliente",
+    "Reducir personal no calificado",
+    "Eliminar toda burocracia"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué representa un análisis de sensibilidad en un plan financiero?",
+  opciones: [
+    "El valor estimado de los activos fijos",
+    "El impacto de variaciones en variables clave sobre los resultados esperados",
+    "El porcentaje de crecimiento de la empresa",
+    "El rendimiento en la bolsa de valores"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué herramienta permite visualizar el ciclo de vida de un producto?",
+  opciones: [
+    "Análisis PESTEL",
+    "Matriz BCG",
+    "Cadena de suministro",
+    "Análisis de liquidez"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué mide el índice de rotación de inventario?",
+  opciones: [
+    "Cuánto inventario entra por día",
+    "La frecuencia con la que se renuevan los productos en almacén en un periodo dado",
+    "La cantidad de productos en exhibición",
+    "La rotación de empleados"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué tipo de liderazgo favorece la participación y toma de decisiones conjunta?",
+  opciones: [
+    "Autoritario",
+    "Democrático",
+    "Laissez-faire",
+    "Transaccional"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es la elasticidad-precio de la demanda?",
+  opciones: [
+    "El costo fijo por unidad vendida",
+    "La variación porcentual en la cantidad demandada ante un cambio en el precio",
+    "La relación entre demanda e inflación",
+    "La estabilidad del producto en el mercado"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa que una empresa tenga una ventaja de diferenciación?",
+  opciones: [
+    "Produce al menor costo posible",
+    "Ofrece productos únicos que el cliente percibe como superiores",
+    "Opera sin impuestos",
+    "No tiene competencia directa"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es el propósito del análisis del entorno competitivo de Porter (las 5 fuerzas)?",
+  opciones: [
+    "Identificar oportunidades de inversión en bolsa",
+    "Analizar amenazas y fortalezas internas",
+    "Evaluar la rentabilidad potencial de un sector",
+    "Diseñar organigramas empresariales"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué son los activos intangibles en una empresa?",
+  opciones: [
+    "Productos de stock que no se usan",
+    "Bienes físicos como maquinaria",
+    "Recursos sin forma física como marcas, patentes o reputación",
+    "Dinero en efectivo"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué estrategia permite a una empresa adaptarse a entornos cambiantes con rapidez?",
+  opciones: [
+    "Planeamiento rígido a largo plazo",
+    "Estrategia de océano rojo",
+    "Planeamiento estratégico flexible",
+    "Integración vertical ascendente"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué representa el costo marginal?",
+  opciones: [
+    "El costo total del mes anterior",
+    "El costo de producir una unidad adicional",
+    "El costo fijo por empleado",
+    "El precio de mercado promedio"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué tipo de innovación implica crear un producto completamente nuevo que cambia el mercado?",
+  opciones: [
+    "Innovación incremental",
+    "Innovación de mejora interna",
+    "Innovación disruptiva",
+    "Innovación secundaria"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es el rol del análisis financiero vertical?",
+  opciones: [
+    "Comparar las variaciones entre distintos períodos",
+    "Mostrar la proporción que representa cada partida dentro de un mismo estado financiero",
+    "Analizar costos fijos exclusivamente",
+    "Calcular impuestos de una empresa"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es una función de la planificación estratégica?",
+  opciones: [
+    "Resolver conflictos laborales",
+    "Establecer metas a corto plazo sin diagnóstico",
+    "Definir objetivos a largo plazo considerando el entorno y recursos",
+    "Aumentar impuestos empresariales"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa eficiencia operativa en una empresa?",
+  opciones: [
+    "Lograr altos ingresos sin importar los costos",
+    "Minimizar recursos usados manteniendo el mismo nivel de resultados",
+    "Incrementar el número de empleados",
+    "Reducir la calidad para bajar precios"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué implican los costos de oportunidad en una decisión empresarial?",
+  opciones: [
+    "Costos visibles en contabilidad",
+    "Costos legales por incumplimiento",
+    "El valor del beneficio al que se renuncia por elegir una opción sobre otra",
+    "El total de salarios pagados"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es una consecuencia de una baja rotación de cartera de clientes?",
+  opciones: [
+    "Alta fidelidad y relaciones estables",
+    "Falta de competitividad",
+    "Pérdida de confianza",
+    "Demasiadas devoluciones"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué implica un entorno VUCA en gestión empresarial?",
+  opciones: [
+    "Entorno estable y predecible",
+    "Alta volatilidad, incertidumbre, complejidad y ambigüedad",
+    "Mercado en crecimiento constante",
+    "Negocios tradicionales sin riesgos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué representa la curva de experiencia en estrategia empresarial?",
+  opciones: [
+    "El aumento de costos con el tiempo",
+    "La reducción de costos unitarios a medida que se gana experiencia",
+    "La pérdida de productividad al escalar operaciones",
+    "La dificultad de gestionar talento humano"
+  ],
+  correcta: 1
+},
+
+{
+  pregunta: "¿Cuál es el propósito principal del análisis de brechas en una empresa?",
+  opciones: [
+    "Comparar sueldos entre departamentos",
+    "Identificar diferencias entre el desempeño actual y los objetivos deseados",
+    "Establecer políticas de recursos humanos",
+    "Aumentar el volumen de inventario"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es el ciclo PDCA en gestión empresarial?",
+  opciones: [
+    "Una técnica contable",
+    "Una metodología para análisis de mercado",
+    "Un modelo de mejora continua: Planificar, Hacer, Verificar, Actuar",
+    "Un tipo de auditoría externa"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué representa el ratio de endeudamiento?",
+  opciones: [
+    "La proporción de pasivos frente a activos totales",
+    "El número de socios en la empresa",
+    "La tasa de crecimiento anual",
+    "El índice de satisfacción del cliente"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué estrategia utiliza una empresa que ofrece el producto más barato del mercado?",
+  opciones: [
+    "Diferenciación",
+    "Liderazgo en costos",
+    "Foco en innovación",
+    "Integración horizontal"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué ventaja presenta el modelo canvas para un emprendimiento?",
+  opciones: [
+    "Permite la declaración de impuestos",
+    "Facilita visualizar y desarrollar el modelo de negocio en una sola hoja",
+    "Establece estatutos legales",
+    "Gestiona planillas de sueldos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué son las barreras de entrada en un mercado?",
+  opciones: [
+    "Obstáculos que dificultan el ingreso de nuevos competidores",
+    "Ofertas de productos sustitutos",
+    "Promociones para consumidores fieles",
+    "Costos internos por baja eficiencia"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué es la propuesta de valor de una empresa?",
+  opciones: [
+    "El precio de sus acciones en el mercado",
+    "Lo que la empresa promete entregar al cliente que la diferencia de otras",
+    "El salario promedio de los empleados",
+    "El gasto total en publicidad"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué mide el índice de satisfacción del cliente (CSAT)?",
+  opciones: [
+    "La fidelidad de los empleados",
+    "El porcentaje de productos devueltos",
+    "El grado de conformidad del cliente con un producto o servicio",
+    "La tasa de ingresos netos"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es una función del control de gestión?",
+  opciones: [
+    "Asignar tareas a los proveedores",
+    "Medir el desempeño y corregir desviaciones respecto al plan",
+    "Redactar contratos laborales",
+    "Diseñar la marca de la empresa"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es una ventaja del financiamiento con capital propio?",
+  opciones: [
+    "Menores riesgos para el dueño",
+    "No genera deudas ni intereses a pagar",
+    "Permite deducir más impuestos",
+    "Garantiza mayores ventas"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa que un mercado esté saturado?",
+  opciones: [
+    "Falta de productos para ofrecer",
+    "Altísima demanda sin oferta",
+    "Existencia de demasiados competidores y poca demanda",
+    "Exceso de empleados sin tareas"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál de estas es una estrategia de fidelización?",
+  opciones: [
+    "Reducir salarios",
+    "Aumentar la producción sin analizar calidad",
+    "Crear programas de beneficios para clientes recurrentes",
+    "Disminuir la publicidad"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué es el análisis ABC en la gestión de inventarios?",
+  opciones: [
+    "Agrupar productos por tamaño",
+    "Clasificar inventario por su valor y rotación: A (alto), B (medio), C (bajo)",
+    "Medir la antigüedad de los productos",
+    "Identificar productos defectuosos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué representa el NPS (Net Promoter Score)?",
+  opciones: [
+    "Nivel de producción semanal",
+    "Porcentaje de clientes que recomiendan la empresa",
+    "Cantidad de empleados por sector",
+    "Pérdida neta por sucursal"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué rol cumple la misión en la visión estratégica de una empresa?",
+  opciones: [
+    "Define objetivos financieros a corto plazo",
+    "Indica el propósito y razón de ser actual de la empresa",
+    "Establece políticas de precios",
+    "Describe la situación fiscal de la empresa"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es una desventaja de la integración vertical total?",
+  opciones: [
+    "Reducción del control de calidad",
+    "Dependencia del proveedor externo",
+    "Altos costos iniciales y complejidad de gestión",
+    "Falta de posicionamiento de marca"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué busca una matriz DOFA (FODA) cruzada?",
+  opciones: [
+    "Detectar errores en productos defectuosos",
+    "Asociar factores internos y externos para definir estrategias",
+    "Eliminar tareas duplicadas",
+    "Separar activos de pasivos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué función tiene un cuadro de mando integral (CMI)?",
+  opciones: [
+    "Registrar ingresos bancarios",
+    "Medir el desempeño organizacional desde múltiples perspectivas",
+    "Llevar el control de asistencia",
+    "Contratar a nuevos directivos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es un ejemplo de estrategia de internacionalización?",
+  opciones: [
+    "Reducir los precios internos",
+    "Abrir una sede en otro país",
+    "Comprar productos importados",
+    "Despedir personal extranjero"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué mide el punto muerto en un emprendimiento?",
+  opciones: [
+    "El nivel máximo de producción",
+    "El momento en que los ingresos igualan los costos totales",
+    "La rotación del inventario",
+    "La cantidad de clientes fidelizados"
+  ],
+  correcta: 1
+},
+
+{
+  pregunta: "¿Qué es el valor agregado de un producto o servicio?",
+  opciones: [
+    "El costo de fabricación",
+    "El margen de ganancia total",
+    "La mejora que lo diferencia y lo hace más atractivo para el cliente",
+    "La cantidad de unidades vendidas"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es una característica clave del liderazgo transformacional?",
+  opciones: [
+    "Busca mantener el statu quo",
+    "Motiva e inspira a los empleados para lograr un cambio positivo",
+    "Evita tomar decisiones difíciles",
+    "Se enfoca solo en los resultados financieros"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué mide el indicador TIR (Tasa Interna de Retorno)?",
+  opciones: [
+    "El retorno que iguala el valor presente de flujos futuros con la inversión inicial",
+    "La tasa de inflación",
+    "El índice de rotación de personal",
+    "La utilidad neta anual"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué representa la curva de aprendizaje en una empresa?",
+  opciones: [
+    "La tasa de rotación del inventario",
+    "La mejora en eficiencia a medida que se repite una tarea",
+    "La cantidad de cursos internos",
+    "La inversión en capacitación"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué factor es fundamental al calcular el precio de venta de un producto?",
+  opciones: [
+    "El salario del gerente",
+    "El costo total de producción y el margen deseado",
+    "El número de empleados",
+    "El valor del alquiler"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué tipo de innovación busca mejorar procesos existentes sin cambiar el producto?",
+  opciones: [
+    "Disruptiva",
+    "De producto",
+    "Incremental",
+    "Comercial"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué indica una alta rotación de personal en una empresa?",
+  opciones: [
+    "Buena estabilidad",
+    "Mayor capacitación interna",
+    "Problemas en el clima laboral o políticas de retención",
+    "Alta rentabilidad"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es una función del área de operaciones en una empresa industrial?",
+  opciones: [
+    "Contratar personal",
+    "Llevar la contabilidad",
+    "Transformar insumos en productos terminados",
+    "Diseñar campañas de marketing"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué permite identificar un análisis PESTEL?",
+  opciones: [
+    "Amenazas internas",
+    "Factores externos que afectan a la empresa: Políticos, Económicos, Sociales, Tecnológicos, Ecológicos y Legales",
+    "Costo de oportunidad",
+    "Nivel de satisfacción interna"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es el objetivo de un análisis financiero horizontal?",
+  opciones: [
+    "Observar cómo evolucionan las cuentas a lo largo del tiempo",
+    "Estimar la rotación del stock",
+    "Determinar el salario promedio",
+    "Fijar precios de productos"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué herramienta se utiliza para mapear procesos internos y mejorar su eficiencia?",
+  opciones: [
+    "Diagrama de flujo",
+    "Análisis PESTEL",
+    "Matriz BCG",
+    "Informe de marketing"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué caracteriza a una organización 'lean' o esbelta?",
+  opciones: [
+    "Altos niveles de burocracia",
+    "Estructura rígida y centralizada",
+    "Eliminación de desperdicios y mejora continua de procesos",
+    "Alta rotación de personal"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué tipo de mercado se caracteriza por tener un solo oferente?",
+  opciones: [
+    "Oligopolio",
+    "Competencia perfecta",
+    "Monopolio",
+    "Libre mercado"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué representa el flujo de caja o cash flow?",
+  opciones: [
+    "La utilidad neta acumulada",
+    "Los ingresos totales del año",
+    "La diferencia entre ingresos y egresos en un periodo determinado",
+    "La cantidad de clientes"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué es la cultura organizacional?",
+  opciones: [
+    "El nivel de ventas",
+    "Las normas, valores y formas de actuar compartidas por los miembros de una organización",
+    "La forma jurídica de la empresa",
+    "El salario promedio del personal"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué hace la segmentación de mercado?",
+  opciones: [
+    "Fusiona productos de diferentes rubros",
+    "Divide el mercado en grupos homogéneos con características similares",
+    "Disminuye el costo de marketing",
+    "Aumenta el precio de los productos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué permite una buena gestión del talento humano?",
+  opciones: [
+    "Reducir la inversión en infraestructura",
+    "Optimizar recursos físicos",
+    "Atraer, desarrollar y retener a los mejores empleados",
+    "Eliminar la capacitación"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué representa el concepto de responsabilidad social empresarial?",
+  opciones: [
+    "Obligación legal de pagar impuestos",
+    "Inversión en maquinaria ecológica exclusivamente",
+    "Compromiso voluntario de actuar de forma ética con el entorno y la comunidad",
+    "Evitar toda inversión en marketing"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué es la propuesta única de valor (PUV)?",
+  opciones: [
+    "El nombre de la empresa",
+    "El argumento central que diferencia a un producto frente a la competencia",
+    "El precio estimado de venta",
+    "El logo institucional"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué representa la matriz BCG en marketing?",
+  opciones: [
+    "Clasificación de productos según su participación de mercado y tasa de crecimiento",
+    "Análisis de liderazgo de empleados",
+    "Ciclo de vida de la empresa",
+    "Modelo financiero a largo plazo"
+  ],
+  correcta: 0
+},
+
+{
+  pregunta: "¿Qué característica define al mercado de competencia perfecta?",
+  opciones: [
+    "Pocas empresas dominan el mercado",
+    "Hay un solo oferente",
+    "Muchos oferentes venden productos homogéneos y no influyen en el precio",
+    "Los consumidores no tienen información"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué es el análisis de stakeholders?",
+  opciones: [
+    "Estudio de la competencia directa",
+    "Evaluación de los proveedores",
+    "Identificación y evaluación de los grupos de interés que afectan o son afectados por la empresa",
+    "Informe contable del director"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es un ejemplo de costo variable?",
+  opciones: [
+    "Alquiler del local",
+    "Sueldos fijos",
+    "Energía utilizada en producción",
+    "Impuesto inmobiliario"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué mide el índice de productividad laboral?",
+  opciones: [
+    "La cantidad de clientes atendidos por día",
+    "El número de empleados en una empresa",
+    "La relación entre producción y cantidad de trabajo utilizado",
+    "La cantidad de horas trabajadas"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es una función del área de finanzas?",
+  opciones: [
+    "Fabricar productos",
+    "Contratar personal operativo",
+    "Gestionar inversiones, costos y presupuestos",
+    "Diseñar logotipos"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué objetivo tiene la curva de demanda?",
+  opciones: [
+    "Determinar la oferta máxima de un producto",
+    "Representar gráficamente cómo varía la cantidad demandada según el precio",
+    "Estimar los gastos fijos",
+    "Calcular impuestos indirectos"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué es un mercado objetivo?",
+  opciones: [
+    "La competencia directa",
+    "El grupo de consumidores a quienes se dirige el producto o servicio",
+    "El área de logística",
+    "El plan de exportación"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué representa el análisis de breakeven o punto de equilibrio?",
+  opciones: [
+    "El momento donde la empresa pierde más",
+    "El punto donde los ingresos igualan a los costos totales",
+    "La máxima producción alcanzada",
+    "La inversión inicial necesaria"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué implica la estrategia de diversificación en una empresa?",
+  opciones: [
+    "Reducir costos operativos",
+    "Aumentar el número de empleados",
+    "Ampliar la gama de productos o mercados para reducir riesgos",
+    "Evitar exportaciones"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué permite el análisis de benchmarking competitivo?",
+  opciones: [
+    "Estimar la inflación anual",
+    "Imitar procesos sin análisis previo",
+    "Comparar con empresas líderes para detectar oportunidades de mejora",
+    "Reemplazar al departamento de calidad"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué se busca al realizar un estudio de mercado?",
+  opciones: [
+    "Determinar el sueldo del gerente",
+    "Medir la productividad interna",
+    "Conocer necesidades, preferencias y hábitos del público objetivo",
+    "Diseñar un producto final"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué es una economía de escala?",
+  opciones: [
+    "Reducción de costos unitarios a medida que aumenta la producción",
+    "Incremento de precios con menor producción",
+    "Aumento de recursos humanos sin inversión",
+    "Descentralización de procesos"
+  ],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué hace el análisis FODA interno?",
+  opciones: [
+    "Analiza amenazas y oportunidades del entorno",
+    "Estudia la tasa de impuestos",
+    "Evalúa fortalezas y debilidades propias de la empresa",
+    "Controla costos operativos"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué representa una matriz de riesgo?",
+  opciones: [
+    "Clasificación de empleados",
+    "Herramienta para evaluar la probabilidad e impacto de distintos riesgos",
+    "Diagrama de ventas semanales",
+    "Mapa de ubicación de sucursales"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué implica un análisis de rentabilidad por línea de producto?",
+  opciones: [
+    "Revisar quién vende más",
+    "Identificar qué productos generan más ingresos y ganancias",
+    "Medir cuántos productos están en stock",
+    "Comparar los precios con la competencia"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué tipo de empresa se adapta mejor a entornos altamente dinámicos?",
+  opciones: [
+    "Empresa rígida y centralizada",
+    "Empresa con estructura flexible y capacidad de innovación",
+    "Empresa estatal tradicional",
+    "Empresa sin planificación estratégica"
+  ],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué objetivo tiene un sistema de gestión ambiental (SGA)?",
+  opciones: [
+    "Reducir costos de personal",
+    "Mejorar la calidad del producto",
+    "Minimizar el impacto ambiental de las operaciones",
+    "Eliminar residuos sin tratamiento"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es una herramienta clave del marketing digital?",
+  opciones: [
+    "Canales de distribución física",
+    "Publicidad en televisión",
+    "SEO (optimización para motores de búsqueda)",
+    "Carteles callejeros"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué es una estrategia de enfoque o nicho?",
+  opciones: [
+    "Atender todos los mercados posibles",
+    "Aumentar la masa salarial",
+    "Centrarse en un segmento de mercado muy específico con productos adaptados",
+    "Reducir la producción al mínimo"
+  ],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué busca una auditoría externa?",
+  opciones: [
+    "Contratar nuevos proveedores",
+    "Certificar la transparencia y confiabilidad de la información financiera",
+    "Diseñar procesos productivos",
+    "Crear nuevas unidades de negocio"
+  ],
+  correcta: 1
+}
+
+
+
+]
+
+
+
+
+
+
 
 
   const questionText = document.getElementById("questionText");
