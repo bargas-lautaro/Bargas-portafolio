@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Audio Sincronizado con Barra Estilizada</title>
+<style>
+         body {
+      margin: 0;
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      text-align: center;
+    }
+    .titulo{    
+        color: aqua;
+
+    }
+
+
+
+    #precarga {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2em;
+      color: lime;
+    }
+
+    #inicio {
+      display: none;
+      font-size: 2em;
+      margin-top: 40vh;
+      color: yellow;
+      cursor: pointer;
+    }
+
+    #contenido {
+      display: none;
+      padding-top: 50px;
+    }
+
+    .evento {
+      display: none;
+      font-size: 2em;
+      margin: 20px;
+    }
+
+    .imagen-evento {
+      display: none;
+      max-width: 80%;
+      margin: 20px auto;
+    }
+
+    #barraAudio {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+    }
+
+    #audio {
+      width: 100%;
+      background-color: white;
+      border-radius: 10px;
+      height: 30px;
+    }
+
+    #audio::-webkit-media-controls-panel {
+      background-color: white;
+      border-radius: 10px;
+    }
+
+    #audio::-webkit-media-controls-timeline {
+      background-color: lime;
+      border-radius: 5px;
+    }
+
+    #audio::-webkit-media-controls-play-button {
+      background-color: black;
+      border-radius: 50%;
+    }
+    </style>
+</head>
+<body>
+
+<div id="precarga">
+  Cargando contenido...<br>
+  Espera <span id="contador">25</span> segundos
+</div>
+
+<div id="inicio">Haz clic aquí para comenzar</div>
+
+<div id="contenido">
+  <audio id="audio" src="https://github.com/bargas-lautaro/sonidos.mp3/raw/refs/heads/main/parte%201-v2.m4a" preload="auto" controls></audio>
+
+  <div id="texto1" class="evento titulo" style="position: absolute; top: 20px; width: 40%;">Bargas, Nehuen Lautaro</div>
+    
+  <div id="documento" class="evento titulo" 
+  style="position: absolute; top: 20px; right: 20px; width: 40%;  color: rgb(49, 255, 49);">
+  <span style="color: red;transform: scale(1.3); display: inline-block;">4</span>1.1<span style="color: red;transform: scale(1.3); display: inline-block;">1</span>8.815</div>
+
+
+
+
+  <div id="texto2" class="evento">Ingenieria Mecanica</div>
+  <img id="imagen1" class="imagen-evento" src="https://i.imgur.com/9h6C8Ye.png"  style="position: absolute; width: 40%; left: 20px;" alt="Imagen 1">
+  <img id="imagen2" class="imagen-evento" src="imagen2.jpg" alt="Imagen 2">
+</div>
+
+<div id="barraAudio"></div>
+
+<script>
+  let segundos = 1;
+  const contador = document.getElementById("contador");
+
+  const cuenta = setInterval(() => {
+    segundos--;
+    contador.textContent = segundos;
+    if (segundos <= 0) {
+      clearInterval(cuenta);
+      document.getElementById('precarga').style.display = 'none';
+      document.getElementById('inicio').style.display = 'block';
+    }
+  }, 1000);
+
+  const eventos = [
+    { tiempo: 1.8, id: "texto1", mostrado: false },
+    { tiempo: 5, id: "documento", mostrado: false },
+    { tiempo: 25, id: "imagen1", mostrado: false },
+    { tiempo: 17, id: "texto2", mostrado: false },
+    { tiempo: 111, id: "imagen2", mostrado: false }
+  ];
+
+  document.getElementById('inicio').addEventListener('click', () => {
+    document.getElementById('inicio').style.display = 'none';
+    document.getElementById('contenido').style.display = 'block';
+    iniciarAudio();
+  });
+
+  function iniciarAudio() {
+    const audio = document.getElementById('audio');
+    document.getElementById("barraAudio").appendChild(audio);
+    audio.play();
+
+    audio.ontimeupdate = () => {
+      const t = audio.currentTime;
+      eventos.forEach(evento => {
+        if (t >= evento.tiempo && !evento.mostrado) {
+          mostrar(evento.id);
+          evento.mostrado = true;
+        } else if (t < evento.tiempo && evento.mostrado) {
+          ocultar(evento.id);
+          evento.mostrado = false;
+        }
+      });
+    };
+  }
+
+  function mostrar(id) {
+    const elem = document.getElementById(id);
+    if (elem) elem.style.display = 'block';
+  }
+
+  function ocultar(id) {
+    const elem = document.getElementById(id);
+    if (elem) elem.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
