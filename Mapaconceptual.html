@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>BargasLautaro - Mapa Conceptual Límite</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: auto;
+      background-color: black;
+      font-family: sans-serif;
+    }
+
+    #contenedorZoom {
+      width: 2000px;
+      height: 2000px;
+      background-color: #000000;
+      transform-origin: 0 0;
+      position: relative;
+    }
+    
+    
+    .ventana-info {
+  position: absolute;
+  
+  width: 99vw;
+  height:;
+  background-color: black;
+  color: #1cff0e;
+  border: 3px solid #16b9d1;
+  border-radius: 30px;
+  padding: 20px;
+  z-index: 10;
+  box-shadow: 0 0 10px #16d12e;
+}
+
+.cerrar {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+    .nodo {
+      position: absolute;
+      background: black;
+      border: 2px solid lime;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      width: 200px;
+      z-index: 2;
+      color: lime;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .linea {
+      position: absolute;
+      width: 4px;
+      background-color: #53aaff;
+      transform-origin: top left;
+    }
+
+    #zoomBar {
+      position: fixed;
+      bottom: 10px;
+      right: 20px;
+      background: white;
+      border: 2px solid black;
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 9999;
+    }
+
+    #zoomSlider {
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <div id="contenedorZoom">
+    <!-- Nodo raíz -->
+    <div class="nodo" style="scale:2; top: 50px; left: 900px;">Límite de una función</div>
+
+
+
+
+    <!-- asintota -->
+    
+    
+<div class="nodo" style="  top: 530px; left: 880px; z-index:100; border:3px solid yellow;" >Asintotas</div>
+
+    <!-- Nivel 2 -->
+<div class="nodo" style="top: 830px; left: 740px;" onclick="abrirInfoLateral()">Límites laterales</div>
+
+<div id="infoLateral" class="ventana-info" style="display: none; top: 750px;
+  left: 600px;">
+  <button onclick="cerrarInfoLateral()" class="cerrar">X</button>
+  <p>Los límites laterales de una función describen el comportamiento de la misma cuando la variable se acerca a un valor específico desde la izquierda (−) o desde la derecha (+). Se escriben como:<br>
+  <strong>lim(x→a⁻)f(x)</strong> y <strong>lim(x→a⁺)f(x)</strong>.<br>
+  Si ambos coinciden, existe el límite en x=a.</p>
+</div>
+    
+    <div class="nodo" style="top: 930px; left: 740px;">propiedades</div>
+    
+    <div class="nodo" style="top: 930px; left: 740px;" onclick="abrirInfoPropiedades()">propiedades</div>
+
+<div id="infoPropiedades" class="ventana-info" style="display: none; top: 830px; left: 650px;">
+  <button onclick="cerrarInfoPropiedades()" class="cerrar">X</button>
+  <p>Las propiedades de los límites permiten operar con ellos de forma algebraica. Algunas propiedades clave son:<br>
+  - El límite de una suma es la suma de los límites.<br>
+  - El límite de un producto es el producto de los límites.<br>
+  - El límite de una constante por una función es la constante por el límite.<br>
+  - Si el límite del denominador es distinto de cero, se puede dividir los límites.<br>
+  Estas propiedades son fundamentales para resolver límites de funciones más complejas.</p>
+</div>
+
+<div class="nodo" style="top: 1033px; left: 740px;" onclick="abrirInfoCasos()">Casos especiales</div>
+
+<div id="infoCasos" class="ventana-info" style="display: none; left:630px; top:900px; border:3px solid red;">
+  <button onclick="cerrarInfoCasos()" class="cerrar">X</button>
+  <p>Los casos especiales de límites se presentan cuando ocurren situaciones como:<br>
+  - Indeterminaciones (0/0, ∞/∞, etc.)<br>
+  - Funciones definidas por partes<br>
+  - Funciones con asíntotas verticales<br>
+  - Límites infinitos<br>
+  En estos casos, se deben aplicar técnicas como factoreo, racionalización, uso de conjugadas o análisis lateral para resolverlos correctamente.</p>
+</div>
+
+
+    
+    <div class="nodo" style="top: 200px; left: 400px; scale:1.4;">Continuidad</div>
+    <div class="nodo" style="top: 200px; left: 900px; height:100px; padding:20px 0 20px 0;">El límite de una función es el valor al que se aproxima la función cuando la variable independiente se acerca a un punto específico.</div>
+    <div class="nodo" style="top: 600px; left: 690px; height:70px; padding:40px;">Valor que se aproxima una función cuando la variable independiente se acerca a un número real</div>
+        <div class="nodo" style="top: 600px; left: 1050px; height:160px; padding:40px;">Un límite infinito describe el comportamiento de una función cuando sus valores crecen indefinidamente de forma positiva o negativa a medida que la variable independiente se aproxima a un número real o al infinito.</div>
+    
+    <div class="nodo" style="top: 200px; left: 1300px;">Límitaaaaaanito</div>
+
+    
+   <!--bueno bueno -->
+    <div class="nodo" style="top: 476px; left: 1030px;">Límites infinito</div>
+    <div class="nodo" style="top: 476px; left: 710px;">Límites finito</div>
+
+
+
+
+    <!-- Conexiones -->
+    
+
+         <div class="linea" style="top: 500px; left: 1150px; height: 300px; transform: rotate(90deg);"></div>
+         <div class="linea" style="top: 700px; left: 700px; height: 500px; transform: rotate(0deg);"></div>
+          <div class="linea" style="top: 850px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
+          
+           <div class="linea" style="top: 950px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
+            <div class="linea" style="top: 1150px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
+             <div class="linea" style="top: 1050px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
+  
+           
+  
+  
+
+    
+    <div class="linea" style="top: 500px; left: 800px; height: 200px; transform: rotate(0deg);"></div>
+        <div class="linea" style="top: 500px; left: 1200px; height: 200px; transform: rotate(0deg);"></div>
+    
+    
+    
+    <div class="linea" style="top: 100px; left: 900px; z-index:0; height: 500px; transform: rotate(75deg);"></div>
+    
+        <div class="linea" style="top: 220px; left: 1500px; z-index:0; height: 450px; transform: rotate(105deg);"></div>
+    
+    <div class="linea" style="top: 100px; left: 1300px; height: 100px; transform: rotate(115deg);"></div>
+    <div class="linea" style="top: 200px; left: 500px; height: 300px;"></div>
+    
+      <div class="linea" style="top: 100px; left: 975px; height: 100px;"></div>
+    <div class="linea" style="top: 100px; left: 1000px; height: 100px; transform: rotate(-115deg);"></div>
+    <div class="linea" style="top: 100px; left: 1000px; height: 120px; transform: rotate(-135deg);"></div>
+    
+    <div class="linea" style="top: 200px; left: 980px; height: 300px; transform: rotate(0deg);"></div>
+  </div>
+      
+
+  </div>
+
+
+
+  
+
+  <!-- Barra de Zoom -->
+  <div id="zoomBar">
+    <label for="zoomSlider">Zoom:</label>
+    <input style="z-index:1;"type="range" id="zoomSlider" min="0.4" max="1" step="0.1" value="1">
+  </div>
+
+  <script>
+    const contenedor = document.getElementById("contenedorZoom");
+    const slider = document.getElementById("zoomSlider");
+
+    let scale = 1;
+
+    function aplicarZoom() {
+      contenedor.style.transform = `scale(${scale})`;
+    }
+
+    slider.addEventListener("input", () => {
+      scale = parseFloat(slider.value);
+      aplicarZoom();
+    });
+
+    window.addEventListener("wheel", e => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        scale += delta;
+        scale = Math.max(0.2, Math.min(scale, 3));
+        slider.value = scale.toFixed(1);
+        aplicarZoom();
+      }
+    }, { passive: false });
+    
+    
+      function abrirInfoLateral() {
+    document.getElementById("infoLateral").style.display = "block";
+  }
+
+  function cerrarInfoLateral() {
+    document.getElementById("infoLateral").style.display = "none";
+  }
+    function abrirInfoPropiedades() {
+    document.getElementById("infoPropiedades").style.display = "block";
+  }
+
+  function cerrarInfoPropiedades() {
+    document.getElementById("infoPropiedades").style.display = "none";
+  }
+  
+  
+  function abrirInfoCasos() {
+    document.getElementById("infoCasos").style.display = "block";
+  }
+
+  function cerrarInfoCasos() {
+    document.getElementById("infoCasos").style.display = "none";
+  }
+
+  </script>
+</body>
+</html>
