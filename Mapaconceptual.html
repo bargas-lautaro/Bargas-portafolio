@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  
   <meta charset="UTF-8">
   <title>BargasLautaro - Mapa Conceptual Límite</title>
   <style>
@@ -83,6 +89,22 @@
     #zoomSlider {
       width: 150px;
     }
+
+    @keyframes cambioColorPermanente {
+  0% {scale: 1.1; color: rgb(0, 221, 255); }
+  25% { scale: 1.0;color: rgb(0, 255, 8); }
+  50% {scale: 1.1; color: yellow; }
+  75% { scale: 1; color: rgb(237, 0, 126); }
+  100% {scale: 1.1; color: rgb(255, 53, 3); }
+}
+
+.nodo-animado {
+  animation: cambioColorPermanente 4s infinite alternate;
+}
+
+
+
+
   </style>
 </head>
 <body>
@@ -94,14 +116,54 @@
 
 
     <!-- asintota -->
-    
-    
-<div class="nodo" style="  top: 530px; left: 880px; z-index:100; border:3px solid yellow;" >Asintotas</div>
+    <div class="nodo nodo-animado" style="top: 530px; left: 880px; z-index:100; border:3px solid yellow;" onclick="abrirInfoAsintotas()">Asintotas</div>
 
+    <div id="infoAsintotas" class="ventana-info" style="display: none; top: 590px; left: 820px; width: 260px; height: 60px; padding: 0 20px 40px 20px;">
+      <button onclick="cerrarInfoAsintotas()" class="cerrar">X</button>
+      <p>Las asíntotas son rectas que una función se acerca pero nunca toca. Existen tres tipos principales:<br>
+      <div style="z-index: 2; position: relative; top: -200px; left: 400px; border: 3px solid red; background-color: rgb(61, 0, 34); color: aliceblue; ">
+      <strong>Asíntotas horizontales:</strong> Describen el comportamiento de la función cuando x tiende a infinito o menos infinito.<br></div>
+      <div class="linea" style="z-index: 1; top: -40px; border: 2px solid rgb(204, 255, 0); left: 440px; color: lime; background-color: rgb(229, 255, 0); height: 700px; transform: rotate(90deg);"></div>
+     <div style="z-index: 2; position: relative; top: -300px; left: -300px; border: 3px solid red; background-color: rgb(61, 0, 34); color: aliceblue; ">
+      <strong>Asíntotas verticales:</strong> 
+      Ocurren cuando la función tiende a infinito en un valor de x.</div><br>
+    
+    
+    
+      <div class="linea" style="z-index: 1; top: -100px; border: 4px solid rgb(204, 255, 0); left: -50px; color: lime; background-color: rgb(229, 255, 0); height: 30px; transform: rotate(70deg);"></div>
+      <div class="linea" style="z-index: 1; top: -85px; border: 4px solid rgb(204, 255, 0); left: 450px; color: lime; background-color: rgb(229, 255, 0); height: 30px; transform: rotate(115deg); z-index: -1;"></div>
+      <div class="linea" style="z-index: 1; top: -285px; border: 4px solid rgb(204, 255, 0); left: 450px; color: lime; background-color: rgb(229, 255, 0); height: 300px; transform: rotate(45deg); z-index: -1;"></div>
+   
+
+
+
+
+
+      <div style="z-index: 2; position: relative; top: -620px; left: 380px; border: 3px solid red; background-color: rgb(61, 0, 34); color: aliceblue; ">
+  
+      <strong>Asíntotas oblicuas:</strong> Se presentan cuando el grado del numerador es mayor al del denominador en funciones racionales.<br>
+      Estas ayudan a describir la forma general de una gráfica.</p></div>
+    </div>
+    
     <!-- Nivel 2 -->
-<div class="nodo" style="top: 830px; left: 740px;" onclick="abrirInfoLateral()">Límites laterales</div>
+<div class="nodo nodo-animado" style="top: 830px; left: 740px;" onclick="abrirInfoLateral()">
+Límites laterales</div>
 
-<div id="infoLateral" class="ventana-info" style="display: none; top: 750px;
+
+<div class="nodo" style="top: 830px; left: 330px; width: 100px;">
+los límites laterales deben existir y ser iguales</div>
+
+<div class="nodo" style="top: 1030px; left: 330px; width: 100px;">
+En caso de que esos límites coincidan dan como resultado un límite finito</div>
+
+<div class="nodo" style="top: 1380px; left: 330px; width: 100px;">
+Se usa para evaluar la continuidad
+</div>
+  
+
+
+
+<div id="infoLateral" class="ventana-info" style="display: none; width: 300px; top: 750px;
   left: 600px;">
   <button onclick="cerrarInfoLateral()" class="cerrar">X</button>
   <p>Los límites laterales de una función describen el comportamiento de la misma cuando la variable se acerca a un valor específico desde la izquierda (−) o desde la derecha (+). Se escriben como:<br>
@@ -111,9 +173,9 @@
     
     <div class="nodo" style="top: 930px; left: 740px;">propiedades</div>
     
-    <div class="nodo" style="top: 930px; left: 740px;" onclick="abrirInfoPropiedades()">propiedades</div>
+    <div class="nodo nodo-animado" style="top: 930px; left: 740px;" onclick="abrirInfoPropiedades()">propiedades</div>
 
-<div id="infoPropiedades" class="ventana-info" style="display: none; top: 830px; left: 650px;">
+<div id="infoPropiedades" class="ventana-info" style="width: 400px; display: none; top: 830px; left: 650px;">
   <button onclick="cerrarInfoPropiedades()" class="cerrar">X</button>
   <p>Las propiedades de los límites permiten operar con ellos de forma algebraica. Algunas propiedades clave son:<br>
   - El límite de una suma es la suma de los límites.<br>
@@ -125,7 +187,7 @@
 
 <div class="nodo" style="top: 1033px; left: 740px;" onclick="abrirInfoCasos()">Casos especiales</div>
 
-<div id="infoCasos" class="ventana-info" style="display: none; left:630px; top:900px; border:3px solid red;">
+<div id="infoCasos" class="ventana-info" style="width: 400px    ; display: none; left:630px; top:900px; border:3px solid red;">
   <button onclick="cerrarInfoCasos()" class="cerrar">X</button>
   <p>Los casos especiales de límites se presentan cuando ocurren situaciones como:<br>
   - Indeterminaciones (0/0, ∞/∞, etc.)<br>
@@ -136,11 +198,14 @@
 </div>
 
 
-    
+<div class="nodo" style="top: 450px; left: 400px; scale:1.4;">
+ Una función  f(x) es continua en  x = a  si se cumple que \( \lim_{x \to a} f(x) = f(a) \), es decir, el límite existe, coincide con el valor de la función y no hay saltos, huecos ni asíntotas.
+</div>
+
     <div class="nodo" style="top: 200px; left: 400px; scale:1.4;">Continuidad</div>
-    <div class="nodo" style="top: 200px; left: 900px; height:100px; padding:20px 0 20px 0;">El límite de una función es el valor al que se aproxima la función cuando la variable independiente se acerca a un punto específico.</div>
+    <div class="nodo" style="top: 200px; left: 900px; height:120px; padding:20px 0 20px 0;">El límite de una función es el valor al que se aproxima la función cuando la variable independiente se acerca a un punto específico.</div>
     <div class="nodo" style="top: 600px; left: 690px; height:70px; padding:40px;">Valor que se aproxima una función cuando la variable independiente se acerca a un número real</div>
-        <div class="nodo" style="top: 600px; left: 1050px; height:160px; padding:40px;">Un límite infinito describe el comportamiento de una función cuando sus valores crecen indefinidamente de forma positiva o negativa a medida que la variable independiente se aproxima a un número real o al infinito.</div>
+        <div class="nodo" style="top: 600px; left: 1050px; height:260px; padding:40px;">Un límite infinito describe el comportamiento de una función cuando sus valores crecen indefinidamente de forma positiva o negativa a medida que la variable independiente se aproxima a un número real o al infinito.</div>
     
     <div class="nodo" style="top: 200px; left: 1300px;">Límitaaaaaanito</div>
 
@@ -163,9 +228,14 @@
             <div class="linea" style="top: 1150px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
              <div class="linea" style="top: 1050px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
   
-           
-  
-  
+      
+      <div class="linea" style="top: 850px; border: 4px solid red; left: 745px; color: lime; background-color: rgb(255, 0, 0); height: 360px; transform: rotate(130deg);"></div>
+      <div class="linea" style="top: 850px; border: 2px solid red; left: 800px; color: lime; background-color: rgb(255, 0, 0); height: 360px; transform: rotate(90deg);"></div>
+       
+      <div class="linea" style="top: 650px; border: 4px solid red; left: 545px; color: lime; background-color: rgb(255, 0, 0); height: 280px; transform: rotate(40deg);"></div>
+     
+
+      <div class="linea" style="top: 1050px; border: 2px solid red; left: 800px; color: lime; background-color: rgb(255, 0, 0); height: 360px; transform: rotate(90deg);"></div>
 
     
     <div class="linea" style="top: 500px; left: 800px; height: 200px; transform: rotate(0deg);"></div>
@@ -178,8 +248,9 @@
         <div class="linea" style="top: 220px; left: 1500px; z-index:0; height: 450px; transform: rotate(105deg);"></div>
     
     <div class="linea" style="top: 100px; left: 1300px; height: 100px; transform: rotate(115deg);"></div>
-    <div class="linea" style="top: 200px; left: 500px; height: 300px;"></div>
-    
+    <div class="linea" style="top: 200px; left: 500px; height: 1500px;"></div>
+    <div class="linea" style="top: 430px; left: 400px; height: 990px;"></div>
+   
       <div class="linea" style="top: 100px; left: 975px; height: 100px;"></div>
     <div class="linea" style="top: 100px; left: 1000px; height: 100px; transform: rotate(-115deg);"></div>
     <div class="linea" style="top: 100px; left: 1000px; height: 120px; transform: rotate(-135deg);"></div>
@@ -249,6 +320,14 @@
 
   function cerrarInfoCasos() {
     document.getElementById("infoCasos").style.display = "none";
+  }
+
+  function abrirInfoAsintotas() {
+    document.getElementById("infoAsintotas").style.display = "block";
+  }
+
+  function cerrarInfoAsintotas() {
+    document.getElementById("infoAsintotas").style.display = "none";
   }
 
   </script>
