@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  
+  <meta charset="UTF-8">
+  <title>BargasLautaro - Mapa Conceptual Límite</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: auto;
+      background-color: black;
+      font-family: sans-serif;
+    }
+
+    #contenedorZoom {
+      width: 900px;
+      height: 2000px;
+      background-color: #000000;
+      transform-origin: 0 0;
+      position: relative;
+    }
+    
+    
+    .ventana-info {
+  position: absolute;
+  
+  width: 99vw;
+  height:;
+  background-color: black;
+  color: #1cff0e;
+  border: 3px solid #16b9d1;
+  border-radius: 30px;
+  padding: 20px;
+  z-index: 10;
+  box-shadow: 0 0 10px #16d12e;
+}
+
+.cerrar {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+    .nodo {
+      position: absolute;
+      background: black;
+      border: 2px solid lime;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      width: 200px;
+      z-index: 2;
+      color: lime;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .linea {
+      position: absolute;
+      width: 4px;
+      background-color: #53aaff;
+      transform-origin: top left;
+    }
+
+    #zoomBar {
+      position: fixed;
+      bottom: 10px;
+      right: 20px;
+      background: white;
+      border: 2px solid black;
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 9999;
+    }
+
+    #zoomSlider {
+      width: 150px;
+    }
+
+    @keyframes cambioColorPermanente {
+  0% {scale: 1.1; color: rgb(0, 221, 255); }
+  25% { scale: 1.0;color: rgb(0, 255, 8); }
+  50% {scale: 1.1; color: yellow; }
+  75% { scale: 1; color: rgb(237, 0, 126); }
+  100% {scale: 1.1; color: rgb(255, 53, 3); }
+}
+
+.nodo-animado {
+  animation: cambioColorPermanente 4s infinite alternate;
+}
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <audio id="player" controls style="position: fixed; bottom: 60px; left: 20px; z-index: 9999;">
+    Tu navegador no soporta audio HTML5.
+  </audio>
+  
+  <script>
+    const pistas = [
+      "https://github.com/bargas-lautaro/sonidos.mp3/raw/refs/heads/main/Entre%20L%C3%ADmites%20y%20Continuidades.mp3",
+      "https://github.com/bargas-lautaro/sonidos.mp3/raw/refs/heads/main/L%C3%ADmites%20de%20la%20Realidad(1).mp3",
+      "https://github.com/bargas-lautaro/sonidos.mp3/raw/refs/heads/main/L%C3%ADmites%20de%20la%20Realidad(3).mp3"
+    ];
+  
+    const player = document.getElementById('player');
+    let indice = 0;
+  
+    function reproducirPista(i) {
+      player.src = pistas[i];
+      player.play();
+    }
+  
+    player.addEventListener('ended', () => {
+      indice = (indice + 1) % pistas.length;
+      reproducirPista(indice);
+    });
+  
+    reproducirPista(indice);
+  </script>
+  
+  <div id="contenedorZoom">
+    <!-- Nodo raíz -->
+    <div class="nodo" style="scale:2; top: 50px; left: 900px;">Límite de una función</div>
+
+
+
+
+    <!-- asintota -->
+    <div class="nodo nodo-animado" style="top: 530px; left: 880px; z-index:100; border:3px solid yellow;" onclick="abrirInfoAsintotas()">Asintotas</div>
+
+    <div id="infoAsintotas" class="ventana-info" style="display: none; top: 590px; left: 820px; width: 260px; height: 60px; padding: 0 20px 40px 20px;">
+      <button onclick="cerrarInfoAsintotas()" class="cerrar">X</button>
+      <p>Las asíntotas son rectas que una función se acerca pero nunca toca. Existen tres tipos principales:<br>
+      
+      
+        <div onclick="mostrarInfoAsintotaHorizontal()" class="nodo-animado" style="z-index: 2; position: relative; top: -200px; left: 400px; border: 3px solid red; background-color: rgb(61, 0, 34); color: aliceblue; cursor: pointer;">
+          <strong>Asíntotas horizontales:</strong> Describen el comportamiento de la función cuando x tiende a infinito o menos infinito.
+        </div>
+        
+        <!-- DIV oculto con información -->
+        <div id="infoAsintotaHorizontal" style="display: none; position: absolute; top: 0px; left: 320px; background-color: black; border: 3px solid lime; color: white; padding: 20px; width: 500px; z-index: 999;">
+          <button onclick="document.getElementById('infoAsintotaHorizontal').style.display='none'" style="position:absolute; top:5px; right:10px; background:red; color:white; border:none; font-weight:bold; padding:5px;">X</button>
+          <p><strong>Definición:</strong><br>
+          Una <b>asíntota horizontal</b> ocurre cuando el valor de una función se aproxima a una constante \( L \) a medida que la variable independiente tiende a infinito positivo o negativo. Matemáticamente:<br>
+          <code>lim(x → ±∞) f(x) = L</code><br>
+          Indica el valor hacia el cual se estabiliza la función.</p>
+          <img src="https://i.imgur.com/Fo3O5Nn.gif" alt="Asíntota horizontal" style="width:100%; border:2px solid white;">
+        </div>
+        
+
+
+
+
+      <div class="linea" style="z-index: 1; top: -40px; border: 2px solid rgb(204, 255, 0); left: 440px; color: lime; background-color: rgb(229, 255, 0); height: 700px; transform: rotate(90deg);"></div>
+      <div onclick="mostrarInfoAsintotaVertical()" class="nodo-animado" style="z-index: 2; position: relative; top: -280px; left: -300px; border: 3px solid red; background-color: rgb(61, 0, 34); color: aliceblue; cursor: pointer;">
+        <strong>Asíntotas verticales:</strong> 
+        Ocurren cuando la función tiende a infinito en un valor de x.
+      </div>
+      
+      <!-- DIV oculto que se muestra al hacer clic -->
+      <div id="infoAsintotaVertical" style="display: none; position: absolute; top: -200px; left: -350px; background-color: black; border: 3px solid lime; color: white; padding: 20px; width: 500px; z-index: 9999;">
+        <button onclick="document.getElementById('infoAsintotaVertical').style.display='none'" style="position:absolute; top:5px; right:10px; background:red; color:white; border:none; font-weight:bold; padding:5px;">X</button>
+        <p><strong>Definición:</strong><br>
+        Una <b>asíntota vertical</b> ocurre cuando el valor absoluto de una función crece sin límite al acercarse a cierto valor de x. Matemáticamente, esto se expresa como:<br>
+        <code>lim(x → a) f(x) = ±∞</code>.<br>
+        Esto indica una discontinuidad no evitable.</p>
+        <img src="https://i.imgur.com/cCNtxgO.gif" alt="Asíntota vertical" style="width:100%; border:2px solid white;">
+        <button><a href="https://www.superprof.es/diccionario/matematicas/calculo/asintotas-verticales.html"> link Información</a></button>
+     
+      </div>
+      
+    
+      <br>
+    
+    
+    
+      <div class="linea" style="z-index: 1; top: -100px; border: 4px solid rgb(204, 255, 0); left: -60px; color: lime; background-color: rgb(229, 255, 0); height: 30px; transform: rotate(70deg);"></div>
+      <div class="linea" style="z-index: 1; top: -85px; border: 4px solid rgb(204, 255, 0); left: 450px; color: lime; background-color: rgb(229, 255, 0); height: 30px; transform: rotate(115deg); z-index: -1;"></div>
+      <div class="linea" style="z-index: 1; top: -285px; border: 4px solid rgb(204, 255, 0); left: 450px; color: lime; background-color: rgb(229, 255, 0); height: 300px; transform: rotate(45deg); z-index: -1;"></div>
+   
+      <script>
+        function mostrarInfoAsintotaVertical() {
+          document.getElementById("infoAsintotaVertical").style.display = "block";
+        }
+        function mostrarInfoAsintotaHorizontal() {
+  document.getElementById("infoAsintotaHorizontal").style.display = "block";
+}
+        function mostrarInfoAsintotaOblicua() {
+  document.getElementById("infoAsintotaOblicua").style.display = "block";
+}
+
+        </script>
+
+
+
+<div onclick="mostrarInfoAsintotaOblicua()" class="nodo-animado" style="z-index: 2; position: relative; top: -620px; left: 380px; border: 3px solid red; background-color: rgb(61, 0, 34); color: aliceblue; cursor: pointer;">
+  <strong>Asíntotas oblicuas:</strong> Se presentan cuando el grado del numerador es mayor al del denominador en funciones racionales.<br>
+  Estas ayudan a describir la forma general de una gráfica.
+</div>
+
+<!-- DIV oculto con la definición + imagen -->
+<div id="infoAsintotaOblicua" style="display: none; position: absolute; top: -400px; left: -200px; background-color: black; border: 3px solid lime; color: white; padding: 20px; width: 500px; z-index: 9999;">
+  <button onclick="document.getElementById('infoAsintotaOblicua').style.display='none'" style="position:absolute; top:5px; right:10px; background:red; color:white; border:none; font-weight:bold; padding:5px;">X</button>
+  <p><strong>Definición:</strong><br>
+  Una <b>asíntota oblicua</b> ocurre cuando el grado del numerador de una función racional es exactamente uno mayor que el grado del denominador. La gráfica de la función se aproxima a una recta inclinada \( y = mx + n \) cuando x tiende a infinito o menos infinito.</p>
+  <img src="https://i.imgur.com/1p062SB.gif" alt="Asíntota oblicua" style="width:100%; border:2px solid white;">
+</div>
+
+    </div>
+    
+    <!-- Nivel 2 -->
+<div class="nodo nodo-animado" style="top: 830px; left: 740px;" onclick="abrirInfoLateral()">
+Límites laterales</div>
+
+
+<div class="nodo" style="top: 830px; left: 330px; width: 100px;">
+los límites laterales deben existir y ser iguales</div>
+
+<div class="nodo" style="top: 1030px; left: 330px; width: 100px;">
+En caso de que esos límites coincidan dan como resultado un límite finito</div>
+
+<div class="nodo" style=" font-size: 8px; top: 880px; left: 460px; width: 100px;">
+  El cálculo por sustitución directa consiste en evaluar una función
+   directamente en el punto al que tiende la variable, es decir,
+    si se quiere calcular el límite de f(x) cuando x -> a,
+   simplemente se reemplaza x=a en la expresión</div>
+  
+
+   <div class="nodo" style="border: 3px solid red; font-size: 8px; top: 1240px; left: 410px; width: 100px;">
+    Esta técnica es válida solo si la función está definida en ese punto y el resultado no genera una indeterminación.</div>
+    
+  
+
+
+
+
+
+<div class="nodo" style="top: 1380px; left: 330px; width: 100px;">
+Se usa para evaluar la continuidad
+</div>
+  
+
+
+
+<div id="infoLateral" class="ventana-info" style="display: none; width: 300px; top: 750px;
+  left: 600px;">
+  <button onclick="cerrarInfoLateral()" class="cerrar">X</button>
+  <p>Los límites laterales de una función describen el comportamiento de la misma cuando la variable se acerca a un valor específico desde la izquierda (−) o desde la derecha (+). Se escriben como:<br>
+  <strong>lim(x→a⁻)f(x)</strong> y <strong>lim(x→a⁺)f(x)</strong>.<br>
+  Si ambos coinciden, existe el límite en x=a.</p>
+</div>
+    
+    <div class="nodo" style="top: 930px; left: 740px;">propiedades</div>
+    
+    <div class="nodo nodo-animado" style="top: 930px; left: 740px;" onclick="abrirInfoPropiedades()">propiedades</div>
+
+<div id="infoPropiedades" class="ventana-info" style="width: 400px; display: none; top: 830px; left: 650px;">
+  <button onclick="cerrarInfoPropiedades()" class="cerrar">X</button>
+  <p>Las propiedades de los límites permiten operar con ellos de forma algebraica. Algunas propiedades clave son:<br>
+  - El límite de una suma es la suma de los límites.<br>
+  - El límite de un producto es el producto de los límites.<br>
+  - El límite de una constante por una función es la constante por el límite.<br>
+  - Si el límite del denominador es distinto de cero, se puede dividir los límites.<br>
+  Estas propiedades son fundamentales para resolver límites de funciones más complejas.</p>
+</div>
+
+<div class="nodo nodo-animado" style="top: 1033px; left: 740px;" onclick="abrirInfoCasos()">Casos especiales</div>
+
+
+
+
+
+
+<div class="nodo" style="position: absolute; top: 1040px; left: 1000px;" onclick="mostrarLineasZeta()">Indeterminaciones</div>
+
+
+<div id="lineaUnoRara" onclick="this.style.display='none'" class="linea" style="z-index: 99; display:none; top: 1050px; border: 2px solid rgb(255, 155, 4); left: 1050px; color: lime; background-color: rgb(255, 0, 0); height: 1070px; transform: rotate(0deg); position: absolute;"></div>
+<div id="lineaDosRara" onclick="this.style.display='none'" class="linea" style="z-index: 99; display:none; top: 1050px; border: 2px solid rgb(255, 162, 0); left: 1000px; color: lime; background-color: rgb(255, 0, 0); height: 1070px; transform: rotate(0deg); position: absolute;"></div>
+
+
+<div class="linea" style="top: 1px; border: 2px solid red; left: 850px; color: lime; background-color: rgb(255, 0, 0); height: 310px; transform: rotate(90deg);"></div>
+       
+<div class="nodo" style="position: absolute; width: 40px; top: 1100px; scale: 0.4;  left: 850px;"> Tipo 0/0 ​</div>
+<div class="nodo" style="position: absolute; width: 70px; top: 1100px; scale: 0.4;  left: 1000px;"> Tipo infinito - infinito ​</div>
+<div class="nodo" style="position: absolute; top: 1100px; width: 80px; scale: 0.4;  left: 1050px;"> Tipo infinito / infinito  ​</div>
+<div class="nodo" style="position: absolute; top: 1100px; width: 80px; scale: 0.4;  left: 1150px;"> Tipo 0 . infinito  ​</div>
+<div class="nodo" style="position: absolute; top: 1100px; width: 80px; scale: 0.4;  left: 1100px;"> Tipo infinito elevado a 0 ​</div>
+<div class="nodo" style="position: absolute; top: 1100px; width: 80px; scale: 0.4;  left: 950px;"> Tipo 0  elevado a 0 ​</div>
+<div class="nodo" style="position: absolute; top: 1100px; width: 80px; scale: 0.4;  left: 900px;"> x elevado a infinito ​</div>
+<div class="nodo" style="position: absolute; top: 1120px; width: 100px; scale: 0.4;  left: 1035px; border: 1px solid red;"> Requiere simplificación, dividir por la mayor potencia o aplicar técnicas como racionalización.  ​</div>
+<div class="nodo" style="position: absolute; width: 70px; top: 1120px; scale: 0.4;  left: 1000px;">Dos términos tienden a infinito pero su resta no está definida directamente.​</div>
+<div class="nodo" style="position: absolute; width: 140px; top: 1100px; scale: 0.4;  left: 790px;">Es una señal de que la expresión puede 
+  simplificarse o transformarse para hallar el límite. Para resolverla (o "salvarla") se aplican distintas estrategias matemáticas según el caso ​</div>
+<div class="nodo" style="position: absolute; top: 1140px; width: 80px; scale: 0.4;  left: 900px;"> Base tiende a 1 y exponente a infinito. Frecuente en límites de tipo exponencial. ​</div>
+<div class="nodo" style="position: absolute; top: 1180px; width: 80px; scale: 0.4;  left: 950px;"> "sensible al contexto"</div>
+
+<div class="nodo" style="position: absolute; top: 1120px; width: 100px; scale: 0.4;  left: 1150px;"> Producto entre un factor que tiende a 0 y otro que tiende a infinito. Puede transformarse en otras formas para resolver.​</div>
+<div class="nodo" style="position: absolute; top: 1160px; width: 80px; scale: 0.4;  left: 1100px;">Potencia con base creciente y exponente decreciente hacia 0. ​</div>
+<div class="nodo" style="position: absolute; width: 240px; top: 1240px; scale: 0.4;  left: 710px;">Para resolver la indeterminación 0/0​ se aplican estrategias como factoreo, racionalización, uso de límites notables, simplificación algebraica o cambio de variable. Estas técnicas permiten transformar la expresión en una forma equivalente donde el límite pueda calcularse sin ambigüedades. El objetivo es eliminar la indeterminación y encontrar el valor real del límite.​</div>
+
+
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1050px; color: lime; background-color: rgb(255, 0, 0); height: 170px;   transform: rotate(0deg);"></div>
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1000px; color: lime; background-color: rgb(255, 0, 0); height: 170px;   transform: rotate(0deg);"></div>
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1100px; color: lime; background-color: rgb(255, 0, 0); height: 170px;   transform: rotate(0deg);"></div>
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1000px; color: lime; background-color: rgb(255, 0, 0); height: 80px;   transform: rotate(40deg);"></div>
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1000px; color: lime; background-color: rgb(255, 0, 0); height: 120px;   transform: rotate(60deg);"></div>
+
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1000px; color: lime; background-color: rgb(255, 0, 0); height: 170px;   transform: rotate(0deg);"></div>
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1100px; color: lime; background-color: rgb(255, 0, 0); height: 170px;   transform: rotate(0deg);"></div>
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1150px; color: lime; background-color: rgb(255, 0, 0); height: 170px;   transform: rotate(0deg);"></div>
+<div class="linea" style="top: 1050px; border: 2px solid red; left: 1200px; color: lime; background-color: rgb(255, 0, 0); height: 170px;   transform: rotate(0deg);"></div>
+<div class="linea" style="top: 1150px; border: 2px solid red; left: 950px; color: lime; background-color: rgb(255, 0, 0); height: 70px;   transform: rotate(0deg);"></div>
+<div class="linea" style="top: 1150px; border: 2px solid red; left: 880px; color: lime; background-color: rgb(255, 0, 0); height: 250px;   transform: rotate(0deg);"></div>
+
+
+
+
+
+
+
+
+
+<div id="infoCasos" class="ventana-info" style="width: 400px    ; display: none; left:630px; top:900px; border:1.2px solid red;">
+  <button onclick="cerrarInfoCasos()" class="cerrar">X</button>
+  <p>Los casos especiales de límites se presentan cuando ocurren situaciones como:<br>
+  - Indeterminaciones (0/0, ∞/∞, etc.)<br>
+  - Funciones definidas por partes<br>
+  - Funciones con asíntotas verticales<br>
+  - Límites infinitos<br>
+  En estos casos, se deben aplicar técnicas como factoreo, racionalización, uso de conjugadas o análisis lateral para resolverlos correctamente.</p>
+</div>
+
+
+
+<div class="nodo" style="top: 450px; left: 400px; scale:1.4;">
+ Una función  f(x) es continua en  x = a  si se cumple que \( \lim_{x \to a} f(x) = f(a) \), es decir, el límite existe, coincide con el valor de la función y no hay saltos, huecos ni asíntotas.
+</div>
+
+
+    <div class="nodo" style="top: 200px; left: 400px; scale:1.4;">Continuidad</div>
+    <div class="nodo" style="top: 200px; left: 900px; height:120px; padding:20px 0 20px 0;">El límite de una función es el valor al que se aproxima la función cuando la variable independiente se acerca a un punto específico.</div>
+    <div class="nodo" style="top: 600px; left: 690px; height:70px; padding:40px;">Valor que se aproxima una función cuando la variable independiente se acerca a un número real</div>
+        <div class="nodo" style="top: 600px; left: 1050px; height:260px; padding:40px;">Un límite infinito describe el comportamiento de una función cuando sus valores crecen indefinidamente de forma positiva o negativa a medida que la variable independiente se aproxima a un número real o al infinito.</div>
+    
+    <div class="nodo" style="top: 200px; left: 1300px;">Discontinuidad</div>
+
+
+
+    <div class="nodo" style="top: 270px; left: 1120px; height:90px; font-size: 7px; width: 120px; padding:1px 0 1px 0;">Un límite con variable finita se analiza cuando xx se aproxima a un número real específico, mientras que con variable infinita se estudia el comportamiento de la función cuando xx tiende a infinito o menos infinito.</div>
+
+
+
+    <div class="nodo" style="top: 250px; left: 700px; height:60px; font-size: 7px; width: 120px; padding:1px 0 1px 0;">Cuando la variable es infinita, el límite estudia cómo se comporta la función cuando \( x \) crece sin límite positivo o negativo.
+      .</div>
+  
+    
+   <!--bueno bueno -->
+    <div class="nodo" style="top: 476px; left: 1030px;">Límites infinito</div>
+    <div class="nodo" style="top: 476px; left: 710px;">Límites finito</div>
+
+
+
+
+    <!-- Conexiones -->
+    <div class="linea" style="top: 350px; border: 1px solid red; left: 1170px; color: lime; background-color: rgb(255, 0, 0); height: 280px; transform: rotate(60deg);"></div>
+       
+    <div class="linea" style="top: 320px; border: 1px solid red; left: 820px; color: lime; background-color: rgb(255, 0, 0); height: 280px; transform: rotate(-50deg);"></div>
+      
+          
+    <div class="linea" style="z-index: 9; top: 1240px; border: 1px solid red; left: 470px; color: lime; background-color: rgb(255, 0, 0); height: 30px; transform: rotate(135deg);"></div>
+      
+
+
+
+         <div class="linea" style="top: 500px; left: 1150px; height: 300px; transform: rotate(90deg);"></div>
+         <div class="linea" style="top: 700px; left: 700px; height: 500px; transform: rotate(0deg);"></div>
+          <div class="linea" style="top: 850px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
+          
+           <div class="linea" style="top: 950px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
+            <div class="linea" style="top: 1150px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
+             <div class="linea" style="top: 1050px; left: 800px; height: 100px; transform: rotate(90deg);"></div>
+  
+      
+      <div class="linea" style="top: 850px; border: 4px solid red; left: 745px; color: lime; background-color: rgb(255, 0, 0); height: 360px; transform: rotate(130deg);"></div>
+      <div class="linea" style="top: 850px; border: 2px solid red; left: 800px; color: lime; background-color: rgb(255, 0, 0); height: 360px; transform: rotate(90deg);"></div>
+       
+      <div class="linea" style="top: 650px; border: 4px solid red; left: 545px; color: lime; background-color: rgb(255, 0, 0); height: 280px; transform: rotate(40deg);"></div>
+     
+
+      <div class="linea" style="top: 1050px; border: 2px solid red; left: 800px; color: lime; background-color: rgb(255, 0, 0); height: 360px; transform: rotate(90deg);"></div>
+
+    
+    <div class="linea" style="top: 500px; left: 800px; height: 200px; transform: rotate(0deg);"></div>
+        <div class="linea" style="top: 500px; left: 1200px; height: 200px; transform: rotate(0deg);"></div>
+    
+    
+    
+    <div class="linea" style="top: 100px; left: 900px; z-index:0; height: 500px; transform: rotate(75deg);"></div>
+    
+        <div class="linea" style="top: 220px; left: 1500px; z-index:0; height: 450px; transform: rotate(105deg);"></div>
+    
+    <div class="linea" style="top: 300px; left: 1230px; height:150px; transform: rotate(90deg);"></div>
+    <div class="linea" style="top: 200px; left: 500px; height: 1500px;"></div>
+    <div class="linea" style="top: 430px; left: 400px; height: 990px;"></div>
+   
+      <div class="linea" style="top: 100px; left: 975px; height: 100px;"></div>
+    <div class="linea" style="top: 100px; left: 1000px; height: 100px; transform: rotate(-115deg);"></div>
+    <div class="linea" style="top: 100px; left: 1000px; height: 120px; transform: rotate(-135deg);"></div>
+    
+    <div class="linea" style="top: 200px; left: 980px; height: 300px; transform: rotate(0deg);"></div>
+  </div>
+      
+
+  </div>
+
+
+
+  
+
+  <!-- Barra de Zoom -->
+  <div id="zoomBar">
+    <label for="zoomSlider">Zoom:</label>
+    <input style="z-index:1;"type="range" id="zoomSlider" min="0.6" max="3" step="0.1" value="1">
+  </div>
+
+  <script>
+    const contenedor = document.getElementById("contenedorZoom");
+    const slider = document.getElementById("zoomSlider");
+
+    let scale = 1;
+
+    function aplicarZoom() {
+      contenedor.style.transform = `scale(${scale})`;
+    }
+
+    slider.addEventListener("input", () => {
+      scale = parseFloat(slider.value);
+      aplicarZoom();
+    });
+
+    window.addEventListener("wheel", e => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        scale += delta;
+        scale = Math.max(0.2, Math.min(scale, 3));
+        slider.value = scale.toFixed(1);
+        aplicarZoom();
+      }
+    }, { passive: false });
+    
+    
+      function abrirInfoLateral() {
+    document.getElementById("infoLateral").style.display = "block";
+  }
+
+  function cerrarInfoLateral() {
+    document.getElementById("infoLateral").style.display = "none";
+  }
+    function abrirInfoPropiedades() {
+    document.getElementById("infoPropiedades").style.display = "block";
+  }
+
+  function cerrarInfoPropiedades() {
+    document.getElementById("infoPropiedades").style.display = "none";
+  }
+  
+  
+  function abrirInfoCasos() {
+    document.getElementById("infoCasos").style.display = "block";
+  }
+
+  function cerrarInfoCasos() {
+    document.getElementById("infoCasos").style.display = "none";
+  }
+
+  function abrirInfoAsintotas() {
+    document.getElementById("infoAsintotas").style.display = "block";
+  }
+
+  function cerrarInfoAsintotas() {
+    document.getElementById("infoAsintotas").style.display = "none";
+  }
+  function mostrarLineasZeta() {
+    document.getElementById("lineaUnoRara").style.display = "block";
+    document.getElementById("lineaDosRara").style.display = "block";
+  }
+
+  function ocultarLineasZeta() {
+    document.getElementById("lineaUnoRara").style.display = "none";
+    document.getElementById("lineaDosRara").style.display = "none";
+  }
+  </script>
+</body>
+</html>
