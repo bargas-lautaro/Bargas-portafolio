@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>BargasLautaro‑TriviaSkeleton + Explicación</title>
+
+  <style>
+    /* --- Estilos generales --- */
+    body{margin:0;height:100vh;display:flex;flex-direction:column;
+         justify-content:center;align-items:center;
+         background:#000;color:#39ff14;font-family:'Segoe UI',sans-serif;}
+    .card{background:#111;border:2px solid #39ff14;border-radius:12px;
+          width:90%;max-width:650px;padding:24px;box-shadow:0 0 25px #39ff14;}
+    h1{text-align:center;margin-top:0;}
+    .question{font-size:1.3em;text-align:center;margin-bottom:20px;}
+    .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .option{background:#222;border:2px solid #555;border-radius:8px;
+            padding:35px;text-align:center;cursor:pointer;transition:.25s;
+            color:#fff;user-select:none;}
+    .option:hover{background:#39ff14;color:#000;}
+
+    .correct   {background:lime   !important;color:#000 !important;}
+    .incorrect {background:red    !important;color:#fff !important;}
+    .highlight {background:#00e5ff!important;color:#000 !important;}
+
+    #nextBtn,#resetBtn{margin-top:18px;padding:10px 22px;border:none;
+                       border-radius:6px;font-weight:bold;cursor:pointer;
+                       background:#39ff14;color:#000;display:none;}
+    #nextBtn:hover,#resetBtn:hover{background:#76ff03;}
+
+    .meta{margin-top:16px;text-align:center;font-size:1em;}
+    #explanation{margin-top:14px;text-align:center;font-size:0.95em;display:none;}
+
+    footer{position:fixed;bottom:2px;width:100%;text-align:center;
+           background:#000;color:#fff;border-top:3px solid lime;padding:4px;z-index:999;}
+  </style>
+</head>
+<body>
+
+  <h1>Juego de Trivia ‑ Demo con Explicación</h1>
+
+  <div class="card">
+    <div class="question" id="questionText">Cargando…</div>
+    <div class="options"   id="optionsContainer"></div>
+
+    <div id="explanation"></div>
+
+    <div class="meta">
+      Aciertos: <span id="hits">0</span> |
+      Errores: <span id="fails">0</span> |
+      Tiempo:  <span id="timeLeft">‑</span>s
+    </div>
+
+    <button id="nextBtn"  onclick="nextQuestion()">Siguiente</button>
+    <button id="resetBtn" onclick="resetGame()">Reiniciar</button>
+  </div>
+
+  <footer>Bargas Nehuen Lautaro ‑ Creado el 03/05/2025</footer>
+
+<script>
+/* ---------- CONFIGURACIÓN ---------- */
+const TIME_PER_QUESTION = 20;   // segundos por pregunta
+/* ---------- PREGUNTAS DE METROLOGÍA DIMENSIONAL ---------- */
+const QUESTIONS = [
+  {
+    pregunta: "¿Qué define ISO 1 dentro de la metrología dimensional?",
+    opciones: [
+      "La referencia de 20 °C como temperatura estándar de medición",
+      "Los símbolos de soldadura en planos técnicos",
+      "Los grados IT para tolerancias",
+      "La verificación de micrómetros"
+    ],
+    correcta: 0,
+    explicacion: "ISO 1 fija 20 °C como temperatura de referencia; todas las cotas y tolerancias se entienden a esa temperatura."
+  },
+  {
+    pregunta: "¿Cuál es la función principal de ISO 2768 en un plano mecánico?",
+    opciones: [
+      "Definir tolerancias generales cuando no se especifican individualmente",
+      "Establecer ajustes entre ejes y agujeros",
+      "Regular la rugosidad superficial",
+      "Calibrar un calibre Vernier"
+    ],
+    correcta: 0,
+    explicacion: "ISO 2768 asigna tolerancias generales (f, m, c, v) para dimensiones que no llevan tolerancia explícita."
+  },
+  {
+    pregunta: "¿Qué representa el par H7/g6 según ISO 286?",
+    opciones: [
+      "Un ajuste juego‑interferencia para tornillos",
+      "Un sistema de tolerancias y ajustes entre un agujero (H7) y un eje (g6)",
+      "Una rugosidad superficial específica",
+      "La zona de tolerancia de una rosca métrica"
+    ],
+    correcta: 1,
+    explicacion: "ISO 286 describe letras y números que definen la posición y tamaño de las zonas de tolerancia de ejes y agujeros."
+  },
+  {
+    pregunta: "¿Para qué sirve la norma ISO 1101 en dibujo técnico?",
+    opciones: [
+      "Especificar tolerancias geométricas de forma, posición y orientación",
+      "Definir bloques patrón",
+      "Medir incertidumbre de la calibración",
+      "Regular la dureza de materiales"
+    ],
+    correcta: 0,
+    explicacion: "ISO 1101 es la base del sistema GPS: planitud, paralelismo, concentricidad, etc., se indican con sus símbolos."
+  },
+  {
+    pregunta: "DIN 862 se refiere a:",
+    opciones: [
+      "Calibradores Vernier (pie de rey)",
+      "Bloques patrón de cerámica",
+      "Micrómetros de interiores",
+      "Ajustes de rosca métrica"
+    ],
+    correcta: 0,
+    explicacion: "DIN 862 establece características, precisión y verificación de los calibradores Vernier."
+  },
+  {
+    pregunta: "¿Qué organismo elabora la norma ASME Y14.5?",
+    opciones: [
+      "ISO",
+      "DIN",
+      "ANSI/ASME",
+      "IEC"
+    ],
+    correcta: 2,
+    explicacion: "ASME Y14.5 (GD&T) es desarrollada por la American Society of Mechanical Engineers y acreditada por ANSI."
+  },
+  {
+    pregunta: "La ISO/IEC 17025 es esencial porque:",
+    opciones: [
+      "Define la posición de tolerancias geométricas",
+      "Establece requisitos de competencia para laboratorios de calibración y ensayo",
+      "Clasifica la rugosidad superficial",
+      "Regula la temperatura de medición"
+    ],
+    correcta: 1,
+    explicacion: "ISO/IEC 17025 fija criterios de gestión y técnicos para garantizar resultados de medición válidos y trazables."
+  },
+  {
+    pregunta: "¿Cuál es el objetivo de la normalización en metrología dimensional?",
+    opciones: [
+      "Crear nuevas unidades de medida",
+      "Eliminar ambigüedades y asegurar la comparabilidad de mediciones",
+      "Reducir el gasto energético en fabricación",
+      "Mejorar la estética de los planos"
+    ],
+    correcta: 1,
+    explicacion: "La normalización unifica criterios técnicos y permite que una medida sea entendida y aceptada mundialmente."
+  },
+  {
+    pregunta: "Según ISO 13385‑1, el instrumento verificado es:",
+    opciones: [
+      "Micrómetro exterior",
+      "Calibre Vernier",
+      "Bloque patrón",
+      "Indicador de carátula"
+    ],
+    correcta: 1,
+    explicacion: "ISO 13385‑1 detalla requisitos y métodos de verificación para calibres Vernier (pie de rey)."
+  },
+  {
+    pregunta: "¿Por qué se utiliza la serie ISO 21920?",
+    opciones: [
+      "Para sistemas de gestión de calidad",
+      "Para medir la rugosidad superficial",
+      "Para determinar incertidumbre de medición",
+      "Para diseñar ajustes prensa"
+    ],
+    correcta: 1,
+    explicacion: "ISO 21920 reemplaza normas antiguas y especifica parámetros y métodos para la medición de rugosidad."
+  }/* --- preguntas adicionales de Metrología Dimensional (agregar al array) --- */
+,{
+  pregunta: "¿Qué simboliza la letra ’M’ dentro de una indicación Ø25 M en ISO 14405‑1?",
+  opciones: [
+    "Máxima condición de material (MMC)",
+    "Media aritmética de errores",
+    "Margen de incertidumbre",
+    "Medida modificada"
+  ],
+  correcta: 0,
+  explicacion: "’M’ indica que la tolerancia se aplica en la máxima condición de material: Ø mayor para agujeros o menor para ejes."
+},{
+  pregunta: "El término 'trazabilidad metrológica' implica:",
+  opciones: [
+    "Uso exclusivo de instrumentos digitales",
+    "Vincular resultados de medición a patrones nacionales o internacionales mediante una cadena ininterrumpida de calibraciones",
+    "Analizar incertidumbre estadística sin patrones",
+    "Calibrar una sola vez un instrumento"
+  ],
+  correcta: 1,
+  explicacion: "La trazabilidad exige una cadena documentada de calibraciones con incertidumbres conocidas hasta un patrón reconocido."
+},{
+  pregunta: "¿Cuál es la finalidad de ISO 14253‑1 en las verificaciones dimensionales?",
+  opciones: [
+    "Definir la temperatura estándar",
+    "Establecer reglas de decisión al comparar resultados de medición con tolerancias",
+    "Regular calibradores roscados",
+    "Crear ajustes de interferencia"
+  ],
+  correcta: 1,
+  explicacion: "ISO 14253‑1 especifica cómo decidir conformidad o no conformidad considerando la incertidumbre de medición."
+},{
+  pregunta: "En el sistema IT de tolerancias, un número IT menor significa:",
+  opciones: [
+    "Tolerancia más amplia",
+    "Tolerancia más estrecha (mayor precisión)",
+    "Zona de ajuste flotante",
+    "Condición de material mínima"
+  ],
+  correcta: 1,
+  explicacion: "Los números IT (International Tolerance) decrecen a medida que la tolerancia se hace más estricta."
+},{
+  pregunta: "¿Cuál es la norma que especifica bloques patrón de acero y carburo?",
+  opciones: [
+    "ISO 3650",
+    "ISO 1938‑2",
+    "ISO 286‑1",
+    "DIN 863"
+  ],
+  correcta: 0,
+  explicacion: "ISO 3650 define requisitos, grados de exactitud y métodos de calibración para bloques patrón sólidos."
+},{
+  pregunta: "Según ISO 10360‑2, ¿qué se evalúa en una CMM (máquina de medición por coordenadas)?",
+  opciones: [
+    "Error de indicación del palpador",
+    "Capacidad de repetición de la escala angular",
+    "Rendimiento volumétrico (E₀,MPE) y repetibilidad",
+    "Desgaste del husillo de avance"
+  ],
+  correcta: 2,
+  explicacion: "La serie ISO 10360 establece ensayos de aceptación y verificación periódica de CMM, midiendo errores volumétricos."
+},{
+  pregunta: "La norma ISO/TS 15066 está relacionada con:",
+  opciones: [
+    "Colaboración humano‑robot y límites de fuerza en entornos seguros",
+    "Temperatura estándar de medición",
+    "Ajustes de precisión IT01",
+    "Micrómetros para láminas"
+  ],
+  correcta: 0,
+  explicacion: "ISO/TS 15066 complementa ISO 10218 para definir parámetros de seguridad en robots colaborativos."
+},{
+  pregunta: "¿Qué instrumento requiere verificación conforme a ISO 3611?",
+  opciones: [
+    "Calibre de carátula (indicador analógico)",
+    "Micrómetro exterior",
+    "Bloque patrón",
+    "Rugosímetro portátil"
+  ],
+  correcta: 0,
+  explicacion: "ISO 3611 especifica requisitos para calibrar indicadores analógicos de carátula y digitales equivalentes."
+},{
+  pregunta: "La incertidumbre expandida se obtiene multiplicando la incertidumbre estándar combinada por:",
+  opciones: [
+    "La constante de Avogadro",
+    "Un factor de cobertura k",
+    "El número IT de la tolerancia",
+    "El coeficiente de dilatación"
+  ],
+  correcta: 1,
+  explicacion: "El factor k (habitualmente 2 para ≈95 %) amplía la incertidumbre estándar para dar un intervalo de confianza."
+},{
+  pregunta: "¿Qué clase de instrumento cubre ISO 145 — 'Gauge blocks with centres'?",
+  opciones: [
+    "Micrómetros interiores",
+    "Bloques patrón con topes centrales para medir ejes",
+    "Relojes comparadores",
+    "Calibres telescópicos"
+  ],
+  correcta: 1,
+  explicacion: "ISO 145 describe bloques patrón con rebaje central para calibrar longitudes internas y externas."
+},{
+  pregunta: "DIN 863‑1 se aplica específicamente a:",
+  opciones: [
+    "Micrómetros exteriores con contacto plano‑plano",
+    "Micrómetros de rosca",
+    "Calibres pasa‑no pasa",
+    "Calibres de profundidad"
+  ],
+  correcta: 0,
+  explicacion: "DIN 863‑1 normaliza dimensiones, error máximo permitido y verificación de micrómetros exteriores estándar."
+},{
+  pregunta: "¿Qué magnitud controla ISO 4287 en un componente mecanizado?",
+  opciones: [
+    "Ovalidad",
+    "Rugosidad superficial (parámetro Ra, Rz, etc.)",
+    "Concentricidad",
+    "Rectitud longitudinal"
+  ],
+  correcta: 1,
+  explicacion: "ISO 4287 define los parámetros matemáticos de la rugosidad 2D obtenidos del perfil de la superficie."
+},{
+  pregunta: "El calibre anular 'Go/No‑Go' verifica:",
+  opciones: [
+    "Rugosidad",
+    "Roscas internas",
+    "Diámetros exteriores dentro de límites de aceptación",
+    "Planitud de una superficie"
+  ],
+  correcta: 2,
+  explicacion: "El lado 'Go' debe pasar y el 'No‑Go' no debe pasar, comprobando ajuste del diámetro exterior."
+},{
+  pregunta: "¿Cuál es el principio básico del comparador óptico (perfilescopio)?",
+  opciones: [
+    "Interferometría láser de doble fe",
+    "Proyectar la silueta ampliada de la pieza y compararla con plantillas de tolerancia",
+    "Medición de capacitancia",
+    "Triangulación láser 3D"
+  ],
+  correcta: 1,
+  explicacion: "El comparador óptico amplía el perfil de la pieza para inspeccionar contornos y dimensiones contra patrones."
+},{
+  pregunta: "Según ISO 1938‑1, los calibres cilíndricos lisos para agujeros se clasifican en:",
+  opciones: [
+    "Sólo en clase A",
+    "Clases X, Y, Z",
+    "Clases GO y NOGO",
+    "Clases 0, 1 y 2 (precisión creciente)"
+  ],
+  correcta: 3,
+  explicacion: "ISO 1938‑1 establece tres clases: 0 (la más precisa), 1 y 2, con errores dimensionales crecientes."
+},{
+  pregunta: "La 'ley de Abbe' recomienda que:",
+  opciones: [
+    "El eje de medida sea colineal con el eje de graduación del instrumento",
+    "La temperatura sea 25 °C",
+    "Se use siempre un micrómetro láser",
+    "El ángulo de incidencia sea 45°"
+  ],
+  correcta: 0,
+  explicacion: "Para minimizar errores de paralaje y coseno, el desplazamiento medido debe coincidir con la línea de medición."
+},{
+  pregunta: "¿Qué parámetro define ISO 25178‑2 en rugosidad 3D?",
+  opciones: [
+    "Sa (promedio aritmético de alturas)",
+    "Ra",
+    "Rt",
+    "Rmr"
+  ],
+  correcta: 0,
+  explicacion: "ISO 25178 introduce parámetros tridimensionales; Sa extiende el Ra clásico al análisis de área superficial."
+},{
+  pregunta: "¿Qué norma rige la calibración de micrómetros de interiores de tres puntos?",
+  opciones: [
+    "ISO 16946",
+    "DIN 863‑4",
+    "ISO 14978",
+    "ISO 1938‑2"
+  ],
+  correcta: 1,
+  explicacion: "DIN 863‑4 especifica tolerancias, diseño y verificación de micrómetros de tres puntos para interiores."
+},{
+  pregunta: "El patrón primario de longitud del SI se basa actualmente en:",
+  opciones: [
+    "Longitud del metro patrón iridio‑platino",
+    "Velocidad de la luz en el vacío",
+    "Interferencia de átomos de cesio",
+    "Cristal de silicio dopado"
+  ],
+  correcta: 1,
+  explicacion: "Desde 1983 el metro se define como la distancia que recorre la luz en el vacío durante 1/299 792 458 s."
+},{
+  pregunta: "ISO 5459 se utiliza para:",
+  opciones: [
+    "Especificar referencias y sistemas de referencia en tolerancias geométricas",
+    "Medir paso de roscas",
+    "Calibrar rugosímetros",
+    "Ajustar cilindros maestros"
+  ],
+  correcta: 0,
+  explicacion: "ISO 5459 detalla cómo establecer marcos de referencia y datums en indicaciones GPS."
+},{
+  pregunta: "¿Cuál es el propósito de la norma ISO 8025 en metrología?",
+  opciones: [
+    "Evaluar incertidumbre mediante Monte Carlo",
+    "Definir vocabulario de metrología industrial",
+    "Planificar muestreo en control estadístico",
+    "Regular la metrología legal de pesaje"
+  ],
+  correcta: 1,
+  explicacion: "ISO 8025 recopila términos y definiciones para asegurar un lenguaje común en la metrología dimensional."
+}
+/* --- preguntas histórico‑metrológicas y conversiones antropométricas (agregar) --- */
+,{
+  pregunta: "¿Qué civilización tomó el codo real como patrón maestro para construir las pirámides?",
+  opciones: ["Mesopotamia", "Egipto", "Roma", "Grecia"],
+  correcta: 1,
+  explicacion: "El codo real egipcio (≈ 52 cm) era la longitud desde el codo hasta el extremo del dedo medio más la anchura de la mano abierta."
+},{
+  pregunta: "La longitud aceptada del codo real egipcio es aproximadamente:",
+  opciones: ["36 cm", "45 cm", "52 cm", "66 cm"],
+  correcta: 2,
+  explicacion: "Las varillas de granito halladas en Luxor y Turín miden unos 52,3 cm, referencia clave para la egiptología."
+},{
+  pregunta: "¿En qué año se firmó la Convención del Metro que dio origen al BIPM?",
+  opciones: ["1799", "1815", "1875", "1960"],
+  correcta: 2,
+  explicacion: "Veinte naciones firmaron en París el 20 de mayo de 1875, creando el Bureau International des Poids et Mesures."
+},{
+  pregunta: "La Revolución Francesa impulsó el sistema métrico para:",
+  opciones: [
+    "Fortalecer la monarquía",
+    "Unificar y simplificar las medidas eliminando unidades locales",
+    "Expandir la influencia británica",
+    "Medir el tiempo con más precisión"
+  ],
+  correcta: 1,
+  explicacion: "Francia tenía miles de unidades regionales; el nuevo sistema decimal buscó igualdad y comercio eficiente."
+},{
+  pregunta: "¿Cuántos centímetros EXACTOS mide una pulgada internacional?",
+  opciones: ["2 cm", "2,54 cm", "2,75 cm", "3,048 cm"],
+  correcta: 1,
+  explicacion: "Desde 1959 los países anglosajones acordaron definir 1 in = 2,54 cm exactamente."
+},{
+  pregunta: "Un pie internacional equivale a:",
+  opciones: ["25,4 cm", "30 cm", "30,48 cm", "33 cm"],
+  correcta: 2,
+  explicacion: "El pie se fijó como 12 pulgadas ⇒ 12 × 2,54 cm = 30,48 cm."
+},{
+  pregunta: "El palmo castellano, distancia entre pulgar y meñique extendidos, vale aprox.:",
+  opciones: ["15 cm", "20 cm", "25 cm", "30 cm"],
+  correcta: 1,
+  explicacion: "Tradicionalmente se considera ≈ 1/4 vara ≈ 20,9 cm; servía para medidas rápidas de tela o madera."
+},{
+  pregunta: "La yarda internacional corresponde exactamente a:",
+  opciones: ["0,9144 m", "1 m", "0,9 m", "1,0936 m"],
+  correcta: 0,
+  explicacion: "Por convenio de 1959, 1 yard = 3 ft = 0,9144 m exactos."
+},{
+  pregunta: "El metro original de 1793 se definió como:",
+  opciones: [
+    "Distancia recorrida por la luz en cierto tiempo",
+    "La diezmillonésima parte del meridiano terrestre (cuadrante Dunkerque‑Barcelona)",
+    "Longitud media del codo francés",
+    "Promedio de una vara castellana"
+  ],
+  correcta: 1,
+  explicacion: "La misión geodésica de Delambre y Méchain midió el arco Dunkerque‑Barcelona para fijar esa fracción del meridiano."
+},{
+  pregunta: "En 1960 el metro se redefinió a partir de:",
+  opciones: [
+    "Prototipo de platino‑iridio",
+    "Longitud de la onda naranja del criptón‑86",
+    "Velocidad de la luz",
+    "Interferencia del cesio‑133"
+  ],
+  correcta: 1,
+  explicacion: "Se eligieron 1 657 763,73 longitudes de onda de la radiación Kr‑86 para mayor estabilidad que la barra metálica."
+},{
+  pregunta: "Desde 1983 el metro se basa en:",
+  opciones: [
+    "Promedio de 10 codos egipcios",
+    "Patrón de platino‑iridio",
+    "Longitud recorrida por la luz en 1/299 792 458 s",
+    "Distancia Tierra‑Sol dividida por 100 000 000"
+  ],
+  correcta: 2,
+  explicacion: "La definición fija la velocidad de la luz como constante fundamental y deriva la unidad de longitud."
+},{
+  pregunta: "¿Qué institución custodiaba el Prototipo Internacional del Metro (barra X)?",
+  opciones: ["CGPM", "BIPM en Sèvres", "ISO", "IEC"],
+  correcta: 1,
+  explicacion: "El BIPM resguardó la barra de platino‑iridio (IPK) y sus copias desde 1889 hasta la redefinición de 1960."
+},{
+  pregunta: "Relación aproximada entre codo romano (cubitus, 1,5 pes) y pie romano es:",
+  opciones: ["1:1", "3:2", "2:3", "5:4"],
+  correcta: 1,
+  explicacion: "Un codo romano equivalía a 1,5 pies; con el pie de 29,6 cm, el codo era ≈ 44,4 cm."
+},{
+  pregunta: "Argentina adoptó oficialmente el Sistema Métrico Decimal mediante ley en:",
+  opciones: ["1863", "1886", "1910", "1947"],
+  correcta: 0,
+  explicacion: "La Ley 52 de 1863 estableció el uso obligatorio del sistema métrico en la Confederación Argentina."
+},{
+  pregunta: "¿Qué tratado de 1960 estableció el SI (Système International) unificando las unidades métricas?",
+  opciones: ["CGS", "Tratado de Versalles", "11ª CGPM", "Acuerdo de Washington"],
+  correcta: 2,
+  explicacion: "La 11ª Conferencia General de Pesas y Medidas (1960) adoptó formalmente el SI basado en el metro‑kilogramo‑segundo."
+}
+,{
+  pregunta: "¿Quién definió la yarda inglesa como la distancia desde la punta de su nariz hasta el pulgar con el brazo extendido (s. XII)?",
+  opciones: ["Guillermo el Conquistador", "Enrique I", "Ricardo Corazón de León", "Eduardo III"],
+  correcta: 1,
+  explicacion: "Según la tradición, el rey Enrique I (1100‑1135) tomó su propia envergadura para fijar la yarda real."
+},{
+  pregunta: "La Magna Carta (1215) menciona la 'vara de Londres'. ¿Qué buscaba al regular esta unidad?",
+  opciones: [
+    "Favorecer la exportación de lana",
+    "Unificar las medidas de longitud, vino y grano para evitar abusos",
+    "Crear un nuevo impuesto a la sal",
+    "Definir el calendario juliano"
+  ],
+  correcta: 1,
+  explicacion: "La Carta Magna exigía un único patrón de medidas en todo el reino para proteger a los comerciantes y consumidores."
+},{
+  pregunta: "El codo hebreo bíblico se estima tradicionalmente en:",
+  opciones: ["30 cm", "45 cm", "50 cm", "60 cm"],
+  correcta: 1,
+  explicacion: "Las excavaciones y textos lo sitúan cerca de 18 in (≈ 45,72 cm), usado en la construcción del Templo de Salomón."
+},{
+  pregunta: "La Orden Mendenhall de 1893 en EE. UU. estableció que:",
+  opciones: [
+    "El sistema métrico era obligatorio para comercio",
+    "Las yardas y libras se definirían a partir del metro y kilogramo internacionales",
+    "Se adoptaba la hora estándar en ferrocarriles",
+    "Se creaba el National Bureau of Standards"
+  ],
+  correcta: 1,
+  explicacion: "Thomas Mendenhall vinculó las unidades estadounidenses al Sistema Métrico sin desmantelar las anglo‑sajonas."
+},{
+  pregunta: "¿Qué año proclamó Francia el uso obligatorio del Sistema Métrico Decimal tras la Revolución?",
+  opciones: ["1795", "1801", "1812", "1840"],
+  correcta: 0,
+  explicacion: "El 7 de abril de 1795 se promulgó la ley que instauró oficialmente el nuevo sistema de medidas en Francia."
+},{
+  pregunta: "El National Bureau of Standards (hoy NIST) se fundó en EE. UU. en:",
+  opciones: ["1866", "1890", "1901", "1927"],
+  correcta: 2,
+  explicacion: "El Congreso creó el NBS en 1901 para proporcionar patrones de medida y fomentar la uniformidad industrial."
+},{
+  pregunta: "Convertir 1 braza inglesa (fathom) a metros equivale aproximadamente a:",
+  opciones: ["1 m", "1,5 m", "1,8288 m", "2,54 m"],
+  correcta: 2,
+  explicacion: "La braza marina se define como 6 ft y cada pie es 0,3048 m ⇒ 1,8288 m."
+},{
+  pregunta: "¿Cuál fue uno de los motivos para redefinir el metro mediante la luz en 1983?",
+  opciones: [
+    "El prototipo de platino‑iridio se encogía",
+    "La barra patrón era difícil de transportar y podía contaminarse",
+    "Facilitar mediciones reproducibles en cualquier laboratorio mediante constantes físicas",
+    "Reducir el coste del platino"
+  ],
+  correcta: 2,
+  explicacion: "Usar una constante universal (c) permite realizar la unidad en cualquier lugar con equipo láser adecuado."
+},{
+  pregunta: "El Guide to the Expression of Uncertainty in Measurement (GUM) se publicó por primera vez en:",
+  opciones: ["1977", "1980", "1993", "2008"],
+  correcta: 2,
+  explicacion: "El GUM 1993 unificó la forma de calcular y reportar incertidumbres, base de ISO 17025."
+},{
+  pregunta: "Una legua castellana tradicional (≈ 20 000 pies) equivale en el SI a unos:",
+  opciones: ["2,5 km", "4,2 km", "5,6 km", "7,5 km"],
+  correcta: 2,
+  explicacion: "Con el pie castellano de 0,2786 m, 20 000 pies dan ≈ 5,57 km; redondeado se citan 5,6 km."
+}
+/* --- 20 preguntas sobre norma y normalización en metrología (agregar) --- */
+,{
+  pregunta: "¿Qué es una norma técnica en metrología?",
+  opciones: [
+    "Una ley obligatoria de cada país",
+    "Un documento consensuado con requisitos y guías para mediciones y calibraciones",
+    "Una patente industrial",
+    "Un reglamento militar interno"
+  ],
+  correcta: 1,
+  explicacion: "Las normas técnicas son acuerdos voluntarios elaborados por organismos como ISO u OIML que establecen criterios uniformes."
+},{
+  pregunta: "¿Qué organismo internacional emite las 'International Vocabulary of Metrology' (VIM)?",
+  opciones: ["ISO y BIPM", "IEC", "ASME", "DIN"],
+  correcta: 0,
+  explicacion: "El VIM es copublicado por ISO, IEC, BIPM y otras entidades, definiendo términos clave de la metrología."
+},{
+  pregunta: "La ISO/IEC 17025 cubre principalmente:",
+  opciones: [
+    "Seguridad de alimentos",
+    "Competencia de laboratorios de ensayo y calibración",
+    "Gestión ambiental",
+    "Protección contra descargas eléctricas"
+  ],
+  correcta: 1,
+  explicacion: "ISO/IEC 17025 especifica requerimientos de gestión y técnicos para asegurar resultados de medición confiables y trazables."
+},{
+  pregunta: "¿Qué define la normalización?",
+  opciones: [
+    "Proceso de crear unidades agregadas de mercancías",
+    "Actividad de formular reglas para un uso común y repetido, con el fin de conseguir un ordenamiento óptimo",
+    "Método de calibrar micrómetros",
+    "Política aduanera"
+  ],
+  correcta: 1,
+  explicacion: "La normalización busca simplificar y hacer compatibles productos, procesos y servicios mediante acuerdos documentados."
+},{
+  pregunta: "¿Cuál es el nivel superior de la jerarquía de patrones de medición?",
+  opciones: ["Patrón de trabajo", "Patrón secundario", "Patrón primario", "Patrón de referencia"],
+  correcta: 2,
+  explicacion: "El patrón primario materializa la definición de la unidad y carece de comparación con otros de mayor exactitud."
+},{
+  pregunta: "¿Qué significa la trazabilidad metrológica según el VIM?",
+  opciones: [
+    "Registro contable de equipos de medición",
+    "Cadena ininterrumpida de calibraciones con incertidumbres establecidas que relaciona un resultado con un patrón de referencia",
+    "Uso exclusivo de láseres como referencia",
+    "Garantía de fabricación europea"
+  ],
+  correcta: 1,
+  explicacion: "La trazabilidad vincula una medición con patrones nacionales o internacionales mediante calibraciones documentadas."
+},{
+  pregunta: "¿Cómo se denomina la unidad organizativa responsable de los patrones nacionales?",
+  opciones: [
+    "Oficina Internacional de Pesas y Medidas",
+    "Instituto Nacional de Metrología (NMI)",
+    "Secretaría de Normalización Comercial",
+    "Laboratorio de producción"
+  ],
+  correcta: 1,
+  explicacion: "Cada país posee un NMI (p. ej., INTI en Argentina, NIST en EE. UU.) que mantiene los patrones nacionales."
+},{
+  pregunta: "Las Recomendaciones Internacionales R de la OIML son:",
+  opciones: [
+    "Reglamentos legales vinculantes en todos los países",
+    "Guías para instrumentos sujetos a metrología legal",
+    "Manuales de contabilidad",
+    "Catálogos de repuestos"
+  ],
+  correcta: 1,
+  explicacion: "OIML publica Recomendaciones que sirven a los Estados para armonizar reglamentaciones de instrumentos destinados al comercio."
+},{
+  pregunta: "¿Qué entidad coordina los Acuerdos de Reconocimiento Mutuo (MRA) para calibraciones?",
+  opciones: ["ILAC", "IEC", "CIPM", "ISO/TC 213"],
+  correcta: 0,
+  explicacion: "ILAC gestiona los MRAs que permiten el reconocimiento recíproco de certificados de laboratorio acreditado."
+},{
+  pregunta: "El 'Guide 34' (ahora ISO 17034) se relaciona con:",
+  opciones: [
+    "Competencia para productores de materiales de referencia",
+    "Gestión de riesgos",
+    "Sistema de gestión de calidad automotriz",
+    "Diseño de laboratorios químicos"
+  ],
+  correcta: 0,
+  explicacion: "ISO 17034 define requisitos de producción y certificación de materiales de referencia utilizados en calibraciones y ensayos."
+},{
+  pregunta: "¿Qué norma establece la evaluación de incertidumbre de medición en instrumentos de presión?",
+  opciones: ["ISO 5167", "ISO 2186", "ISO/IEC Guide 98-3 (GUM)", "ISO 15189"],
+  correcta: 2,
+  explicacion: "El GUM (Guide 98‑3) es aplicable a cualquier magnitud e instrumento, proporcionando el marco para calcular incertidumbre."
+},{
+  pregunta: "Dentro del sistema ISO GPS, la norma marco que explica principios generales es:",
+  opciones: ["ISO 8015", "ISO 1101", "ISO 5459", "ISO 286"],
+  correcta: 0,
+  explicacion: "ISO 8015 define los principios fundamentales de la acotación y especificación geométrica de productos."
+},{
+  pregunta: "El Comité de la CGPM que asesora sobre temas científicos‑técnicos es el:",
+  opciones: [
+    "CCT (Temperatura)",
+    "CIPM",
+    "JCRB",
+    "CCQM (Química y Biología)"
+  ],
+  correcta: 1,
+  explicacion: "El CIPM (Comité Internacional de Pesas y Medidas) supervisa la ejecución de la Convención del Metro."
+},{
+  pregunta: "¿Cuál es el objetivo principal de la normalización metrológica?",
+  opciones: [
+    "Incrementar ventas de instrumentos digitales",
+    "Permitir comparabilidad y coherencia de mediciones a nivel global",
+    "Eliminar la competencia internacional",
+    "Patentar nuevos procedimientos secretos"
+  ],
+  correcta: 1,
+  explicacion: "Facilitar el comercio, la seguridad y la calidad asegurando que todos midan de forma equivalente y reconocida."
+},{
+  pregunta: "La serie ISO 10012 proporciona orientación sobre:",
+  opciones: [
+    "Gestión de procesos de medición y equipos de medición",
+    "Ensayos destructivos de metales",
+    "Seguridad eléctrica",
+    "Compatibilidad electromagnética"
+  ],
+  correcta: 0,
+  explicacion: "ISO 10012 complementa ISO 9001 indicando cómo planificar y controlar los procesos de medición en la industria."
+},{
+  pregunta: "¿Qué es un 'Patrón de Trabajo' según el VIM?",
+  opciones: [
+    "Patrón utilizado cotidianamente para calibrar o verificar instrumentos en el taller",
+    "Patrón que define la unidad SI",
+    "Patrón guardado en el BIPM",
+    "Patrón obsoleto sin trazabilidad"
+  ],
+  correcta: 0,
+  explicacion: "Los patrones de trabajo son los más cerca del proceso de medición diario y suelen recalibrarse contra patrones de referencia."
+},{
+  pregunta: "La calibración 'in‑house' de un termómetro debe vincularse a un patrón que posea:",
+  opciones: [
+    "Certificado vigente con incertidumbre y trazabilidad a un estándar superior",
+    "Una marca CE",
+    "Un sensor de platino",
+    "Software propietario"
+  ],
+  correcta: 0,
+  explicacion: "Para asegurar validez, la cadena de trazabilidad debe documentarse y la incertidumbre ser conocida."
+},{
+  pregunta: "¿Qué documento ISO define términos como 'verificación', 'ajuste' y 'calibración'?",
+  opciones: ["ISO 5725", "ISO/IEC 17000", "ISO 3534", "ISO 4427"],
+  correcta: 1,
+  explicacion: "ISO/IEC 17000 proporciona vocabulario fundamental para evaluación de la conformidad, incluyendo conceptos metrológicos."
+},{
+  pregunta: "La Serie EURAMET cg‑xx son:",
+  opciones: [
+    "Guías europeas de buenas prácticas de calibración",
+    "Reglamentos de transporte de sustancias químicas",
+    "Especificaciones de conectores eléctricos",
+    "Manuales de soldadura MIG"
+  ],
+  correcta: 0,
+  explicacion: "EURAMET publica guías (cg) para calibrar diversas magnitudes, armonizando métodos entre laboratorios europeos."
+},{
+  pregunta: "¿Qué representa el símbolo 'E0,MPE' en ISO 10360 para CMM?",
+  opciones: [
+    "Error máximo permitido en medición de longitud",
+    "Extensión del palpador",
+    "Intervalo de calibración",
+    "Exactitud de repetibilidad angular"
+  ],
+  correcta: 0,
+  explicacion: "E0,MPE es el error máximo permitido en la medición de distancias en la verificación de máquinas de coordenadas."
+},{
+  pregunta: "El 'Arreglo CIPM MRA' firmado en 1999 busca:",
+  opciones: [
+    "Definir la cuarta generación del SI",
+    "Reconocer mutuamente los certificados de calibración y valores de referencia emitidos por NMIs",
+    "Crear un nuevo patrón de masa cuántico",
+    "Reemplazar la ISO/IEC 17025"
+  ],
+  correcta: 1,
+  explicacion: "El CIPM MRA facilita el comercio y la confianza global, evitando calibraciones duplicadas."
+}
+/* --- 20 preguntas sobre norma y normalización en metrología (agregar) --- */
+,{
+  pregunta: "¿Qué es una norma técnica en metrología?",
+  opciones: [
+    "Una ley obligatoria de cada país",
+    "Un documento consensuado con requisitos y guías para mediciones y calibraciones",
+    "Una patente industrial",
+    "Un reglamento militar interno"
+  ],
+  correcta: 1,
+  explicacion: "Las normas técnicas son acuerdos voluntarios elaborados por organismos como ISO u OIML que establecen criterios uniformes."
+},{
+  pregunta: "¿Qué organismo internacional emite las 'International Vocabulary of Metrology' (VIM)?",
+  opciones: ["ISO y BIPM", "IEC", "ASME", "DIN"],
+  correcta: 0,
+  explicacion: "El VIM es copublicado por ISO, IEC, BIPM y otras entidades, definiendo términos clave de la metrología."
+},{
+  pregunta: "La ISO/IEC 17025 cubre principalmente:",
+  opciones: [
+    "Seguridad de alimentos",
+    "Competencia de laboratorios de ensayo y calibración",
+    "Gestión ambiental",
+    "Protección contra descargas eléctricas"
+  ],
+  correcta: 1,
+  explicacion: "ISO/IEC 17025 especifica requerimientos de gestión y técnicos para asegurar resultados de medición confiables y trazables."
+},{
+  pregunta: "¿Qué define la normalización?",
+  opciones: [
+    "Proceso de crear unidades agregadas de mercancías",
+    "Actividad de formular reglas para un uso común y repetido, con el fin de conseguir un ordenamiento óptimo",
+    "Método de calibrar micrómetros",
+    "Política aduanera"
+  ],
+  correcta: 1,
+  explicacion: "La normalización busca simplificar y hacer compatibles productos, procesos y servicios mediante acuerdos documentados."
+},{
+  pregunta: "¿Cuál es el nivel superior de la jerarquía de patrones de medición?",
+  opciones: ["Patrón de trabajo", "Patrón secundario", "Patrón primario", "Patrón de referencia"],
+  correcta: 2,
+  explicacion: "El patrón primario materializa la definición de la unidad y carece de comparación con otros de mayor exactitud."
+},{
+  pregunta: "¿Qué significa la trazabilidad metrológica según el VIM?",
+  opciones: [
+    "Registro contable de equipos de medición",
+    "Cadena ininterrumpida de calibraciones con incertidumbres establecidas que relaciona un resultado con un patrón de referencia",
+    "Uso exclusivo de láseres como referencia",
+    "Garantía de fabricación europea"
+  ],
+  correcta: 1,
+  explicacion: "La trazabilidad vincula una medición con patrones nacionales o internacionales mediante calibraciones documentadas."
+},{
+  pregunta: "¿Cómo se denomina la unidad organizativa responsable de los patrones nacionales?",
+  opciones: [
+    "Oficina Internacional de Pesas y Medidas",
+    "Instituto Nacional de Metrología (NMI)",
+    "Secretaría de Normalización Comercial",
+    "Laboratorio de producción"
+  ],
+  correcta: 1,
+  explicacion: "Cada país posee un NMI (p. ej., INTI en Argentina, NIST en EE. UU.) que mantiene los patrones nacionales."
+},{
+  pregunta: "Las Recomendaciones Internacionales R de la OIML son:",
+  opciones: [
+    "Reglamentos legales vinculantes en todos los países",
+    "Guías para instrumentos sujetos a metrología legal",
+    "Manuales de contabilidad",
+    "Catálogos de repuestos"
+  ],
+  correcta: 1,
+  explicacion: "OIML publica Recomendaciones que sirven a los Estados para armonizar reglamentaciones de instrumentos destinados al comercio."
+},{
+  pregunta: "¿Qué entidad coordina los Acuerdos de Reconocimiento Mutuo (MRA) para calibraciones?",
+  opciones: ["ILAC", "IEC", "CIPM", "ISO/TC 213"],
+  correcta: 0,
+  explicacion: "ILAC gestiona los MRAs que permiten el reconocimiento recíproco de certificados de laboratorio acreditado."
+},{
+  pregunta: "El 'Guide 34' (ahora ISO 17034) se relaciona con:",
+  opciones: [
+    "Competencia para productores de materiales de referencia",
+    "Gestión de riesgos",
+    "Sistema de gestión de calidad automotriz",
+    "Diseño de laboratorios químicos"
+  ],
+  correcta: 0,
+  explicacion: "ISO 17034 define requisitos de producción y certificación de materiales de referencia utilizados en calibraciones y ensayos."
+},{
+  pregunta: "¿Qué norma establece la evaluación de incertidumbre de medición en instrumentos de presión?",
+  opciones: ["ISO 5167", "ISO 2186", "ISO/IEC Guide 98-3 (GUM)", "ISO 15189"],
+  correcta: 2,
+  explicacion: "El GUM (Guide 98‑3) es aplicable a cualquier magnitud e instrumento, proporcionando el marco para calcular incertidumbre."
+},{
+  pregunta: "Dentro del sistema ISO GPS, la norma marco que explica principios generales es:",
+  opciones: ["ISO 8015", "ISO 1101", "ISO 5459", "ISO 286"],
+  correcta: 0,
+  explicacion: "ISO 8015 define los principios fundamentales de la acotación y especificación geométrica de productos."
+},{
+  pregunta: "El Comité de la CGPM que asesora sobre temas científicos‑técnicos es el:",
+  opciones: [
+    "CCT (Temperatura)",
+    "CIPM",
+    "JCRB",
+    "CCQM (Química y Biología)"
+  ],
+  correcta: 1,
+  explicacion: "El CIPM (Comité Internacional de Pesas y Medidas) supervisa la ejecución de la Convención del Metro."
+},{
+  pregunta: "¿Cuál es el objetivo principal de la normalización metrológica?",
+  opciones: [
+    "Incrementar ventas de instrumentos digitales",
+    "Permitir comparabilidad y coherencia de mediciones a nivel global",
+    "Eliminar la competencia internacional",
+    "Patentar nuevos procedimientos secretos"
+  ],
+  correcta: 1,
+  explicacion: "Facilitar el comercio, la seguridad y la calidad asegurando que todos midan de forma equivalente y reconocida."
+},{
+  pregunta: "La serie ISO 10012 proporciona orientación sobre:",
+  opciones: [
+    "Gestión de procesos de medición y equipos de medición",
+    "Ensayos destructivos de metales",
+    "Seguridad eléctrica",
+    "Compatibilidad electromagnética"
+  ],
+  correcta: 0,
+  explicacion: "ISO 10012 complementa ISO 9001 indicando cómo planificar y controlar los procesos de medición en la industria."
+},{
+  pregunta: "¿Qué es un 'Patrón de Trabajo' según el VIM?",
+  opciones: [
+    "Patrón utilizado cotidianamente para calibrar o verificar instrumentos en el taller",
+    "Patrón que define la unidad SI",
+    "Patrón guardado en el BIPM",
+    "Patrón obsoleto sin trazabilidad"
+  ],
+  correcta: 0,
+  explicacion: "Los patrones de trabajo son los más cerca del proceso de medición diario y suelen recalibrarse contra patrones de referencia."
+},{
+  pregunta: "La calibración 'in‑house' de un termómetro debe vincularse a un patrón que posea:",
+  opciones: [
+    "Certificado vigente con incertidumbre y trazabilidad a un estándar superior",
+    "Una marca CE",
+    "Un sensor de platino",
+    "Software propietario"
+  ],
+  correcta: 0,
+  explicacion: "Para asegurar validez, la cadena de trazabilidad debe documentarse y la incertidumbre ser conocida."
+},{
+  pregunta: "¿Qué documento ISO define términos como 'verificación', 'ajuste' y 'calibración'?",
+  opciones: ["ISO 5725", "ISO/IEC 17000", "ISO 3534", "ISO 4427"],
+  correcta: 1,
+  explicacion: "ISO/IEC 17000 proporciona vocabulario fundamental para evaluación de la conformidad, incluyendo conceptos metrológicos."
+},{
+  pregunta: "La Serie EURAMET cg‑xx son:",
+  opciones: [
+    "Guías europeas de buenas prácticas de calibración",
+    "Reglamentos de transporte de sustancias químicas",
+    "Especificaciones de conectores eléctricos",
+    "Manuales de soldadura MIG"
+  ],
+  correcta: 0,
+  explicacion: "EURAMET publica guías (cg) para calibrar diversas magnitudes, armonizando métodos entre laboratorios europeos."
+},{
+  pregunta: "¿Qué representa el símbolo 'E0,MPE' en ISO 10360 para CMM?",
+  opciones: [
+    "Error máximo permitido en medición de longitud",
+    "Extensión del palpador",
+    "Intervalo de calibración",
+    "Exactitud de repetibilidad angular"
+  ],
+  correcta: 0,
+  explicacion: "E0,MPE es el error máximo permitido en la medición de distancias en la verificación de máquinas de coordenadas."
+},{
+  pregunta: "El 'Arreglo CIPM MRA' firmado en 1999 busca:",
+  opciones: [
+    "Definir la cuarta generación del SI",
+    "Reconocer mutuamente los certificados de calibración y valores de referencia emitidos por NMIs",
+    "Crear un nuevo patrón de masa cuántico",
+    "Reemplazar la ISO/IEC 17025"
+  ],
+  correcta: 1,
+  explicacion: "El CIPM MRA facilita el comercio y la confianza global, evitando calibraciones duplicadas."
+}
+/* --- 20 preguntas sobre medición dimensional, su importancia e instrumentos --- */
+,{
+  pregunta: "¿Cuál es la función principal de un calibre Vernier?",
+  opciones: ["Medir masa", "Medir longitudes externas, internas y profundidades con resolución de 0,02 mm", "Medir dureza", "Detectar fallas por ultrasonido"],
+  correcta: 1,
+  explicacion: "El calibre Vernier ofrece versatilidad y precisión básica en taller para diversas dimensiones."
+},{
+  pregunta: "¿Qué instrumento proporciona la mayor exactitud en la calibración de longitud en un laboratorio?",
+  opciones: ["Micrómetro de exteriores", "Bloques patrón grado 0", "Regla milimetrada", "Pie de rey digital"],
+  correcta: 1,
+  explicacion: "Los bloques patrón de acero/carburo grado 0 son la referencia primaria para verificar otros instrumentos."
+},{
+  pregunta: "La medición dimensional es crucial porque:",
+  opciones: ["Reduce el consumo energético", "Garantiza que las piezas encajen y funcionen según diseño", "Elimina la necesidad de planos", "Sustituye la inspección visual"],
+  correcta: 1,
+  explicacion: "Un control dimensional adecuado evita rechazos, fallos en servicio y asegura la intercambiabilidad."
+},{
+  pregunta: "Un micrómetro de exteriores típico tiene resolución de:",
+  opciones: ["1 mm", "0,1 mm", "0,01 mm", "0,001 mm"],
+  correcta: 2,
+  explicacion: "El husillo roscado de paso 0,5 mm con tambor dividido en 50 da 0,01 mm por división."
+},{
+  pregunta: "¿Qué tecnología utiliza un láser tracker para medir distancias?",
+  opciones: ["Triangulación óptica", "Interferometría láser con reflectores esféricos", "Capacitancia", "Sensor Hall"],
+  correcta: 1,
+  explicacion: "El láser tracker rastrea un retro‐reflector y usa interferometría para obtener alta precisión en grandes volúmenes."
+},{
+  pregunta: "¿Cuál es la principal ventaja de las CMM de brazo articulado portátil?",
+  opciones: ["Mayor exactitud que las CMM de puente", "Portabilidad y acceso a piezas grandes in situ", "No necesitan calibración", "Son más económicas que un pie de rey"],
+  correcta: 1,
+  explicacion: "Permiten medir puntos en piezas instaladas sin llevarlas al laboratorio, aunque con menor precisión absoluta."
+},{
+  pregunta: "El indicador de carátula se usa frecuentemente para:",
+  opciones: ["Medir rugosidad", "Detectar excentricidad y variaciones pequeñas en alineación", "Determinar dureza Rockwell", "Cuantificar peso"],
+  correcta: 1,
+  explicacion: "Su aguja amplifica recorridos del orden de 0,01 mm, ideal para concentricidad o planitud."
+},{
+  pregunta: "¿Qué parámetro dimensional se verifica con una galga de roscas 'pasa‑no pasa'?",
+  opciones: ["Paso, ángulo y diámetro efectivo de la rosca", "Rugosidad", "Redondez", "Módulo de engrane"],
+  correcta: 0,
+  explicacion: "La galga confirma que la rosca cumple las tolerancias funcionales sin medir valores numéricos."
+},{
+  pregunta: "La resolución típica de un rugosímetro portátil (Ra) es de:",
+  opciones: ["1 µm", "0,1 µm", "0,01 µm", "0,001 µm"],
+  correcta: 2,
+  explicacion: "Los rugosímetros modernos alcanzan 0,01 µm para parámetros Ra y Rz."
+},{
+  pregunta: "¿Qué error puede aparecer si se mide con micrómetro y la pieza está caliente?",
+  opciones: ["Error de Abbe", "Error de dilatación térmica", "Error de histéresis magnética", "Error de backlash"],
+  correcta: 1,
+  explicacion: "La expansión térmica altera la longitud real; se recomienda medición a 20 °C o aplicar corrección."
+},{
+  pregunta: "El principio de Abbe indica que:",
+  opciones: ["La medición debe alinearse con la línea de referencia del instrumento", "La temperatura debe ser 25 °C", "Se requiere calibrar cada 6 meses", "La rugosidad afecta la reflectancia"],
+  correcta: 0,
+  explicacion: "Colinear el desplazamiento evita errores de coseno y momentos de flexión."
+},{
+  pregunta: "¿Qué instrumento emplea palpadores diamante y luz para medir contornos 2D de alta precisión?",
+  opciones: ["Perfilómetro óptico", "Interpolador lineal", "Comparador óptico (proyector de perfiles)", "Brazo CMM"],
+  correcta: 2,
+  explicacion: "El proyector amplifica la silueta proyectada, permitiendo comparar con plantillas o coordenadas."
+},{
+  pregunta: "Las galgas de espesores (feeler) se utilizan para:",
+  opciones: ["Medir dureza HRC", "Comprobar holguras o ranuras pequeñas", "Medir profundidad de rosca", "Ajustar torque"],
+  correcta: 1,
+  explicacion: "Sus hojas calibradas permiten verificar juegos entre superficies, por ejemplo válvulas o cojinetes."
+},{
+  pregunta: "¿Cuál es la precisión máxima típica de una regla de acero graduada clase I según ISO 361‑1?",
+  opciones: ["±0,2 mm/m", "±0,1 mm/m", "±0,5 mm/m", "±1 mm/m"],
+  correcta: 1,
+  explicacion: "Las reglas clase I ofrecen ±0,1 mm por metro; clase II duplica ese valor."
+},{
+  pregunta: "Un altímetro digital de altura con palpador permite:",
+  opciones: ["Medir angulos de 90°", "Trazar líneas y medir alturas relativas desde la placa de granito", "Medir dureza Vickers", "Cuantificar peso específico"],
+  correcta: 1,
+  explicacion: "Se desplaza verticalmente sobre la base de referencia, midiendo escalonamientos o trazando cotas."
+},{
+  pregunta: "¿Qué error compensa la función ABS en un calibre digital?",
+  opciones: ["Backlash", "Pérdida de referencia al apagar; conserva origen absoluto", "Error de coseno", "Histéresis térmica"],
+  correcta: 1,
+  explicacion: "El sensor absoluta recuerda el punto cero, evitando nuevas puestas a cero tras encendido."
+},{
+  pregunta: "La importancia de medir rugosidad radica en que:",
+  opciones: ["Disminuye el color de la pieza", "Afecta fricción, desgaste y capacidad de sellado", "Reduce la densidad del material", "Aumenta la conductividad eléctrica"],
+  correcta: 1,
+  explicacion: "Un acabado incorrecto puede provocar fugas, fatiga y fallos prematuros."
+},{
+  pregunta: "¿Cuál es un método no contacto para medir dimensiones externas?",
+  opciones: ["Micrómetro de exteriores", "Escáner láser 3D", "Palpador de carátula", "Galga pasa‑no pasa"],
+  correcta: 1,
+  explicacion: "El escaneo láser captura nube de puntos sin tocar la pieza, útil para piezas blandas o delicadas."
+},{
+  pregunta: "¿Qué instrumento mediría mejor la planitud de una placa de granito de laboratorio?",
+  opciones: ["Niveles electrónicos de precisión y regla rectificada", "Pie de rey", "Micrómetro tubular", "Feeler gauge"],
+  correcta: 0,
+  explicacion: "La combinación permite detectar desviaciones micrométricas sobre superficies grandes."
+},{
+  pregunta: "El comparador láser (laser micrometer) se basa en:",
+  opciones: ["Interrupción de haz para medir diámetro con resolución micrométrica", "Triangulación de sonido", "Capacitivo", "Corrientes de Foucault"],
+  correcta: 0,
+  explicacion: "El haz se bloquea parcialmente por la pieza y el sistema calcula la dimensión a partir del perfil de intensidad."
+},{
+  pregunta: "Cuando se habla de 'incertidumbre de medición' en control dimensional, se refiere a:",
+  opciones: ["Error máximo permitido", "Intervalo que caracteriza la dispersión de los valores atribuibles al mensurando", "Calibración vencida", "Repetibilidad del operario"],
+  correcta: 1,
+  explicacion: "Incluye componentes de repetibilidad, calibración, ambiente, patrón y método; es esencial para decisiones de conformidad."
+}
+
+];
+
+/* ---------- VARIABLES DE ESTADO ---------- */
+let pool=[], currentQ=null, answered=false, timer=null, timeLeft=TIME_PER_QUESTION;
+let hits=0, fails=0;
+
+/* ---------- REFERENCIAS DOM ---------- */
+const qText  = document.getElementById("questionText");
+const opts   = document.getElementById("optionsContainer");
+const expl   = document.getElementById("explanation");
+const hitsSp = document.getElementById("hits");
+const failSp = document.getElementById("fails");
+const tLeft  = document.getElementById("timeLeft");
+const nextBt = document.getElementById("nextBtn");
+const resetBt= document.getElementById("resetBtn");
+
+/* ---------- FUNCIONES PRINCIPALES ---------- */
+function initGame(){
+  hits=fails=0;
+  hitsSp.textContent=0; failSp.textContent=0;
+  pool=[...QUESTIONS];
+  resetBt.style.display="none"; nextBt.style.display="none";
+  nextQuestion();
+}
+
+function nextQuestion(){
+  clearInterval(timer);
+  if(pool.length===0){ showResults(); return; }
+
+  currentQ = pool.splice(Math.floor(Math.random()*pool.length),1)[0];
+  answered=false; timeLeft=TIME_PER_QUESTION; tLeft.textContent=timeLeft;
+  nextBt.style.display="none"; expl.style.display="none"; expl.textContent="";
+  qText.textContent=currentQ.pregunta;
+  opts.innerHTML="";
+
+  currentQ.opciones.forEach((txt,i)=>{
+    const div=document.createElement("div");
+    div.className="option"; div.textContent=txt;
+    div.onclick=()=> answered||checkAnswer(i,div);
+    opts.appendChild(div);
+  });
+
+  timer=setInterval(()=>{
+    timeLeft--; tLeft.textContent=timeLeft;
+    if(timeLeft===0 && !answered) checkAnswer(null,null);
+  },1000);
+}
+
+function checkAnswer(idx,btn){
+  answered=true; clearInterval(timer);
+
+  [...opts.children].forEach((opt,i)=>{
+    if(i===currentQ.correcta) opt.classList.add("highlight");
+  });
+
+  if(idx===currentQ.correcta){
+    btn?.classList.add("correct"); hits++; hitsSp.textContent=hits;
+  }else{
+    if(idx!==null) btn?.classList.add("incorrect");
+    fails++; failSp.textContent=fails;
+  }
+
+  /* --- Mostrar explicación --- */
+  expl.textContent = currentQ.explicacion;
+  expl.style.display = "block";
+
+  nextBt.style.display="inline-block";
+}
+
+function showResults(){
+  qText.textContent=`Juego terminado. Aciertos: ${hits} | Errores: ${fails}`;
+  opts.innerHTML=""; tLeft.textContent="‑"; expl.style.display="none";
+  nextBt.style.display="none"; resetBt.style.display="inline-block";
+}
+
+function resetGame(){ initGame(); }
+
+/* ---------- INICIO ---------- */
+initGame();
+</script>
+</body>
+</html>
