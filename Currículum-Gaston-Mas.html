@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gastón Más - Currículum</title>
+
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    color: #39ff14;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    font-size: 2vw;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 8vw;
+    animation: colorchange 5s infinite alternate;
+    margin-top: 3vh;
+    z-index: 2;
+    position: relative;
+  }
+
+  @keyframes colorchange {
+    0% { color: #39ff14; }
+    25% { color: #00ffcc; }
+    50% { color: #ffff00; }
+    75% { color: #ff00ff; }
+    100% { color: #39ff14; }
+  }
+
+  .nav-bar {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 2vw;
+    padding: 1vh 2vw;
+    z-index: 3;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .nav-bar button {
+    flex: 0 0 auto;
+    background-color: #111;
+    border: 0.3vw solid #39ff14;
+    color: #39ff14;
+    padding: 1vh 2vw;
+    border-radius: 1vw;
+    cursor: pointer;
+    font-size: 2vw;
+    white-space: nowrap;
+  }
+
+  .nav-bar button:hover {
+    background-color: #39ff14;
+    color: black;
+  }
+
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 4vw;
+    padding: 2vh 10vw;
+    z-index: 2;
+    position: relative;
+    scroll-behavior: smooth;
+  }
+
+  .card {
+    flex: 0 0 80vw;
+    height: 60vh;
+    background-color: #111;
+    border: 0.3vw solid #39ff14;
+    border-radius: 2vw;
+    scroll-snap-align: center;
+    box-shadow: 0 0 1vw #39ff14;
+    overflow-y: auto;
+    padding: 2vh 2vw;
+    font-size: 2vw;
+  }
+
+  .card h2 {
+    margin-top: 0;
+    font-size: 5vw;
+    color: #00ffcc;
+  }
+
+  .card .breve {
+    font-weight: bold;
+    margin-bottom: 1vh;
+    font-size: 4vw;
+    color: aqua;
+  }
+
+  .card .detalle {
+    font-size: 3.5vw;
+    line-height: 5vw;
+  }
+
+  .card ul {
+    padding-left: 4vw;
+  }
+
+  .whatsapp-btn {
+    display: block;
+    width: fit-content;
+    margin: 4vh auto;
+    padding: 1.5vh 3vw;
+    background-color: #25D366;
+    color: white;
+    border: none;
+    border-radius: 1vw;
+    font-size: 2.5vw;
+    text-decoration: none;
+    z-index: 2;
+    position: absolute;
+    bottom: 5px;
+    left:35%;
+  }
+
+  .stars {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .stars span {
+    position: absolute;
+    color: white;
+    font-size: 2vw;
+    animation: moveStar linear infinite;
+  }
+
+  @keyframes moveStar {
+    from {
+      transform: translateY(-10vh);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(100vh);
+      opacity: 0;
+    }
+  }
+</style>
+  
+  
+  
+  
+</head>
+<body>
+  <div class="stars">
+    <script>
+      for (let i = 0; i < 50; i++) {
+        const star = document.createElement('span');
+        star.textContent = '⭐';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDuration = (2 + Math.random() * 4) + 's';
+        document.querySelector('.stars').appendChild(star);
+      }
+    </script>
+  </div>
+
+  <h1>Gastón Más</h1>
+
+  <div class="nav-bar">
+    <button onclick="scrollToCard(0)">Electricista</button>
+    <button onclick="scrollToCard(1)">Gasista</button>
+    <button onclick="scrollToCard(2)">Carpintería</button>
+    <button onclick="scrollToCard(3)">Fusión</button>
+    <button onclick="scrollToCard(4)">Albañil</button>
+    <button onclick="scrollToCard(5)">Agrónomo</button>
+  </div>
+
+  <div class="carousel">
+    <div class="card">
+      <h2>Electricista</h2>
+      <div class="breve">Especialista en instalaciones eléctricas seguras y eficientes.</div>
+      <div class="detalle">
+        Con amplia experiencia en instalaciones eléctricas domiciliarias, comerciales y rurales, Gastón ofrece servicios profesionales cumpliendo con normas de seguridad eléctrica. Trabaja con precisión en proyectos nuevos, mantenimiento y mejoras de sistemas eléctricos ya existentes.
+        <br><br>
+        <strong>Servicios y trabajos realizados:</strong>
+        <ul>
+          <li>Instalaciones eléctricas completas en viviendas y locales.</li>
+          <li>Colocación de térmicas, disyuntores y llaves seccionadoras.</li>
+          <li>Instalación de tableros eléctricos con distribución por circuitos.</li>
+          <li>Montaje y conexión de tomacorrientes e interruptores.</li>
+          <li>Iluminación interior y exterior (LED, halógenas, dicroicas).</li>
+          <li>Luces automáticas con sensor de movimiento o crepuscular.</li>
+          <li>Canalización y cableado embutido o con cañerías externas.</li>
+          <li>Instalación de ventiladores de techo y extractores de aire.</li>
+          <li>Colocación y conexión de artefactos eléctricos.</li>
+          <li>Medición de consumo eléctrico y equilibrio de fases.</li>
+          <li>Detección y reparación de cortocircuitos o fugas de corriente.</li>
+          <li>Instalación de luces de emergencia y señalización.</li>
+          <li>Automatización básica de luminarias y portones eléctricos.</li>
+          <li>Asesoramiento en ahorro energético e instalación de fotocélulas.</li>
+          <li>Instalación de protecciones contra sobretensiones.</li>
+          <li>Diagnóstico de fallas con tester y pinza amperométrica.</li>
+          <li>Revisión y actualización de instalaciones antiguas.</li>
+          <li>Electricidad en obra: armado de pilares y acometidas.</li>
+          <li>Montaje de bandejas portacables en talleres o depósitos.</li>
+          <li>Colocación de puesta a tierra y pararrayos (según zona).</li>
+        </ul>
+      </div>
+    </div>
+
+<div class="card">
+  <h2>Gasista</h2>
+  <div class="breve">Instalaciones, reparaciones y certificaciones de gas en hogares y obras.</div>
+  <div class="detalle">
+    Con una formación sólida en instalaciones de gas natural y envasado, Gastón Más trabaja con responsabilidad y precisión. Realiza trabajos de obra nueva, mantenimiento y adaptaciones cumpliendo siempre con las normativas técnicas y de seguridad vigentes (ENARGAS, NAG-200, etc.). Utiliza herramientas homologadas y materiales de alta calidad.
+    <br><br>
+    <strong>Servicios y trabajos realizados:</strong>
+    <ul>
+      <li>Instalaciones completas de gas natural o envasado (GLP) en viviendas, obras y comercios.</li>
+      <li>Colocación de cañerías embutidas o visibles con hierro galvanizado, epoxi, termofusión o caño corrugado.</li>
+      <li>Instalación y conexión de cocinas, hornos, termotanques, estufas y calefones.</li>
+      <li>Diseño y armado de circuitos de gas con cálculo de diámetros según consumo.</li>
+      <li>Adaptación de artefactos de gas natural a gas envasado y viceversa.</li>
+      <li>Instalación de artefactos con salida al exterior: tiro balanceado, tiro forzado o natural.</li>
+      <li>Colocación y reemplazo de reguladores, válvulas de seguridad, llaves esféricas y flexibles metálicos.</li>
+      <li>Construcción e instalación de gabinetes de gas y pilares externos según plano.</li>
+      <li>Revisión de ventilaciones cruzadas y verificación de aberturas de seguridad.</li>
+      <li>Detección de pérdidas de gas con instrumentos: manómetro, agua jabonosa, o sensores electrónicos.</li>
+      <li>Pruebas de hermeticidad con equipos de presión y burbujeadores.</li>
+      <li>Reparación de uniones con pérdidas: reemplazo de roscas, selladores, teflón y ajuste de cañerías.</li>
+      <li>Reconexión de servicios tras corte por irregularidades detectadas.</li>
+      <li>Certificación de instalaciones nuevas, ampliadas o modificadas.</li>
+      <li>Asesoramiento técnico previo a inspecciones o habilitaciones.</li>
+      <li>Armado de planos de instalación y documentación técnica requerida por empresas distribuidoras.</li>
+      <li>Atención a emergencias: cierre de válvulas, detección y reparación inmediata de fugas.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Carpintería</h2>
+  <div class="breve">Diseño, construcción y reparación de estructuras en madera.</div>
+  <div class="detalle">
+    Con sólida experiencia en carpintería tradicional y moderna, Gastón trabaja en proyectos personalizados para hogares, comercios y obras. Utiliza herramientas manuales y eléctricas con precisión, y ofrece soluciones creativas adaptadas a cada necesidad. Brinda un servicio completo: desde el diseño hasta la instalación final.
+    <br><br>
+    <strong>Servicios y trabajos realizados:</strong>
+    <ul>
+      <li>Diseño y fabricación de muebles a medida: roperos, alacenas, mesas, escritorios, bibliotecas.</li>
+      <li>Construcción de estructuras de madera: pérgolas, techos, entrepisos, altillos, cercos y portones.</li>
+      <li>Reparación de muebles dañados por humedad, uso o roturas estructurales.</li>
+      <li>Colocación de puertas, ventanas y marcos de madera.</li>
+      <li>Montaje de zócalos, molduras decorativas y marcos ornamentales.</li>
+      <li>Instalación de pisos de madera: entablonados, flotantes, vinílicos con terminación imitación madera.</li>
+      <li>Fabricación y armado de muebles rústicos o de estilo vintage/pulido.</li>
+      <li>Aplicación de tratamientos contra humedad, hongos o termitas.</li>
+      <li>Uso de selladores, barnices, lacas y pinturas para proteger y embellecer la madera.</li>
+      <li>Armado de estructuras para decks, pasarelas y terrazas exteriores en madera tratada.</li>
+      <li>Trabajos con melamina, MDF, fenólicos y multilaminados.</li>
+      <li>Fabricación de cajones, estanterías, gabinetes, barras de cocina y respaldos de cama.</li>
+      <li>Colocación de puertas corredizas, tipo granero o plegables de madera.</li>
+      <li>Refuerzos estructurales en muebles antiguos o de uso intensivo.</li>
+      <li>Colocación de cerraduras y herrajes: bisagras, correderas, manijas, pestillos.</li>
+      <li>Tapacantos, cortes precisos y ajustes de placas de melamina.</li>
+      <li>Recuperación y reciclaje de madera para nuevos proyectos decorativos o utilitarios.</li>
+    </ul>
+  </div>
+</div>
+
+    <div class="card">
+  <h2>Fusión y Electrofusión</h2>
+  <div class="breve">Uniones de cañerías plásticas seguras y duraderas para gas, agua y redes técnicas.</div>
+  <div class="detalle">
+    Gastón Más se especializa en unir cañerías de polietileno mediante procesos de fusión y electrofusión, garantizando hermeticidad, durabilidad y cumplimiento con las normativas técnicas. Estos trabajos son fundamentales para sistemas subterráneos de gas, agua potable, riego, drenajes y sistemas presurizados. 
+    <br><br>
+    Se utilizan equipos profesionales certificados y elementos compatibles con las exigencias de ENARGAS y normas IRAM.
+    <br><br>
+    <strong>Servicios y trabajos realizados:</strong>
+    <ul>
+      <li>Uniones por fusión a tope de caños de polietileno de media y alta densidad (PEAD).</li>
+      <li>Electrofusión con conectores, tees, codos, acoples, tapones y derivaciones con resistencia interna.</li>
+      <li>Instalación de redes de gas natural enterradas mediante electrofusión certificada.</li>
+      <li>Fusión de cañerías para agua potable, riego agrícola, drenajes industriales y sistemas de incendio.</li>
+      <li>Armado de trazados técnicos: medición, corte, desbarbado y alineación de caños.</li>
+      <li>Pruebas de presión en líneas fusionadas y control de estanqueidad.</li>
+      <li>Conexión a válvulas de servicio, derivaciones domiciliarias, cámaras de paso y registros.</li>
+      <li>Colocación de fittings especiales: transiciones a bronce, a hierro, a PVC o a PE.</li>
+      <li>Manejo de máquinas de fusión manual, hidráulica y electrónica con trazabilidad.</li>
+      <li>Lectura de códigos de barras en piezas de electrofusión con control automático de parámetros.</li>
+      <li>Registro de datos del proceso: tiempo, voltaje, presión y temperatura de cada unión.</li>
+      <li>Trabajos en redes de grandes diámetros: caños de 63 mm, 90 mm, 110 mm, 160 mm o más.</li>
+      <li>Trabajos en zonas rurales o con difícil acceso, transporte de maquinaria incluida.</li>
+      <li>Sellado, tapado y marcación de líneas enterradas conforme al plano técnico.</li>
+      <li>Asistencia a empresas constructoras, cooperativas de agua y gas, obras civiles o domiciliarias.</li>
+      <li>Reparación de tramos dañados por excavación o desgaste en conexiones ya fusionadas.</li>
+    </ul>
+  </div>
+</div>
+
+    <div class="card">
+  <h2>Albañil</h2>
+  <div class="breve">Construcción, reformas y reparaciones de estructuras con alta calidad y precisión.</div>
+  <div class="detalle">
+    Gastón Más es especialista en trabajos de albañilería, desde la construcción de obras nuevas hasta la remodelación de espacios existentes. Utiliza materiales de alta calidad y garantiza que todas las estructuras sean seguras y duraderas. Trabaja tanto en obra privada como en proyectos comerciales e industriales.
+    <br><br>
+    Con una gran experiencia, ofrece soluciones efectivas para cada necesidad en la obra, adaptándose a las normativas vigentes y trabajando con precisión en cada fase de la construcción.
+    <br><br>
+    <strong>Servicios y trabajos realizados:</strong>
+    <ul>
+      <li>Construcción de cimientos, bases y estructuras de hormigón armado.</li>
+      <li>Levante de paredes y muros de ladrillo, bloque o mampostería.</li>
+      <li>Reparación y mantenimiento de estructuras: refuerzos, uniones y reposición de materiales dañados.</li>
+      <li>Colocación de pisos: cerámicos, porcelanato, mosaicos, mármol, y pisos flotantes.</li>
+      <li>Instalación de revestimientos interiores y exteriores: yeso, cerámicas, pinturas y barnices.</li>
+      <li>Construcción de techos y cubiertas: de loza, chapa, tejas, y construcción de techos de madera.</li>
+      <li>Realización de aberturas: puertas, ventanas, cerrajería, y colocación de marcos metálicos o de madera.</li>
+      <li>Realización de tabiques, divisiones internas y paneles para oficinas, viviendas o comercios.</li>
+      <li>Reparación de grietas, fisuras y filtraciones en paredes y techos.</li>
+      <li>Demolición controlada de estructuras antiguas, y retiro de escombros.</li>
+      <li>Construcción de escaleras y rampas, tanto de concreto como de material prefabricado.</li>
+      <li>Colocación de columnas, vigas y otros elementos de soporte estructural.</li>
+      <li>Reemplazo de instalaciones de fontanería y electricidad en reformas estructurales.</li>
+      <li>Realización de trabajos de impermeabilización en sótanos, techos y otras superficies expuestas.</li>
+      <li>Asesoramiento y dirección de obras en todo su proceso, desde la planificación hasta la ejecución final.</li>
+      <li>Construcción de instalaciones de cerámica y piedra natural en exteriores: fachadas, patios, jardines.</li>
+      <li>Montaje de estructuras metálicas para techos, naves industriales y otras obras especiales.</li>
+      <li>Reparación y renovación de fachadas y estructuras patrimoniales, siguiendo normas de conservación.</li>
+    </ul>
+  </div>
+</div>
+
+    <div class="card">
+  <h2>Agrónomo</h2>
+  <div class="breve">Especialista en cultivos, cuidado del suelo, producción vegetal y diseño de espacios verdes.</div>
+  <div class="detalle">
+    Gastón Más aplica conocimientos técnicos y experiencia práctica en el ámbito de la agronomía, tanto en espacios rurales como urbanos. Ayuda a mejorar la productividad de huertas y jardines, optimizar el uso del agua, seleccionar cultivos según el clima y enriquecer el suelo con técnicas naturales y sostenibles.
+    <br><br>
+    Además, ofrece soluciones para quienes deseen iniciarse en el cultivo doméstico o profesionalizar sus prácticas agrícolas. Todos los servicios se adaptan a las necesidades del lugar y la época del año.
+    <br><br>
+    <strong>Servicios y trabajos realizados:</strong>
+    <ul>
+      <li>Diseño e implementación de huertas familiares, comunitarias o escolares.</li>
+      <li>Selección de especies hortícolas y aromáticas adaptadas a la zona y estación.</li>
+      <li>Preparación del suelo: descompactación, nivelado, aireado y agregado de compost o abonos orgánicos.</li>
+      <li>Instalación de sistemas de riego por goteo, aspersión o manuales, según tamaño del cultivo.</li>
+      <li>Control ecológico de plagas y enfermedades mediante técnicas naturales.</li>
+      <li>Poda de árboles frutales y ornamentales: de formación, mantenimiento y producción.</li>
+      <li>Asesoramiento sobre fertilización orgánica y nutrientes para cada tipo de cultivo.</li>
+      <li>Producción de compost casero con residuos orgánicos y diseño de composteras.</li>
+      <li>Mejoramiento de suelos degradados o erosionados mediante rotación de cultivos y cobertura vegetal.</li>
+      <li>Plantación y cuidado de especies nativas y ornamentales en espacios verdes.</li>
+      <li>Instalación de invernaderos, macrotúneles y estructuras de protección para cultivos sensibles.</li>
+      <li>Diseño de paisajismo funcional para patios, quintas y jardines productivos.</li>
+      <li>Evaluación de calidad del agua para riego y recomendaciones correctivas si es necesario.</li>
+      <li>Instalación de cercos vivos, sistemas de cortina forestal o barreras contra el viento.</li>
+      <li>Asesoramiento para producción agroecológica o transición a prácticas sostenibles.</li>
+      <li>Capacitación básica a familias o grupos escolares sobre cultivo, cosecha y conservación de alimentos.</li>
+      <li>Elaboración de calendarios de siembra y guías prácticas adaptadas a cada zona.</li>
+    </ul>
+  </div>
+</div>
+  </div>
+
+  <a class="whatsapp-btn" href="https://wa.me/549XXXXXXXXXX" target="_blank">
+    Contactar por WhatsApp
+  </a>
+
+  <script>
+    function scrollToCard(index) {
+      const carousel = document.querySelector('.carousel');
+      const cards = document.querySelectorAll('.card');
+      const card = cards[index];
+      carousel.scrollLeft = card.offsetLeft - carousel.offsetLeft;
+    }
+  </script>
+</body>
+</html>
