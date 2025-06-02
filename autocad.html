@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Listado interactivo de comandos CAD para ingeniería mecánica." />
+  <title>CAD Commands</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #0a0a15;
+      color: #fff;
+      min-height: 100vh;
+      padding-top: 60px;
+    }
+
+    .search-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 15px;
+      background: #121225;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 60px;
+    }
+
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: #00ffff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      min-width: 40px;
+    }
+
+    .search-box-container {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 10px 15px 10px 40px;
+      font-size: 1rem;
+      border-radius: 25px;
+      border: 2px solid #00ffff;
+      background: rgba(0, 10, 20, 0.7);
+      color: #ffffff;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: #ff00ff;
+      box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00ffff;
+      font-size: 1rem;
+    }
+
+    .main-content {
+      display: flex;
+      min-height: calc(100vh - 60px);
+      transition: margin-left 0.3s ease;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #121225;
+      padding: 20px;
+      position: fixed;
+      top: 60px;
+      bottom: 0;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+      z-index: 90;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .command-grid {
+      flex: 1;
+      padding: 20px;
+      margin-left: 250px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .command-grid.expanded {
+      margin-left: 0;
+    }
+
+    .command-btn {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid;
+      border-radius: 10px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .command-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 200, 255, 0.5);
+    }
+
+    .command-name {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px currentColor;
+    }
+
+    .command-desc {
+      font-size: 0.9rem;
+      color: #c0c0ff;
+      margin-bottom: 10px;
+    }
+
+    .command-usage {
+      background: rgba(20, 30, 50, 0.7);
+      padding: 8px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #00ffcc;
+    }
+
+    .color-cyan {
+      color: #00ffff;
+      border-color: #00ffff;
+    }
+
+    .color-pink {
+      color: #ff00ff;
+      border-color: #ff00ff;
+    }
+
+    .category-title {
+      color: #00ffff;
+      margin: 20px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.3);
+    }
+
+    .category-item {
+      padding: 8px 10px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .category-item:hover {
+      background: rgba(0, 200, 255, 0.1);
+    }
+
+    .category-item.active {
+      background: rgba(0, 200, 255, 0.2);
+      font-weight: bold;
+    }
+
+    .favorites-title {
+      color: #ff3366;
+      margin: 25px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(255, 51, 102, 0.3);
+    }
+
+    .favorite-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .favorite-btn:hover {
+      background: rgba(255, 51, 102, 0.1);
+    }
+
+    .favorite-icon {
+      color: #ff3366;
+      font-size: 1.2rem;
+    }
+
+    .favorite-name {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+  .sidebar {
+    width: 80%;
+    padding: 15px;
+    position: fixed;
+    z-index: 90;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar:not(.collapsed) {
+    transform: translateX(0);
+  }
+
+  .command-grid {
+    grid-template-columns: 1fr;
+    margin-left: 0;
+    padding: 15px;
+  }
+
+  .search-box {
+    padding: 8px 15px 8px 35px;
+    font-size: 0.9rem;
+  }
+
+  .search-icon {
+    left: 12px;
+    font-size: 0.9rem;
+  }
+
+  .command-name {
+    font-size: 1.3rem;
+  }
+
+  .category-title, .favorites-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 90%;
+  }
+
+  .command-btn {
+    padding: 10px;
+  }
+
+  .command-name {
+    font-size: 1.2rem;
+  }
+
+  .command-desc,
+  .command-usage {
+    font-size: 0.85rem;
+  }
+}
+
+
+    @media (max-width: 480px) {
+      .sidebar {
+        width: 90%;
+      }
+
+      .command-name {
+        font-size: 1.2rem;
+      }
+
+      .command-desc,
+      .command-usage {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="search-container">
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="search-box-container">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="searchInput" class="search-box" placeholder="Buscar comandos..." aria-label="Buscar comando">
+    </div>
+  </div>
+
+
+  
+
+
+
+
+  <div class="main-content">
+    <div class="sidebar" id="sidebar">
+      <div class="category-title">Categorías</div>
+      <div class="category-item active" data-category="all">Todos los comandos</div>
+      <div class="category-item" data-category="cyan">Dibujo básico</div>
+      <div class="category-item" data-category="pink">Modificación</div>
+      <div class="category-item" data-category="anotacion">Anotación</div>
+      <div class="category-item" data-category="capas">Capas y propiedades</div>
+      <div class="category-item" data-category="bloques">Bloques y referencias</div>
+      <div class="category-item" data-category="presentacion">Vistas y presentación</div>
+      <div class="category-item" data-category="3d">Modelado 3D</div>
+      <div class="category-item" data-category="productividad">Productividad</div>
+      <div class="category-item" data-category="capas">Capas avanzadas</div>
+
+      
+    </div>
+
+    <div class="command-grid" id="commandGrid">
+      <div class="command-btn color-cyan" data-category="cyan" data-command="LINE">
+        <div class="command-name">LINE</div>
+        <div class="command-desc">Crea segmentos de línea recta entre puntos</div>
+        <div class="command-usage">Pto1 → Pto2 o @dist &lt; ángulo</div>
+        
+    
+    
+    </div>
+
+      <div class="command-btn color-cyan" data-category="cyan" data-command="CIRCLE">
+        <div class="command-name">CIRCLE</div>
+        <div class="command-desc">Crea un círculo con centro y radio</div>
+        <div class="command-usage">Centro → Radio o @diámetro</div>
+      </div>
+
+<!-- RECTANGLE Command -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="RECTANGLE">
+  <div class="command-name">RECTANGLE</div>
+  <div class="command-desc">Crea un rectángulo a partir de dos esquinas opuestas</div>
+  <div class="command-usage"><kbd>RECTANGLE</kbd> → clic en primera esquina → clic en segunda esquina</div>
+</div>
+
+<!-- OFFSET Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="OFFSET">
+  <div class="command-name">OFFSET</div>
+  <div class="command-desc">Crea líneas paralelas a una distancia determinada</div>
+  <div class="command-usage"><kbd>OFFSET</kbd> → ingresar distancia → seleccionar objeto → lado</div>
+</div>
+
+<!-- TRIM Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="TRIM">
+  <div class="command-name">TRIM</div>
+  <div class="command-desc">Recorta objetos que se cruzan con otros</div>
+  <div class="command-usage"><kbd>TRIM</kbd> → seleccionar límites → Enter → seleccionar líneas a recortar</div>
+</div>
+
+<!-- EXTEND Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="EXTEND">
+  <div class="command-name">EXTEND</div>
+  <div class="command-desc">Extiende objetos hasta que toquen otros objetos</div>
+  <div class="command-usage"><kbd>EXTEND</kbd> → seleccionar límites → Enter → seleccionar objetos a extender</div>
+</div>
+
+<!-- FILLET Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="FILLET">
+  <div class="command-name">FILLET</div>
+  <div class="command-desc">Redondea la unión entre dos líneas con un radio dado</div>
+  <div class="command-usage"><kbd>FILLET</kbd> → <kbd>R</kbd> → ingresar radio → seleccionar dos líneas</div>
+</div>
+
+<!-- CHAMFER Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="CHAMFER">
+  <div class="command-name">CHAMFER</div>
+  <div class="command-desc">Crea un chaflán (bisel) entre dos líneas</div>
+  <div class="command-usage"><kbd>CHAMFER</kbd> → <kbd>D</kbd> → ingresar distancias → seleccionar líneas</div>
+</div>
+
+<!-- DIMLINEAR Command -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="DIMLINEAR">
+  <div class="command-name">DIMLINEAR</div>
+  <div class="command-desc">Cota lineal entre dos puntos horizontales o verticales</div>
+  <div class="command-usage"><kbd>DIM</kbd> → <kbd>Linear</kbd> → seleccionar puntos</div>
+</div>
+
+<!-- HATCH Command -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="HATCH">
+  <div class="command-name">HATCH</div>
+  <div class="command-desc">Rellena un área cerrada con un patrón o sombreado</div>
+  <div class="command-usage"><kbd>HATCH</kbd> → seleccionar región → elegir patrón</div>
+</div>
+
+
+<!-- ==== CATEGORÍA: ANOTACIÓN ==== -->
+
+<div class="command-btn color-cyan" data-category="anotacion" data-command="TEXT">
+  <div class="command-name">TEXT</div>
+  <div class="command-desc">Inserta texto de una sola línea</div>
+  <div class="command-usage"><kbd>TEXT</kbd> → punto → altura → ángulo → texto</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="anotacion" data-command="MTEXT">
+  <div class="command-name">MTEXT</div>
+  <div class="command-desc">Inserta texto en párrafos con formato</div>
+  <div class="command-usage"><kbd>MTEXT</kbd> → dibujar caja → escribir texto</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="anotacion" data-command="DIM">
+  <div class="command-name">DIM</div>
+  <div class="command-desc">Cotas automáticas según tipo de objeto</div>
+  <div class="command-usage"><kbd>DIM</kbd> → clic en objeto → ubicar cota</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="anotacion" data-command="LEADER">
+  <div class="command-name">LEADER</div>
+  <div class="command-desc">Crea flechas con texto explicativo</div>
+  <div class="command-usage"><kbd>LEADER</kbd> → clics → escribir texto</div>
+</div>
+
+<!-- ==== CATEGORÍA: CAPAS Y PROPIEDADES ==== -->
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYER">
+  <div class="command-name">LAYER</div>
+  <div class="command-desc">Gestión de capas: visibilidad, color, tipo de línea</div>
+  <div class="command-usage"><kbd>LAYER</kbd> → administrador de capas</div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="MATCHPROP">
+  <div class="command-name">MATCHPROP</div>
+  <div class="command-desc">Copia propiedades de un objeto a otro</div>
+  <div class="command-usage"><kbd>MATCHPROP</kbd> → origen → destino</div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="PROPERTIES">
+  <div class="command-name">PROPERTIES</div>
+  <div class="command-desc">Muestra propiedades detalladas del objeto</div>
+  <div class="command-usage"><kbd>PROPERTIES</kbd> → seleccionar objeto</div>
+</div>
+
+<!-- ==== CATEGORÍA: BLOQUES Y REFERENCIAS ==== -->
+
+<div class="command-btn color-pink" data-category="bloques" data-command="BLOCK">
+  <div class="command-name">BLOCK</div>
+  <div class="command-desc">Crea un bloque reutilizable</div>
+  <div class="command-usage"><kbd>BLOCK</kbd> → nombre → objetos → base</div>
+</div>
+
+<div class="command-btn color-pink" data-category="bloques" data-command="INSERT">
+  <div class="command-name">INSERT</div>
+  <div class="command-desc">Inserta un bloque existente</div>
+  <div class="command-usage"><kbd>INSERT</kbd> → elegir bloque → ubicar</div>
+</div>
+
+<div class="command-btn color-pink" data-category="bloques" data-command="ATTEDIT">
+  <div class="command-name">ATTEDIT</div>
+  <div class="command-desc">Edita atributos de un bloque insertado</div>
+  <div class="command-usage"><kbd>ATTEDIT</kbd> → seleccionar atributo → modificar</div>
+</div>
+
+<!-- ==== CATEGORÍA: PRESENTACIÓN E IMPRESIÓN ==== -->
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="LAYOUT">
+  <div class="command-name">LAYOUT</div>
+  <div class="command-desc">Maneja espacios de presentación para impresión</div>
+  <div class="command-usage"><kbd>LAYOUT</kbd> → crear/renombrar presentación</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="PLOT">
+  <div class="command-name">PLOT</div>
+  <div class="command-desc">Imprime o exporta el dibujo como PDF</div>
+  <div class="command-usage"><kbd>PLOT</kbd> → configurar hoja → imprimir</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="VIEW">
+  <div class="command-name">VIEW</div>
+  <div class="command-desc">Guarda y restaura vistas personalizadas</div>
+  <div class="command-usage"><kbd>VIEW</kbd> → guardar posición y nombre</div>
+</div>
+
+<!-- ==== CATEGORÍA: MEDICIÓN Y ANÁLISIS ==== -->
+
+<div class="command-btn color-cyan" data-category="medicion" data-command="DIST">
+  <div class="command-name">DIST</div>
+  <div class="command-desc">Mide distancia entre dos puntos</div>
+  <div class="command-usage"><kbd>DIST</kbd> → punto 1 → punto 2</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="medicion" data-command="AREA">
+  <div class="command-name">AREA</div>
+  <div class="command-desc">Calcula área y perímetro de una figura</div>
+  <div class="command-usage"><kbd>AREA</kbd> → puntos o región cerrada</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="medicion" data-command="ID">
+  <div class="command-name">ID</div>
+  <div class="command-desc">Muestra coordenadas exactas de un punto</div>
+  <div class="command-usage"><kbd>ID</kbd> → clic en punto</div>
+</div>
+<!-- OSNAP -->
+<div class="command-btn color-cyan" data-category="precision" data-command="OSNAP">
+  <div class="command-name">OSNAP</div>
+  <div class="command-desc">Activa referencias precisas como extremos, centros o intersecciones</div>
+  <div class="command-usage"><kbd>F3</kbd> o <kbd>OSNAP</kbd> → seleccionar modos de referencia</div>
+</div>
+
+<!-- ORTHO -->
+<div class="command-btn color-cyan" data-category="precision" data-command="ORTHO">
+  <div class="command-name">ORTHO</div>
+  <div class="command-desc">Restringe el cursor a líneas horizontales o verticales</div>
+  <div class="command-usage"><kbd>F8</kbd> para activar/desactivar</div>
+</div>
+
+<!-- POLAR -->
+<div class="command-btn color-cyan" data-category="precision" data-command="POLAR">
+  <div class="command-name">POLAR</div>
+  <div class="command-desc">Muestra líneas guía en ángulos definidos (por defecto cada 90°)</div>
+  <div class="command-usage"><kbd>F10</kbd> para activar/desactivar</div>
+</div>
+
+<!-- DSETTINGS -->
+<div class="command-btn color-cyan" data-category="precision" data-command="DSETTINGS">
+  <div class="command-name">DSETTINGS</div>
+  <div class="command-desc">Abre la ventana de ajustes de dibujo (rejilla, snap, polar, etc.)</div>
+  <div class="command-usage"><kbd>DSETTINGS</kbd> → configurar preferencias</div>
+</div>
+
+<!-- UNITS -->
+<div class="command-btn color-cyan" data-category="precision" data-command="UNITS">
+  <div class="command-name">UNITS</div>
+  <div class="command-desc">Configura unidades de medida del dibujo</div>
+  <div class="command-usage"><kbd>UNITS</kbd> → elegir tipo, precisión y sistema</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="dibujo" data-command="DONUT">
+  <div class="command-name">DONUT</div>
+  <div class="command-desc">Dibuja un anillo con radio interior y exterior</div>
+  <div class="command-usage"><kbd>DONUT</kbd> → radio int. → radio ext. → centro</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="dibujo" data-command="SPLINE">
+  <div class="command-name">SPLINE</div>
+  <div class="command-desc">Dibuja una curva suave a través de puntos</div>
+  <div class="command-usage"><kbd>SPLINE</kbd> → clics en puntos → <kbd>Enter</kbd></div>
+</div>
+
+<div class="command-btn color-cyan" data-category="dibujo" data-command="ELLIPSE">
+  <div class="command-name">ELLIPSE</div>
+  <div class="command-desc">Crea una elipse especificando ejes mayor y menor</div>
+  <div class="command-usage"><kbd>ELLIPSE</kbd> → eje mayor → eje menor</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="dibujo" data-command="REVCLOUD">
+  <div class="command-name">REVCLOUD</div>
+  <div class="command-desc">Crea una nube de revisión alrededor de elementos</div>
+  <div class="command-usage"><kbd>REVCLOUD</kbd> → dibujar contorno</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="dibujo" data-command="XLINE">
+  <div class="command-name">XLINE</div>
+  <div class="command-desc">Crea líneas infinitas para referencia</div>
+  <div class="command-usage"><kbd>XLINE</kbd> → punto → dirección</div>
+</div>
+
+<!-- ==== PRESENTACIÓN AVANZADA ==== -->
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="MVIEW">
+  <div class="command-name">MVIEW</div>
+  <div class="command-desc">Crea ventanas gráficas en espacio presentación</div>
+  <div class="command-usage"><kbd>MVIEW</kbd> → dibujar ventana sobre layout</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="CHSPACE">
+  <div class="command-name">CHSPACE</div>
+  <div class="command-desc">Mueve objetos entre espacio modelo y presentación</div>
+  <div class="command-usage"><kbd>CHSPACE</kbd> → seleccionar objeto → destino</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="MVSETUP">
+  <div class="command-name">MVSETUP</div>
+  <div class="command-desc">Asistente para configurar hojas de presentación</div>
+  <div class="command-usage"><kbd>MVSETUP</kbd> → configurar vista, escala y layout</div>
+</div>
+
+<!-- ==== VISUALIZACIÓN Y REGENERACIÓN ==== -->
+
+<div class="command-btn color-pink" data-category="admin" data-command="LTSCALE">
+  <div class="command-name">LTSCALE</div>
+  <div class="command-desc">Escala de los tipos de línea del dibujo</div>
+  <div class="command-usage"><kbd>LTSCALE</kbd> → valor → <kbd>REGEN</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="admin" data-command="REGENALL">
+  <div class="command-name">REGENALL</div>
+  <div class="command-desc">Regenera todo el dibujo para actualizar visualización</div>
+  <div class="command-usage"><kbd>REGENALL</kbd> → <kbd>Enter</kbd></div>
+</div>
+
+<!-- ==== MODELADO 3D BÁSICO ==== -->
+
+<div class="command-btn color-cyan" data-category="3d" data-command="EXTRUDE">
+  <div class="command-name">EXTRUDE</div>
+  <div class="command-desc">Convierte objetos 2D en sólidos 3D</div>
+  <div class="command-usage"><kbd>EXTRUDE</kbd> → seleccionar perfil → altura</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="3d" data-command="PRESSPULL">
+  <div class="command-name">PRESSPULL</div>
+  <div class="command-desc">Crea sólidos al presionar o extraer áreas cerradas</div>
+  <div class="command-usage"><kbd>PRESSPULL</kbd> → seleccionar área → altura</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="3d" data-command="UCS">
+  <div class="command-name">UCS</div>
+  <div class="command-desc">Establece un sistema de coordenadas personalizado</div>
+  <div class="command-usage"><kbd>UCS</kbd> → opciones: origen, objeto, cara, vista</div>
+</div>
+
+<!-- ==== PRODUCTIVIDAD Y PERSONALIZACIÓN ==== -->
+
+<div class="command-btn color-pink" data-category="productividad" data-command="TOOLPALETTES">
+  <div class="command-name">TOOLPALETTES</div>
+  <div class="command-desc">Abre el panel de herramientas con bloques y comandos</div>
+  <div class="command-usage"><kbd>TOOLPALETTES</kbd> → seleccionar y usar herramientas</div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="ALIAS">
+  <div class="command-name">ALIAS</div>
+  <div class="command-desc">Define atajos personalizados en el archivo acad.pgp</div>
+  <div class="command-usage">Editar <kbd>acad.pgp</kbd> → agregar alias</div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="CUI">
+  <div class="command-name">CUI</div>
+  <div class="command-desc">Personaliza menús, comandos y teclas rápidas</div>
+  <div class="command-usage"><kbd>CUI</kbd> → configurar interfaz</div>
+</div>
+
+<!-- ==== CAPAS AVANZADAS ==== -->
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYISO">
+  <div class="command-name">LAYISO</div>
+  <div class="command-desc">Aísla la capa seleccionada ocultando las demás</div>
+  <div class="command-usage"><kbd>LAYISO</kbd> → seleccionar capa → confirmar</div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYUNISO">
+  <div class="command-name">LAYUNISO</div>
+  <div class="command-desc">Restaura visibilidad de capas tras usar LAYISO</div>
+  <div class="command-usage"><kbd>LAYUNISO</kbd> → <kbd>Enter</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYERP">
+  <div class="command-name">LAYERP</div>
+  <div class="command-desc">Deshace la última modificación en capas</div>
+  <div class="command-usage"><kbd>LAYERP</kbd> → restaurar estado anterior</div>
+</div>
+
+<!-- ==== PRESENTACIÓN E IMPRESIÓN ==== -->
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="PAGESETUP">
+  <div class="command-name">PAGESETUP</div>
+  <div class="command-desc">Configura márgenes, hoja y escala para impresión</div>
+  <div class="command-usage"><kbd>PAGESETUP</kbd> → seleccionar layout → ajustar</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="PLOTSTYLE">
+  <div class="command-name">PLOTSTYLE</div>
+  <div class="command-desc">Controla color, grosor y estilo de línea al imprimir</div>
+  <div class="command-usage">Asignar <kbd>CTB</kbd> o <kbd>STB</kbd> → desde impresión</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="presentacion" data-command="PUBLISH">
+  <div class="command-name">PUBLISH</div>
+  <div class="command-desc">Imprime en lote varias hojas o layouts</div>
+  <div class="command-usage"><kbd>PUBLISH</kbd> → agregar hojas → configurar → publicar</div>
+</div>
+
+<!-- ==== DISEÑO PARAMÉTRICO ==== -->
+
+<div class="command-btn color-pink" data-category="parametrico" data-command="GEOMCONSTRAINT">
+  <div class="command-name">GEOMCONSTRAINT</div>
+  <div class="command-desc">Aplica restricciones geométricas (paralelo, perpendicular, etc.)</div>
+  <div class="command-usage"><kbd>GEOMCONSTRAINT</kbd> → seleccionar objetos → tipo de restricción</div>
+</div>
+
+<div class="command-btn color-pink" data-category="parametrico" data-command="DIMCONSTRAINT">
+  <div class="command-name">DIMCONSTRAINT</div>
+  <div class="command-desc">Restringe medidas como distancias o ángulos fijos</div>
+  <div class="command-usage"><kbd>DIMCONSTRAINT</kbd> → seleccionar objeto → ingresar valor</div>
+</div>
+
+<!-- ==== VISTAS ISOMÉTRICAS ==== -->
+
+<div class="command-btn color-cyan" data-category="isometrico" data-command="ISOPLANE">
+  <div class="command-name">ISOPLANE</div>
+  <div class="command-desc">Cambia entre planos isométricos izquierdo, derecho o superior</div>
+  <div class="command-usage"><kbd>ISOPLANE</kbd> → usar tecla <kbd>F5</kbd> o ciclo automático</div>
+</div>
+
+<!-- ==== BLOQUES DINÁMICOS Y ATRIBUTOS ==== -->
+
+<div class="command-btn color-pink" data-category="bloques" data-command="BATTMAN">
+  <div class="command-name">BATTMAN</div>
+  <div class="command-desc">Administrador de atributos de bloques</div>
+  <div class="command-usage"><kbd>BATTMAN</kbd> → seleccionar bloque → editar atributos</div>
+</div>
+
+<div class="command-btn color-pink" data-category="bloques" data-command="EATTEDIT">
+  <div class="command-name">EATTEDIT</div>
+  <div class="command-desc">Edita atributos de un bloque directamente</div>
+  <div class="command-usage"><kbd>EATTEDIT</kbd> → seleccionar bloque → editar valores</div>
+</div>
+
+<!-- ==== REFERENCIAS EXTERNAS ==== -->
+
+<div class="command-btn color-pink" data-category="referencias" data-command="XCLIP">
+  <div class="command-name">XCLIP</div>
+  <div class="command-desc">Recorta la visualización de una referencia externa</div>
+  <div class="command-usage"><kbd>XCLIP</kbd> → seleccionar referencia → definir recorte</div>
+</div>
+
+<div class="command-btn color-pink" data-category="referencias" data-command="REFEDIT">
+  <div class="command-name">REFEDIT</div>
+  <div class="command-desc">Edita una referencia externa sin abrir otro archivo</div>
+  <div class="command-usage"><kbd>REFEDIT</kbd> → seleccionar bloque o Xref</div>
+</div>
+
+<div class="command-btn color-pink" data-category="referencias" data-command="REFCLOSE">
+  <div class="command-name">REFCLOSE</div>
+  <div class="command-desc">Cierra la edición de referencia y guarda los cambios</div>
+  <div class="command-usage"><kbd>REFCLOSE</kbd> → confirmar</div>
+</div>
+
+<!-- ==== CONSULTAS Y DIAGNÓSTICO ==== -->
+
+<div class="command-btn color-cyan" data-category="consulta" data-command="DBLIST">
+  <div class="command-name">DBLIST</div>
+  <div class="command-desc">Lista todos los objetos del dibujo actual</div>
+  <div class="command-usage"><kbd>DBLIST</kbd> → muestra datos en texto</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="consulta" data-command="LIST">
+  <div class="command-name">LIST</div>
+  <div class="command-desc">Muestra propiedades detalladas de objetos seleccionados</div>
+  <div class="command-usage"><kbd>LIST</kbd> → seleccionar objeto</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="consulta" data-command="DWGPROPS">
+  <div class="command-name">DWGPROPS</div>
+  <div class="command-desc">Permite ingresar propiedades del dibujo (autor, título, etc.)</div>
+  <div class="command-usage"><kbd>DWGPROPS</kbd> → editar campos</div>
+</div>
+
+<!-- ==== EXPORTACIÓN Y RECUPERACIÓN ==== -->
+
+<div class="command-btn color-pink" data-category="exportacion" data-command="EXPORT">
+  <div class="command-name">EXPORT</div>
+  <div class="command-desc">Exporta el dibujo a otros formatos (PDF, DXF, STL...)</div>
+  <div class="command-usage"><kbd>EXPORT</kbd> → elegir formato → guardar</div>
+</div>
+
+<div class="command-btn color-pink" data-category="exportacion" data-command="DWGCONVERT">
+  <div class="command-name">DWGCONVERT</div>
+  <div class="command-desc">Convierte archivos DWG a versiones anteriores</div>
+  <div class="command-usage"><kbd>DWGCONVERT</kbd> → seleccionar archivos → elegir versión</div>
+</div>
+
+<div class="command-btn color-pink" data-category="exportacion" data-command="RECOVER">
+  <div class="command-name">RECOVER</div>
+  <div class="command-desc">Abre y repara un archivo DWG dañado</div>
+  <div class="command-usage"><kbd>RECOVER</kbd> → elegir archivo → verificar correcciones</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- MOVE Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="MOVE">
+  <div class="command-name">MOVE</div>
+  <div class="command-desc">Mueve objetos de un punto a otro</div>
+  <div class="command-usage"><kbd>MOVE</kbd> → seleccionar objetos → <kbd>Enter</kbd> → clic origen → clic destino</div>
+</div>
+
+<!-- COPY Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="COPY">
+  <div class="command-name">COPY</div>
+  <div class="command-desc">Copia objetos a nuevas ubicaciones</div>
+  <div class="command-usage"><kbd>COPY</kbd> → seleccionar objetos → <kbd>Enter</kbd> → origen → destino</div>
+</div>
+
+<!-- MIRROR Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="MIRROR">
+  <div class="command-name">MIRROR</div>
+  <div class="command-desc">Crea una copia simétrica respecto a un eje</div>
+  <div class="command-usage"><kbd>MIRROR</kbd> → seleccionar objetos → <kbd>Enter</kbd> → eje</div>
+</div>
+
+<!-- ARRAY Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="ARRAY">
+  <div class="command-name">ARRAY</div>
+  <div class="command-desc">Genera copias múltiples en forma rectangular, polar o de camino</div>
+  <div class="command-usage"><kbd>ARRAY</kbd> → elegir tipo → definir cantidad y espaciado</div>
+</div>
+
+<!-- SCALE Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="SCALE">
+  <div class="command-name">SCALE</div>
+  <div class="command-desc">Cambia el tamaño de los objetos en proporción</div>
+  <div class="command-usage"><kbd>SCALE</kbd> → seleccionar → <kbd>Enter</kbd> → punto base → factor</div>
+</div>
+
+<!-- ROTATE Command -->
+<div class="command-btn color-pink" data-category="pink" data-command="ROTATE">
+  <div class="command-name">ROTATE</div>
+  <div class="command-desc">Rota objetos en torno a un punto base</div>
+  <div class="command-usage"><kbd>ROTATE</kbd> → seleccionar objetos → punto base → ángulo</div>
+</div>
+
+<!-- ZOOM Command -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="ZOOM">
+  <div class="command-name">ZOOM</div>
+  <div class="command-desc">Acerca o aleja la vista del dibujo</div>
+  <div class="command-usage"><kbd>ZOOM</kbd> → <kbd>Extents</kbd> o rueda del mouse</div>
+</div>
+
+<!-- PAN Command -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="PAN">
+  <div class="command-name">PAN</div>
+  <div class="command-desc">Desplaza la vista sin cambiar el zoom</div>
+  <div class="command-usage"><kbd>PAN</kbd> o presionar botón central del mouse y arrastrar</div>
+</div>
+
+<!-- OSNAP (Object Snap) -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="OSNAP">
+  <div class="command-name">OSNAP</div>
+  <div class="command-desc">Activa referencias precisas como extremos, centros, intersecciones</div>
+  <div class="command-usage"><kbd>F3</kbd> → o escribir <kbd>OSNAP</kbd> → elegir modos</div>
+</div>
+
+<!-- GRID & SNAP -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="GRID">
+  <div class="command-name">GRID / SNAP</div>
+  <div class="command-desc">Muestra una rejilla y ajusta los puntos a una grilla</div>
+  <div class="command-usage"><kbd>F7</kbd> para <kbd>GRID</kbd> / <kbd>F9</kbd> para <kbd>SNAP</kbd></div>
+</div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const commandGrid = document.getElementById('commandGrid');
+    const commandButtons = document.querySelectorAll('.command-btn');
+    const categoryItems = document.querySelectorAll('.category-item');
+    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+
+    let sidebarVisible = window.innerWidth > 768;
+
+    function updateSidebarVisibility() {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add('collapsed');
+        commandGrid.classList.add('expanded');
+        sidebarVisible = false;
+      } else {
+        sidebar.classList.remove('collapsed');
+        commandGrid.classList.remove('expanded');
+        sidebarVisible = true;
+      }
+    }
+
+    menuToggle.addEventListener('click', () => {
+      sidebarVisible = !sidebarVisible;
+      sidebar.classList.toggle('collapsed');
+      commandGrid.classList.toggle('expanded');
+    });
+
+    function setActiveCategory(category) {
+      categoryItems.forEach(item => {
+        item.classList.toggle('active', item.getAttribute('data-category') === category);
+      });
+      filterCommands();
+    }
+
+    function filterCommands() {
+      const activeCategory = document.querySelector('.category-item.active').getAttribute('data-category');
+      const searchTerm = searchInput.value.toLowerCase();
+      commandButtons.forEach(button => {
+        const name = button.getAttribute('data-command').toLowerCase();
+        const category = button.getAttribute('data-category');
+        const matches = (activeCategory === 'all' || category === activeCategory) &&
+                        (name.includes(searchTerm) || button.textContent.toLowerCase().includes(searchTerm));
+        button.style.display = matches ? 'block' : 'none';
+      });
+    }
+
+    categoryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        setActiveCategory(item.getAttribute('data-category'));
+        if (window.innerWidth <= 768) {
+          sidebar.classList.add('collapsed');
+          commandGrid.classList.add('expanded');
+          sidebarVisible = false;
+        }
+      });
+    });
+
+    favoriteButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const command = button.getAttribute('data-command');
+        searchInput.value = command;
+        filterCommands();
+        if (window.innerWidth <= 768) {
+          sidebar.classList.add('collapsed');
+          commandGrid.classList.add('expanded');
+          sidebarVisible = false;
+        }
+      });
+    });
+
+    searchInput.addEventListener('input', filterCommands);
+    window.addEventListener('resize', updateSidebarVisibility);
+
+    updateSidebarVisibility();
+    setActiveCategory('all');
+  </script>
+</body>
+</html>
