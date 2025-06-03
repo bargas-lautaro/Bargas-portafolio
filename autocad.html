@@ -291,9 +291,21 @@
   </style>
 </head>
 <body>
+  <div class="search-container">
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="search-box-container">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="searchInput" class="search-box" placeholder="Buscar comandos..." aria-label="Buscar comando">
+    </div>
+  </div>
 
 
-  <!-- Footer fijo al pie -->
+  
+
+
+<!-- Footer fijo al pie -->
 <footer style="
   position:fixed;
   bottom:0; left:0; right:0;
@@ -305,20 +317,6 @@
   z-index:150;">
   Bargas Nehuen Lautaro &nbsp;|&nbsp; Última actualización: 02/06/2025
 </footer>
-
-  <div class="search-container">
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="search-box-container">
-      <i class="fas fa-search search-icon"></i>
-      <input type="text" id="searchInput" class="search-box" placeholder="Buscar comandos..." aria-label="Buscar comando">
-    </div>
-  </div>
-
-  
-
-
 
 
   <div class="main-content">
@@ -382,12 +380,303 @@
   <div class="command-usage"><kbd>EXTEND</kbd> → seleccionar límites → Enter → seleccionar objetos a extender</div>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ==== DIBUJO BÁSICO ==== -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="PLINE">
+  <div class="command-name">PLINE</div>
+  <div class="command-desc">Dibuja polilíneas (líneas compuestas por varios segmentos)</div>
+  <div class="command-usage"><kbd>PLINE</kbd> → clics en puntos → <kbd>Enter</kbd></div>
+</div>
+
+<div class="command-btn color-cyan" data-category="cyan" data-command="POLYGON">
+  <div class="command-name">POLYGON</div>
+  <div class="command-desc">Dibuja polígonos regulares</div>
+  <div class="command-usage"><kbd>POLYGON</kbd> → número de lados → centro → radio</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="cyan" data-command="ARC">
+  <div class="command-name">ARC</div>
+  <div class="command-desc">Dibuja arcos</div>
+  <div class="command-usage"><kbd>ARC</kbd> → especificar puntos o parámetros</div>
+</div>
+
+<!-- ==== MODIFICACIÓN ==== -->
+<div class="command-btn color-pink" data-category="pink" data-command="BREAK">
+  <div class="command-name">BREAK</div>
+  <div class="command-desc">Rompe un objeto en dos partes</div>
+  <div class="command-usage"><kbd>BREAK</kbd> → seleccionar objeto → puntos de ruptura</div>
+</div>
+
+<div class="command-btn color-pink" data-category="pink" data-command="JOIN">
+  <div class="command-name">JOIN</div>
+  <div class="command-desc">Une varios objetos en uno solo</div>
+  <div class="command-usage"><kbd>JOIN</kbd> → seleccionar objetos → <kbd>Enter</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="pink" data-command="EXPLODE">
+  <div class="command-name">EXPLODE</div>
+  <div class="command-desc">Descompone bloques o polilíneas en objetos simples</div>
+  <div class="command-usage"><kbd>EXPLODE</kbd> → seleccionar objeto</div>
+</div>
+
+<div class="command-btn color-pink" data-category="pink" data-command="STRETCH">
+  <div class="command-name">STRETCH</div>
+  <div class="command-desc">Estira partes de objetos seleccionados</div>
+  <div class="command-usage"><kbd>STRETCH</kbd> → seleccionar ventana cruzada → punto base → desplazamiento</div>
+</div>
+
+<!-- ==== UTILIDADES Y GESTIÓN ==== -->
+<div class="command-btn color-pink" data-category="admin" data-command="PURGE">
+  <div class="command-name">PURGE</div>
+  <div class="command-desc">Elimina elementos no usados del dibujo</div>
+  <div class="command-usage"><kbd>PURGE</kbd> → seleccionar elementos → eliminar</div>
+</div>
+
+<div class="command-btn color-pink" data-category="admin" data-command="AUDIT">
+  <div class="command-name">AUDIT</div>
+  <div class="command-desc">Revisa y corrige errores en el dibujo</div>
+  <div class="command-usage"><kbd>AUDIT</kbd> → <kbd>Y</kbd> para corregir</div>
+</div>
+
+<div class="command-btn color-pink" data-category="admin" data-command="OVERKILL">
+  <div class="command-name">OVERKILL</div>
+  <div class="command-desc">Elimina líneas duplicadas o solapadas</div>
+  <div class="command-usage"><kbd>OVERKILL</kbd> → seleccionar objetos → aceptar</div>
+</div>
+
+<!-- ==== SELECCIÓN Y CAPAS ==== -->
+<div class="command-btn color-pink" data-category="capas" data-command="QSELECT">
+  <div class="command-name">QSELECT</div>
+  <div class="command-desc">Selección rápida de objetos por propiedades</div>
+  <div class="command-usage"><kbd>QSELECT</kbd> → elegir criterio → seleccionar</div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYOFF">
+  <div class="command-name">LAYOFF</div>
+  <div class="command-desc">Apaga capas seleccionadas</div>
+  <div class="command-usage"><kbd>LAYOFF</kbd> → seleccionar objetos</div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYON">
+  <div class="command-name">LAYON</div>
+  <div class="command-desc">Enciende todas las capas</div>
+  <div class="command-usage"><kbd>LAYON</kbd> → <kbd>Enter</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYFRZ">
+  <div class="command-name">LAYFRZ</div>
+  <div class="command-desc">Congela capas seleccionadas</div>
+  <div class="command-usage"><kbd>LAYFRZ</kbd> → seleccionar objetos</div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYTHW">
+  <div class="command-name">LAYTHW</div>
+  <div class="command-desc">Descongela todas las capas</div>
+  <div class="command-usage"><kbd>LAYTHW</kbd> → <kbd>Enter</kbd></div>
+</div>
+
+<!-- ==== BLOQUES Y ARCHIVOS ==== -->
+<div class="command-btn color-pink" data-category="bloques" data-command="WBLOCK">
+  <div class="command-name">WBLOCK</div>
+  <div class="command-desc">Guarda objetos seleccionados como un nuevo archivo DWG</div>
+  <div class="command-usage"><kbd>WBLOCK</kbd> → seleccionar objetos → guardar archivo</div>
+</div>
+
+<!-- ==== DIVISIÓN Y MEDICIÓN ==== -->
+<div class="command-btn color-cyan" data-category="medicion" data-command="MEASURE">
+  <div class="command-name">MEASURE</div>
+  <div class="command-desc">Coloca puntos o bloques a intervalos regulares</div>
+  <div class="command-usage"><kbd>MEASURE</kbd> → seleccionar objeto → especificar longitud</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="medicion" data-command="DIVIDE">
+  <div class="command-name">DIVIDE</div>
+  <div class="command-desc">Divide un objeto en segmentos iguales</div>
+  <div class="command-usage"><kbd>DIVIDE</kbd> → seleccionar objeto → número de segmentos</div>
+</div>
+
+<!-- ==== ANOTACIÓN ==== -->
+<div class="command-btn color-cyan" data-category="anotacion" data-command="MLEADER">
+  <div class="command-name">MLEADER</div>
+  <div class="command-desc">Crea directrices múltiples (líneas de llamada con texto)</div>
+  <div class="command-usage"><kbd>MLEADER</kbd> → clics → escribir texto</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="anotacion" data-command="TEXTEDIT">
+  <div class="command-name">TEXTEDIT</div>
+  <div class="command-desc">Edita texto de una sola línea</div>
+  <div class="command-usage"><kbd>TEXTEDIT</kbd> → seleccionar texto → editar</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="anotacion" data-command="MTEDIT">
+  <div class="command-name">MTEDIT</div>
+  <div class="command-desc">Edita texto múltiple (MTEXT)</div>
+  <div class="command-usage"><kbd>MTEDIT</kbd> → seleccionar texto múltiple</div>
+</div>
+
+
+
+
+
+
+
 <!-- FILLET Command -->
 <div class="command-btn color-pink" data-category="pink" data-command="FILLET">
   <div class="command-name">FILLET</div>
   <div class="command-desc">Redondea la unión entre dos líneas con un radio dado</div>
   <div class="command-usage"><kbd>FILLET</kbd> → <kbd>R</kbd> → ingresar radio → seleccionar dos líneas</div>
 </div>
+
+
+
+
+<!-- ==== PRODUCTIVIDAD Y GESTIÓN ==== -->
+<div class="command-btn color-pink" data-category="productividad" data-command="UNDO">
+  <div class="command-name">UNDO</div>
+  <div class="command-desc">Deshace la última acción realizada</div>
+  <div class="command-usage"><kbd>UNDO</kbd> o <kbd>Ctrl+Z</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="REDO">
+  <div class="command-name">REDO</div>
+  <div class="command-desc">Rehace la última acción deshecha</div>
+  <div class="command-usage"><kbd>REDO</kbd> o <kbd>Ctrl+Y</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="QSAVE">
+  <div class="command-name">QSAVE</div>
+  <div class="command-desc">Guarda rápidamente el dibujo actual</div>
+  <div class="command-usage"><kbd>QSAVE</kbd> o <kbd>Ctrl+S</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="SAVEAS">
+  <div class="command-name">SAVEAS</div>
+  <div class="command-desc">Guarda el dibujo con un nuevo nombre o formato</div>
+  <div class="command-usage"><kbd>SAVEAS</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="OPEN">
+  <div class="command-name">OPEN</div>
+  <div class="command-desc">Abre un archivo de dibujo existente</div>
+  <div class="command-usage"><kbd>OPEN</kbd> o <kbd>Ctrl+O</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="CLOSE">
+  <div class="command-name">CLOSE</div>
+  <div class="command-desc">Cierra el dibujo actual</div>
+  <div class="command-usage"><kbd>CLOSE</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="COPYCLIP">
+  <div class="command-name">COPYCLIP</div>
+  <div class="command-desc">Copia objetos seleccionados al portapapeles</div>
+  <div class="command-usage"><kbd>COPYCLIP</kbd> o <kbd>Ctrl+C</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="PASTECLIP">
+  <div class="command-name">PASTECLIP</div>
+  <div class="command-desc">Pega objetos desde el portapapeles</div>
+  <div class="command-usage"><kbd>PASTECLIP</kbd> o <kbd>Ctrl+V</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="CUTCLIP">
+  <div class="command-name">CUTCLIP</div>
+  <div class="command-desc">Corta objetos seleccionados al portapapeles</div>
+  <div class="command-usage"><kbd>CUTCLIP</kbd> o <kbd>Ctrl+X</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="SELECTSIMILAR">
+  <div class="command-name">SELECTSIMILAR</div>
+  <div class="command-desc">Selecciona objetos similares al seleccionado</div>
+  <div class="command-usage"><kbd>SELECTSIMILAR</kbd> → seleccionar objeto → <kbd>Enter</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="ISOLATEOBJECTS">
+  <div class="command-name">ISOLATEOBJECTS</div>
+  <div class="command-desc">Aísla los objetos seleccionados ocultando los demás</div>
+  <div class="command-usage"><kbd>ISOLATEOBJECTS</kbd> → seleccionar objetos</div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="UNISOLATEOBJECTS">
+  <div class="command-name">UNISOLATEOBJECTS</div>
+  <div class="command-desc">Restaura la visibilidad de todos los objetos</div>
+  <div class="command-usage"><kbd>UNISOLATEOBJECTS</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="productividad" data-command="PURGEALL">
+  <div class="command-name">PURGEALL</div>
+  <div class="command-desc">Elimina todos los elementos no usados del dibujo</div>
+  <div class="command-usage"><kbd>PURGE</kbd> → <kbd>All</kbd></div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYMRG">
+  <div class="command-name">LAYMRG</div>
+  <div class="command-desc">Fusiona capas seleccionadas en una sola</div>
+  <div class="command-usage"><kbd>LAYMRG</kbd> → seleccionar capas → destino</div>
+</div>
+
+<div class="command-btn color-pink" data-category="capas" data-command="LAYDEL">
+  <div class="command-name">LAYDEL</div>
+  <div class="command-desc">Elimina capas seleccionadas del dibujo</div>
+  <div class="command-usage"><kbd>LAYDEL</kbd> → seleccionar capas</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="anotacion" data-command="FIELD">
+  <div class="command-name">FIELD</div>
+  <div class="command-desc">Inserta campos automáticos (fecha, nombre, etc.)</div>
+  <div class="command-usage"><kbd>FIELD</kbd> → elegir tipo de campo</div>
+</div>
+
+<div class="command-btn color-cyan" data-category="anotacion" data-command="TABLE">
+  <div class="command-name">TABLE</div>
+  <div class="command-desc">Inserta tablas en el dibujo</div>
+  <div class="command-usage"><kbd>TABLE</kbd> → definir filas y columnas</div>
+</div>
+
+<div class="command-btn color-pink" data-category="anotacion" data-command="MLEADERSTYLE">
+  <div class="command-name">MLEADERSTYLE</div>
+  <div class="command-desc">Gestiona estilos de directriz múltiple</div>
+  <div class="command-usage"><kbd>MLEADERSTYLE</kbd> → crear/modificar estilos</div>
+</div>
+
+<div class="command-btn color-pink" data-category="anotacion" data-command="DIMSTYLE">
+  <div class="command-name">DIMSTYLE</div>
+  <div class="command-desc">Gestiona estilos de cotas</div>
+  <div class="command-usage"><kbd>DIMSTYLE</kbd> → crear/modificar estilos</div>
+</div>
+
+<div class="command-btn color-pink" data-category="admin" data-command="RECOVERALL">
+  <div class="command-name">RECOVERALL</div>
+  <div class="command-desc">Recupera todos los archivos referenciados dañados</div>
+  <div class="command-usage"><kbd>RECOVERALL</kbd> → seleccionar archivo</div>
+</div>
+
+<div class="command-btn color-pink" data-category="admin" data-command="RECOVER">
+  <div class="command-name">RECOVER</div>
+  <div class="command-desc">Recupera un archivo DWG dañado</div>
+  <div class="command-usage"><kbd>RECOVER</kbd> → seleccionar archivo</div>
+</div>
+
+
+
 
 <!-- CHAMFER Command -->
 <div class="command-btn color-pink" data-category="pink" data-command="CHAMFER">
