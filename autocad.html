@@ -368,9 +368,34 @@
 
 <!-- TRIM Command -->
 <div class="command-btn color-pink" data-category="pink" data-command="TRIM">
-  <div class="command-name">TRIM</div>
-  <div class="command-desc">Recorta objetos que se cruzan con otros</div>
-  <div class="command-usage"><kbd>TRIM</kbd> → seleccionar límites → Enter → seleccionar líneas a recortar</div>
+    <div class="command-name">TRIM</div>
+    <div class="command-desc">Recorta objetos que se cruzan con otros</div>
+    <div class="command-usage"><kbd>TRIM</kbd> → seleccionar límites → Enter → seleccionar líneas a recortar</div>
+    <details style="margin-top:10px;">
+        <summary style="cursor:pointer;color:#00ffff;">Ver ejemplos y detalles</summary>
+        <div style="margin-top:8px; color:#c0eaff; font-size:0.95em;">
+            <p>
+                El comando <b>TRIM</b> permite eliminar partes de líneas, arcos, círculos u otros objetos que se extienden más allá de los límites definidos por otros objetos. Es fundamental para limpiar intersecciones y ajustar dibujos con precisión.
+            </p>
+            <ul style="margin-left:1em;">
+                <li>
+                    <b>Ejemplo 1:</b> Si tienes dos líneas que se cruzan y solo quieres conservar el segmento dentro de un área, selecciona como límite la línea que define el borde y luego haz clic en la parte de la línea que deseas recortar.
+                </li>
+                <li>
+                    <b>Ejemplo 2:</b> Puedes seleccionar varios límites y recortar múltiples objetos en una sola operación.
+                </li>
+                <li>
+                    Si presionas <kbd>Enter</kbd> al iniciar el comando, todos los objetos se consideran límites automáticamente.
+                </li>
+                <li>
+                    Para recortar arcos o círculos, selecciona el segmento que sobresale del límite.
+                </li>
+            </ul>
+            <p>
+                <b>Consejo:</b> Usa <kbd>TRIM</kbd> junto con <kbd>EXTEND</kbd> para ajustar rápidamente los extremos de líneas y mantener la geometría limpia.
+            </p>
+        </div>
+    </details>
 </div>
 
 <!-- EXTEND Command -->
@@ -687,16 +712,101 @@
 
 <!-- DIMLINEAR Command -->
 <div class="command-btn color-cyan" data-category="cyan" data-command="DIMLINEAR">
-  <div class="command-name">DIMLINEAR</div>
-  <div class="command-desc">Cota lineal entre dos puntos horizontales o verticales</div>
-  <div class="command-usage"><kbd>DIM</kbd> → <kbd>Linear</kbd> → seleccionar puntos</div>
+    <div class="command-name">DIMLINEAR</div>
+    <div class="command-desc">Cota lineal entre dos puntos horizontales o verticales</div>
+    <div class="command-usage"><kbd>DIM</kbd> → <kbd>Linear</kbd> → seleccionar puntos</div>
+    <details style="margin-top:10px;">
+        <summary style="cursor:pointer;color:#00ffff;">Ver ejemplos y detalles</summary>
+        <div style="margin-top:8px; color:#c0eaff; font-size:0.95em;">
+            <p>
+                El comando <b>DIMLINEAR</b> permite crear cotas lineales, es decir, medir distancias horizontales o verticales entre dos puntos del dibujo.
+            </p>
+            <ul style="margin-left:1em;">
+                <li>
+                    <b>Ejemplo 1:</b> Para acotar la distancia horizontal entre dos esquinas de un rectángulo, selecciona el primer punto (esquina izquierda) y luego el segundo punto (esquina derecha). La cota aparecerá paralela al eje X.
+                </li>
+                <li>
+                    <b>Ejemplo 2:</b> Si seleccionas dos puntos alineados verticalmente, la cota será paralela al eje Y, mostrando la altura entre ambos.
+                </li>
+                <li>
+                    Puedes desplazar el texto de la cota haciendo clic y arrastrando después de colocarla.
+                </li>
+                <li>
+                    Para cotas inclinadas, utiliza <kbd>DIMALIGNED</kbd> en lugar de <kbd>DIMLINEAR</kbd>.
+                </li>
+            </ul>
+            <p>
+                <b>Atajo:</b> Escribe <kbd>DIM</kbd> y luego selecciona la opción <b>Linear</b> en la barra de comandos.
+            </p>
+        </div>
+    </details>
 </div>
+
+
 
 <!-- HATCH Command -->
 <div class="command-btn color-cyan" data-category="cyan" data-command="HATCH">
-  <div class="command-name">HATCH</div>
-  <div class="command-desc">Rellena un área cerrada con un patrón o sombreado</div>
-  <div class="command-usage"><kbd>HATCH</kbd> → seleccionar región → elegir patrón</div>
+    <div class="command-name">HATCH</div>
+    <div class="command-desc">Rellena un área cerrada con un patrón o sombreado</div>
+    <div class="command-usage"><kbd>HATCH</kbd> → seleccionar región → elegir patrón</div>
+    <details style="margin-top:10px;">
+        <summary style="cursor:pointer;color:#00ffff;">Ver ejemplos y detalles</summary>
+        <div style="margin-top:8px; color:#c0eaff; font-size:0.95em;">
+            <p>
+                El comando <b>HATCH</b> permite aplicar patrones de sombreado o relleno sólido en áreas cerradas, útil para diferenciar materiales o zonas en planos.
+            </p>
+            <ul style="margin-left:1em;">
+                <li>
+                    <b>Ejemplo 1:</b> Para sombrear el interior de un rectángulo:<br>
+                    Dibuja un rectángulo &rarr; escribe <kbd>HATCH</kbd> &rarr; haz clic dentro del rectángulo &rarr; elige un patrón (por ejemplo, <b>ANSI31</b>) y ajusta la escala si es necesario &rarr; <kbd>Enter</kbd>.
+                </li>
+                <li>
+                    <b>Ejemplo 2:</b> Para rellenar una figura irregular:<br>
+                    Dibuja una polilínea cerrada &rarr; <kbd>HATCH</kbd> &rarr; selecciona el área interna &rarr; elige un color sólido en el tipo de patrón &rarr; <kbd>Enter</kbd>.
+                </li>
+                <li>
+                    Puedes modificar el patrón, ángulo o escala del sombreado seleccionando el hatch y usando la barra de propiedades.
+                </li>
+                <li>
+                    Para editar los límites del hatch, usa <kbd>HATCHEDIT</kbd> o doble clic sobre el sombreado.
+                </li>
+            </ul>
+            <p>
+                <b>Consejo:</b> Si el área no se rellena correctamente, verifica que la figura esté completamente cerrada.
+            </p>
+        </div>
+    </details>
+</div>
+
+<!-- DIMALIGNED Command -->
+<div class="command-btn color-cyan" data-category="cyan" data-command="DIMALIGNED">
+    <div class="command-name">DIMALIGNED</div>
+    <div class="command-desc">Cota alineada entre dos puntos (no necesariamente horizontal o vertical)</div>
+    <div class="command-usage"><kbd>DIM</kbd> → <kbd>Aligned</kbd> → seleccionar puntos</div>
+    <details style="margin-top:10px;">
+        <summary style="cursor:pointer;color:#00ffff;">Ver ejemplos y detalles</summary>
+        <div style="margin-top:8px; color:#c0eaff; font-size:0.95em;">
+            <p>
+                El comando <b>DIMALIGNED</b> permite acotar la distancia real entre dos puntos, sin importar su orientación, es decir, la cota queda alineada con la línea que une ambos puntos.
+            </p>
+            <ul style="margin-left:1em;">
+                <li>
+                    <b>Ejemplo 1:</b> Para acotar la longitud de una línea inclinada:<br>
+                    Selecciona el primer y segundo punto de la línea inclinada &rarr; la cota aparecerá paralela a la línea.
+                </li>
+            
+                <li>
+                    Puedes mover el texto de la cota después de colocarla, haciendo clic y arrastrando.
+                </li>
+                <li>
+                    Si necesitas cotas horizontales o verticales, utiliza <kbd>DIMLINEAR</kbd>.
+                </li>
+            </ul>
+            <p>
+                <b>Atajo:</b> Escribe <kbd>DIM</kbd> y selecciona la opción <b>Aligned</b> en la barra de comandos.
+            </p>
+        </div>
+    </details>
 </div>
 
 
@@ -865,9 +975,40 @@
 </div>
 
 <div class="command-btn color-cyan" data-category="dibujo" data-command="XLINE">
-  <div class="command-name">XLINE</div>
-  <div class="command-desc">Crea líneas infinitas para referencia</div>
-  <div class="command-usage"><kbd>XLINE</kbd> → punto → dirección</div>
+    <div class="command-name">XLINE</div>
+    <div class="command-desc">Crea líneas infinitas para referencia</div>
+    <div class="command-usage"><kbd>XLINE</kbd> → punto → dirección</div>
+</div>
+
+<!-- DIMANGULAR Command -->
+<div class="command-btn color-cyan" data-category="anotacion" data-command="DIMANGULAR">
+    <div class="command-name">DIMANGULAR</div>
+    <div class="command-desc">Cota el ángulo entre dos líneas, arcos o vértices</div>
+    <div class="command-usage"><kbd>DIMANGULAR</kbd> → seleccionar líneas/arco → ubicar cota</div>
+    <details style="margin-top:10px;">
+        <summary style="cursor:pointer;color:#00ffff;">Ver ejemplos y detalles</summary>
+        <div style="margin-top:8px; color:#c0eaff; font-size:0.95em;">
+            <ul style="margin-left:1em;">
+                <li>
+                    <b>Ejemplo 1:</b> Para acotar el ángulo entre dos líneas que se cruzan:<br>
+                    Selecciona la primera y segunda línea &rarr; haz clic para ubicar la cota angular.
+                </li>
+                <li>
+                    <b>Ejemplo 2:</b> Para acotar el ángulo de un arco:<br>
+                    Selecciona el arco &rarr; haz clic para colocar la cota.
+                </li>
+                <li>
+                    También puedes seleccionar tres puntos: vértice y extremos del ángulo.
+                </li>
+                <li>
+                    <b>Comando:</b> Escribe <kbd>DIMANGULAR</kbd> o usa <kbd>DIM</kbd> y elige "Angular".
+                </li>
+            </ul>
+            <p>
+                <b>Consejo:</b> Usa <kbd>DIM</kbd> para acceder a todos los tipos de cotas, incluyendo angular.
+            </p>
+        </div>
+    </details>
 </div>
 
 <!-- ==== PRESENTACIÓN AVANZADA ==== -->
