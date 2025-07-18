@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego de Trivia</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #39ff14;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background-color: #111;
+      border: 2px solid #39ff14;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 700px;
+      padding: 25px;
+      box-shadow: 0 0 25px #39ff14;
+    }
+
+    .question {
+      font-size: 1.4em;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .option {
+      background-color: #222;
+      border: 2px solid #555;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+      color: #fff;
+    }
+
+    .option:hover {
+      background-color: #39ff14;
+      color: #000;
+    }
+
+    .option.correct {
+      background-color: lime;
+      color: black;
+    }
+
+    .option.incorrect {
+      background-color: red;
+      color: white;
+    }
+
+    .option.respuesta-correcta {
+      background-color: #00e5ff;
+      color: black;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.1em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .info {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    #nextBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #39ff14;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #nextBtn:hover {
+      background-color: #76ff03;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="position:absolute; top:10%; width:80%; left:10%; text-align:center;"> Juego de trivias <br> INGLES </h1>
+  <div class="card">
+    <div class="question" id="questionText">Cargando pregunta...</div>
+    <div class="options" id="optionsContainer"></div>
+    <div class="result" id="resultText"></div>
+    <div class="info">
+      Aciertos: <span id="aciertos">0</span> | Errores: <span id="errores">0</span> | Tiempo: <span id="tiempo">10</span>s
+    </div>
+    <button id="nextBtn" onclick="siguientePregunta()">Siguiente</button>
+  </div>
+<footer style="
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  background-color: black;
+  color: white;
+  border-top: 3px solid lime;
+  text-align: center;
+  padding: 5px;
+  font-size: 0.9em;
+  z-index: 999;
+">
+  Bargas Nehuen Lautaro - Creado el 30/03/2025
+</footer>
+  <!-- Cargamos las preguntas -->
+  <script src="triviaOE1.js"></script>
+
+  <script>
+
+const preguntas = [
+
+
+{
+  pregunta: "¿Cuál de estas palabras existe en inglés?",
+  opciones: ["blork", "house", "snart", "glape"],
+  correcta: 1 // "house" sí existe
+},
+{
+  pregunta: "¿Cuál de estas palabras es real en inglés?",
+  opciones: ["plog", "elephant", "drish", "snok"],
+  correcta: 1 // "elephant"
+},
+{
+  pregunta: "¿Qué significa la palabra 'dog'?",
+  opciones: ["Perro", "Gato", "Ratón", "Pez"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál es la traducción de 'chair'?",
+  opciones: ["Silla", "Mesa", "Ventana", "Puerta"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué palabra inventada está en esta lista?",
+  opciones: ["computer", "flerg", "banana", "teacher"],
+  correcta: 1 // "flerg" es inventada
+},
+{
+  pregunta: "¿Qué significa 'window' en español?",
+  opciones: ["Techo", "Puerta", "Ventana", "Mesa"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál de estas no es una palabra en inglés?",
+  opciones: ["table", "mork", "school", "book"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es la traducción correcta de 'apple'?",
+  opciones: ["Naranja", "Uva", "Manzana", "Pera"],
+  correcta: 2
+}
+,
+{
+  pregunta: "¿Cuál de estas palabras es correcta en inglés?",
+  opciones: ["libary", "librety", "library", "livrary"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'wealth'?",
+  opciones: ["Salud", "Riqueza", "Sabiduría", "Ropa"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas palabras existe en inglés?",
+  opciones: ["embrace", "embross", "embart", "embrint"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué significa 'awkward'?",
+  opciones: ["Cómodo", "Torpe", "Elegante", "Paciente"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué palabra NO es una palabra real en inglés?",
+  opciones: ["flamberg", "although", "however", "despite"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál es la traducción de 'misunderstanding'?",
+  opciones: ["Discusión", "Desacuerdo", "Malentendido", "Reunión"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál de estas palabras sí existe en inglés?",
+  opciones: ["betray", "betrim", "betrou", "betarn"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué significa 'gather'?",
+  opciones: ["Reunir", "Cocinar", "Dormir", "Desordenar"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué palabra es inventada?",
+  opciones: ["conclusion", "resultion", "comparison", "statement"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'shallow'?",
+  opciones: ["Profundo", "Poco profundo", "Oscuro", "Lejano"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas palabras es una palabra real?",
+  opciones: ["glossary", "glossiry", "glussary", "gloosary"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué significa 'hesitate'?",
+  opciones: ["Acercarse", "Dudar", "Apresurarse", "Recordar"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál palabra no pertenece al inglés real?",
+  opciones: ["performance", "perflance", "perception", "permanent"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'threat'?",
+  opciones: ["Tesoro", "Problema", "Amenaza", "Queja"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál de estas es una palabra real?",
+  opciones: ["adquire", "require", "retuine", "confirn"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'nevertheless'?",
+  opciones: ["Sin embargo", "Por lo tanto", "A pesar de todo", "A la vez"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué palabra NO es correcta en inglés?",
+  opciones: ["achievement", "accomplishment", "arrangement", "acomplisher"],
+  correcta: 3
+},
+{
+  pregunta: "¿Qué significa 'rely'?",
+  opciones: ["Contar con alguien", "Negar", "Rechazar", "Celebrar"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál de estas palabras no es real en inglés?",
+  opciones: ["dismay", "distrust", "dispart", "discover"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'outcome'?",
+  opciones: ["Problema", "Resultado", "Camino", "Pronóstico"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas palabras existe realmente en inglés?",
+  opciones: ["resistence", "resistance", "resistion", "resisance"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'issue'?",
+  opciones: ["Tarea", "Problema", "Revista", "Resultado"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas NO es una palabra válida en inglés?",
+  opciones: ["trustworthy", "unbelive", "achievement", "highlight"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'policy'?",
+  opciones: ["Policía", "Política (norma)", "Correo", "Documento"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas palabras es falsa?",
+  opciones: ["obligated", "discussed", "mentiored", "suggested"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'assume'?",
+  opciones: ["Asumir", "Evitar", "Confirmar", "Destruir"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál de estas sí es una palabra en inglés?",
+  opciones: ["estability", "stability", "stablition", "stableness"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'regret'?",
+  opciones: ["Olvidar", "Recordar", "Arrepentirse", "Reírse"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál es una palabra inventada?",
+  opciones: ["clarify", "notify", "simplize", "justify"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'reluctant'?",
+  opciones: ["Dudoso", "Resistente a hacer algo", "Feliz", "Presuroso"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas palabras no existe?",
+  opciones: ["collaboration", "communitation", "organization", "negotiation"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'accurate'?",
+  opciones: ["Rápido", "Exacto", "Ligero", "Agudo"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es una palabra real en inglés?",
+  opciones: ["instalation", "installation", "instalement", "instelation"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'approach'?",
+  opciones: ["Alejarse", "Acercarse", "Cancelar", "Rechazar"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál palabra es falsa?",
+  opciones: ["developed", "managment", "interested", "concerned"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'outbreak'?",
+  opciones: ["Sorpresa", "Explosión", "Brote", "Ruptura emocional"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál de estas no es palabra válida?",
+  opciones: ["abundance", "conscience", "existance", "patience"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'sustain'?",
+  opciones: ["Sostener", "Reprimir", "Aumentar", "Seducir"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál es un 'false friend' (falso amigo)?",
+  opciones: ["actually", "truly", "surely", "really"],
+  correcta: 0 // "actually" = en realidad, no "actualmente"
+},
+{
+  pregunta: "¿Qué significa 'comprehensive'?",
+  opciones: ["Compresivo", "Integral, completo", "Abundante", "Sensible"],
+  correcta: 1
+}
+,
+
+{
+  pregunta: "¿Cuál de estas palabras sí es válida en inglés?",
+  opciones: ["presionate", "dominate", "terminice", "situate"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'enhance'?",
+  opciones: ["Aumentar/mejorar", "Restringir", "Cancelar", "Observar"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra es inventada?",
+  opciones: ["strategic", "concentrait", "intelligent", "cooperate"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'relieve'?",
+  opciones: ["Prevenir", "Recordar", "Aliviar", "Saltar"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál de estas palabras no existe en inglés?",
+  opciones: ["responsable", "reliable", "accountable", "dependable"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué significa 'commitment'?",
+  opciones: ["Compromiso", "Confusión", "Contrato", "Discusión"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál es una palabra real en inglés?",
+  opciones: ["preoccupation", "preocuppation", "preoccipion", "preocupation"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué significa 'postpone'?",
+  opciones: ["Repetir", "Posponer", "Descartar", "Distribuir"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas no es una palabra real?",
+  opciones: ["clarity", "priority", "granity", "purity"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'regardless'?",
+  opciones: ["Sin tener en cuenta", "Con mucho interés", "Peligrosamente", "Elegante"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra es falsa?",
+  opciones: ["judgement", "arrengement", "management", "agreement"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'genuine'?",
+  opciones: ["Falso", "Tímido", "Auténtico", "Popular"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál de estas palabras NO existe?",
+  opciones: ["incredible", "confusible", "agreeable", "predictable"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'overcome'?",
+  opciones: ["Superar", "Entregar", "Iniciar", "Reunirse"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál es una palabra real?",
+  opciones: ["confortable", "comfortable", "comforthable", "comforable"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'jealous'?",
+  opciones: ["Celoso", "Orgulloso", "Tranquilo", "Generoso"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra es incorrecta?",
+  opciones: ["compete", "compate", "compare", "compose"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'lack'?",
+  opciones: ["Abundancia", "Falta/ausencia", "Velocidad", "Tamaño"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es una palabra inventada?",
+  opciones: ["perform", "informate", "transform", "deform"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'thorough'?",
+  opciones: ["Rápido", "Profundo/completo", "Tranquilo", "Ligero"],
+  correcta: 1
+}
+,
+
+{
+  pregunta: "¿Cuál de estas palabras sí existe en inglés?",
+  opciones: ["appreciete", "appreciate", "apreciate", "appriciate"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'struggle'?",
+  opciones: ["Luchar", "Estirar", "Planear", "Dudar"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra es inventada?",
+  opciones: ["tremendous", "tremensable", "tremor", "trial"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'hazard'?",
+  opciones: ["Rescate", "Peligro", "Camino", "Curva"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas NO es una palabra real?",
+  opciones: ["expandable", "extendable", "emprovable", "repairable"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'rough'?",
+  opciones: ["Suave", "Duro/áspero", "Claro", "Vacío"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál palabra es válida en inglés?",
+  opciones: ["enviroment", "environment", "enviorement", "envirounment"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'occur'?",
+  opciones: ["Aparecer", "Correr", "Ocurrir", "Romper"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál de estas palabras es falsa?",
+  opciones: ["solution", "absolution", "resolvence", "conclusion"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'glimpse'?",
+  opciones: ["Grieta", "Sombra", "Vistazo", "Paso"],
+  correcta: 2
+},
+{
+  pregunta: "¿Cuál palabra no es válida?",
+  opciones: ["dependant", "dependent", "independent", "independant"],
+  correcta: 3
+},
+{
+  pregunta: "¿Qué significa 'plenty'?",
+  opciones: ["Peligro", "Abundancia", "Urgencia", "Vacío"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál es una palabra real?",
+  opciones: ["exaggeration", "exageration", "exagerration", "exagerrate"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué significa 'threaten'?",
+  opciones: ["Huir", "Amenazar", "Resolver", "Suspender"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál palabra está mal escrita?",
+  opciones: ["concern", "consern", "confirm", "conform"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'bother'?",
+  opciones: ["Molestar", "Pasear", "Dormir", "Buscar"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál de estas es una palabra falsa?",
+  opciones: ["reaction", "relation", "relatate", "negotiation"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'delay'?",
+  opciones: ["Anotar", "Retrasar", "Transportar", "Acelerar"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál palabra existe en inglés?",
+  opciones: ["existance", "existence", "existation", "existenze"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'aware'?",
+  opciones: ["Consciente", "Agresivo", "Seguro", "Lento"],
+  correcta: 0
+}
+,
+
+
+
+{
+  pregunta: "¿Cuál de estas palabras es real en inglés?",
+  opciones: ["confident", "confidant", "confidance", "confidint"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué significa 'regardless'?",
+  opciones: ["Sin importar", "Con respeto", "En dirección contraria", "Fuertemente"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra es inventada?",
+  opciones: ["compulsion", "concussion", "conclussion", "confession"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'faint'?",
+  opciones: ["Debilitarse/desmayarse", "Pintar", "Frenar", "Cantar"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra existe en inglés?",
+  opciones: ["believable", "belivible", "beliveble", "belivabole"],
+  correcta: 0
+},
+{
+  pregunta: "¿Qué significa 'beware'?",
+  opciones: ["Tener cuidado", "Encantar", "Lavar", "Ignorar"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra no es correcta en inglés?",
+  opciones: ["serious", "curious", "furious", "deliciouss"],
+  correcta: 3
+},
+{
+  pregunta: "¿Qué significa 'odd'?",
+  opciones: ["Par", "Extraño", "Viejo", "Vacio"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál palabra es incorrecta?",
+  opciones: ["suspension", "supension", "expansion", "extension"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'retrieve'?",
+  opciones: ["Recuperar", "Revisar", "Reducir", "Rechazar"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra está mal escrita?",
+  opciones: ["anxious", "anxietty", "anxiety", "anxiously"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'tame'?",
+  opciones: ["Domesticar", "Imitar", "Bailar", "Aplaudir"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra no es válida en inglés?",
+  opciones: ["invisible", "incredible", "invitable", "inflexible"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'sorrow'?",
+  opciones: ["Alegría", "Pena", "Orgullo", "Enfado"],
+  correcta: 1
+},
+{
+  pregunta: "¿Cuál de estas sí existe en inglés?",
+  opciones: ["complish", "accomplish", "acomplish", "compleesh"],
+  correcta: 1
+},
+{
+  pregunta: "¿Qué significa 'eager'?",
+  opciones: ["Ansioso/entusiasmado", "Pobre", "Rápido", "Valiente"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra es inventada?",
+  opciones: ["overestimate", "underestimate", "interestimate", "re-estimate"],
+  correcta: 2
+},
+{
+  pregunta: "¿Qué significa 'wander'?",
+  opciones: ["Vagar/sin rumbo", "Esperar", "Escribir", "Golpear"],
+  correcta: 0
+},
+{
+  pregunta: "¿Cuál palabra no pertenece?",
+  opciones: ["determine", "establish", "organize", "disponsate"],
+  correcta: 3
+},
+{
+  pregunta: "¿Qué significa 'lenient'?",
+  opciones: ["Indulgente/suave", "Violento", "Resistente", "Ligero"],
+  correcta: 0
+}
+
+
+]
+
+
+
+
+
+
+
+
+  const questionText = document.getElementById("questionText");
+  const optionsContainer = document.getElementById("optionsContainer");
+  const resultText = document.getElementById("resultText");
+  const aciertosSpan = document.getElementById("aciertos");
+  const erroresSpan = document.getElementById("errores");
+  const tiempoSpan = document.getElementById("tiempo");
+  const nextBtn = document.getElementById("nextBtn");
+
+  let aciertos = 0;
+  let errores = 0;
+  let timer;
+  let tiempo = 30;
+  let respondido = false;
+  let preguntaActual = null;
+
+  // Barajar las preguntas al inicio
+  let preguntasRestantes = [...preguntas];
+
+  function cargarPregunta() {
+    clearInterval(timer);
+    tiempo = 30;
+    tiempoSpan.textContent = tiempo;
+    respondido = false;
+    nextBtn.style.display = "none";
+    resultText.textContent = "";
+
+    if (preguntasRestantes.length === 0) {
+      questionText.textContent = "Juego terminado";
+      optionsContainer.innerHTML = "";
+      resultText.textContent = `Aciertos: ${aciertos} - Errores: ${errores}`;
+      nextBtn.style.display = "none";
+      tiempoSpan.textContent = "-";
+      return;
+    }
+
+    const indice = Math.floor(Math.random() * preguntasRestantes.length);
+    preguntaActual = preguntasRestantes.splice(indice, 1)[0];
+
+    questionText.textContent = preguntaActual.pregunta;
+    optionsContainer.innerHTML = "";
+
+    preguntaActual.opciones.forEach((opcion, i) => {
+      const btn = document.createElement("div");
+      btn.className = "option";
+      btn.textContent = opcion;
+      btn.onclick = () => {
+        if (!respondido) verificarRespuesta(i, btn);
+      };
+      optionsContainer.appendChild(btn);
+    });
+
+    timer = setInterval(() => {
+      tiempo--;
+      tiempoSpan.textContent = tiempo;
+      if (tiempo === 0 && !respondido) {
+        verificarRespuesta(null, null);
+      }
+    }, 1000);
+  }
+
+  function verificarRespuesta(indiceSeleccionado, botonSeleccionado) {
+    respondido = true;
+    clearInterval(timer);
+    const correcta = preguntaActual.correcta;
+
+    const botones = document.querySelectorAll(".option");
+    botones.forEach((btn, i) => {
+      if (i === correcta) btn.classList.add("respuesta-correcta");
+    });
+
+    if (indiceSeleccionado === correcta) {
+      botonSeleccionado?.classList.add("correct");
+      resultText.textContent = "¡Correcto!";
+      resultText.style.color = "lime";
+      aciertos++;
+      aciertosSpan.textContent = aciertos;
+    } else {
+      if (indiceSeleccionado !== null) {
+        botonSeleccionado?.classList.add("incorrect");
+        resultText.textContent = "Incorrecto.";
+        resultText.style.color = "red";
+      } else {
+        resultText.textContent = "¡Tiempo agotado!";
+        resultText.style.color = "orange";
+      }
+      errores++;
+      erroresSpan.textContent = errores;
+    }
+
+    nextBtn.style.display = "inline-block";
+  }
+
+  function siguientePregunta() {
+    cargarPregunta();
+  }
+
+  // Iniciar con una pregunta aleatoria
+  cargarPregunta();
+</script>
+</body>
+</html>
