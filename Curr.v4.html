@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
+
+    
+    <title>Currículum y Portafolio</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            letter-spacing: 0.1em;
+
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .tit {
+            color:red;
+            position: absolute;
+            top: 0%;
+            left: 6%;
+            z-index: 2;
+            background-color: black;
+            padding: 15px;
+            border-radius: 15px;
+            border: 3px solid rgb(1, 255, 1);
+        }
+        
+
+        .subject-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.subject-button {
+    padding: 10px 15px;
+    border: 2px solid #3399ff;
+    background-color: #040026;
+    color: #cfcfcf;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.subject-button:hover {
+    background-color: #00ff99;
+    color: #000;
+}
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2px;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #1e1e2f;
+    border: 2px solid #00ff99;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.grid-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #3399ff;
+    color: #fff;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.grid-item.available {
+    background-color: #00ff99;
+    color: #000;
+}
+
+.grid-item.occupied {
+    background-color: #ff3333;
+    color: #fff;
+}
+
+.subject-info {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: rgb(49, 49, 49, 0.1);
+    border: 2px solid #3399ff;
+    border-radius: 10px;
+    display: none;
+}
+
+.subject-info.active {
+    display: block;
+}
+
+.subject-images img {
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+    border: 2px solid #3399ff;
+    border-radius: 5px;
+}
+
+.subject-links button {
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: #3399ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.subject-links button:hover {
+    background-color: #00ff99;
+    color: #000;
+}
+        .arrow {
+            position: absolute;
+            cursor: pointer;
+            font-size: 2rem;
+            background-color: rgb(12, 12, 12);
+            user-select: none;
+            scale: 2;
+            color: rgb(132, 0, 255);
+            border: 3px solid rgb(49, 49, 49);
+            border-radius: 10px;
+        }
+        .arrow:hover {
+            scale: 2.5; 
+            color: rgb(0, 255, 13);
+            z-index: 10;
+            background-color: rgb(51, 0, 255);
+            border: 3px solid rgb(255, 93, 35, 0.4);
+            
+            
+        }
+
+        .arrow.up {
+            top: 5%;
+            left: 50%;
+            z-index: 2;
+            transform: translateX(-50%);
+        }
+        .arrow.up:hover {
+            left: 50.3%;
+
+
+
+        }
+
+        .arrow.down {
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .arrow.down:hover {
+
+            left: 50.3%;
+
+        }
+
+        .arrow.left {
+            left: 2%;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 16;
+        }
+
+        .arrow.right {
+            right: 2%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .container {
+            width: 87.5%;
+            height: 75%;
+            background-color: rgba(11, 11, 11, 0.9);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid neon-green;
+            box-shadow: 0 0 10px green;
+            overflow: hidden;
+        }
+
+        .button-list {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transform: translateY(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .button {
+            width: 80%;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: white;
+            background-color: black;
+            border: 2px solid green;
+            border-radius: 30px;
+            margin: 10px 0;
+            opacity: 0.5;
+            transform: scale(1);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .button.active {
+            transform: scale(1.2);
+            opacity: 1;
+            z-index: 10;
+            background-color: aqua;
+            color: black;
+            border-radius: 60px;
+            font-size: 2rem;
+        }
+
+
+
+
+
+
+
+        .content {
+            display: none;
+            position: fixed;
+            top: 2.5%;
+            left: 3%;
+            width: 90%;
+            height: 90%;
+            background-color: rgba(0, 0, 0, 1);
+            border: 3px solid neon-green;
+            box-shadow: 0 0 20px green;
+            z-index: 14;
+            text-align: center;
+            padding: 20px;
+            overflow: auto;
+            
+            
+        }
+
+        .content.active {
+            display: block;
+        }
+
+
+        .scrollable-buttons {
+    max-height: 80%; /* Ajusta la altura máxima del contenedor */
+    overflow-y: scroll; /* Habilita el desplazamiento vertical */
+    margin: 10px 0;
+    width: 50%;
+    border: 2px solid #00ff99; /* Verde neón */
+    padding: 10px;
+    background-color: #1e1e2f; /* Fondo oscuro para ciberseguridad */
+    border-radius: 10px;
+}
+
+.scrollable-buttons::-webkit-scrollbar {
+    width: 10px;
+}
+
+.scrollable-buttons::-webkit-scrollbar-thumb {
+    background-color: #00ff99; /* Color del scroll */
+    border-radius: 10px;
+}
+
+.job-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    color: #cfcfcf; /* Texto claro */
+    background-color: #0d0d1a; /* Fondo oscuro */
+    border: 2px solid #3399ff; /* Borde azul */
+    border-radius: 5px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.job-button:hover {
+    background-color: #00ff99; /* Verde neón */
+    color: #000;
+    font-size: 2rem;
+   
+}
+@media screen and (min-aspect-ratio: 1/1) {
+    .titulo {
+        left: 6%;
+        top: -2%;
+        z-index: 1000;
+    }
+}
+
+
+@media screen and (max-aspect-ratio: 1/1) {
+    .titulo {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 15%;
+        width: 75%;
+    }
+}
+
+
+
+.contact-icons {
+    position: fixed;
+    top: 3%;
+    right: 10%;
+    
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    z-index: 3;
+}
+
+.contact-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    padding: 0 0 0 0;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #37ff8d;
+    border: 4px solid #ffffff;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.contact-icon img {
+    width: 30px;
+    height: 30px;
+}
+
+.contact-icon:hover {
+    transform: scale(1.2);
+    background-color: #00ff99;
+}
+
+
+
+
+
+
+.ala {
+    font-size: 40px;
+    color: rgb(0, 247, 255);
+    padding: 20px;
+    background-color: rgb(8, 8, 8);
+    border: 1px solid rgb(255, 13, 13);
+    border-radius: 30px;
+    }
+
+
+    .job-info {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    transform: translate(28%, 33%);
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border: 3px solid #00ff99;
+    border-radius: 10px;
+    width: 40%;
+    height: 70%;
+    text-align: center;
+    display: none;
+    z-index: 100;
+}
+
+.job-info img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.job-info h2 {
+    margin-bottom: 10px;
+}
+
+.close-btn {
+    display: block;
+    margin: 10px auto;
+    padding: 5px 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.electricista-info {
+    position: absolute;
+    top: 50%;
+    right: 2%;
+    transform: translate(0%, -20%);
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border: 3px solid #ffcc00;
+    border-radius: 10px;
+    width: 40%;
+    height: 70%;
+    text-align: center;
+    display: none;
+    z-index: 100;
+}
+.admin {
+    background-image: url('https://i.imgur.com/zdaqTSo.png'); 
+
+
+}
+.electricista-info img {
+    width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+    border: 2px solid #ffcc00;
+    border-radius: 5px;
+}
+
+.electricista-info h2 {
+    margin-bottom: 10px;
+}
+
+.electricista-info p {
+    margin-bottom: 15px;
+}
+
+.close-btn {
+    display: block;
+    margin: 10px auto;
+    padding: 5px 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+
+    </style>
+</head>
+<body>
+<h1 class="tit">Pa'que me necesita compa?</h1>
+
+<div class="contact-icons">
+    <a href="https://wa.me/542944116995" target="_blank" class="contact-icon whatsapp" title="WhatsApp">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+    <a href="https://t.me/tu_usuario" target="_blank" class="contact-icon telegram" title="Telegram">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+    </a>
+    <a href="mailto:ejemplo@correo.com" class="contact-icon email" title="Correo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Email">
+    </a>
+    <a href="tel:+542944116995" class="contact-icon phone" title="Llamar">
+        <img src="https://cdn-icons-png.flaticon.com/512/126/126509.png" alt="Teléfono">
+    </a>
+    <a href="trabajos.html"  class="contact-icon portfolio" title="Mis trabajos">
+        <img src="https://cdn-icons-png.flaticon.com/512/3767/3767084.png" alt="Trabajos">
+    </a>
+</div>
+
+
+
+<div class="arrow up" onclick="moveUp()">▲</div>
+<div class="container">
+   
+    <div class="button-list" id="buttonList">
+        <div class="button active">Curriculum</div>
+        <div class="button">Administrador de Sistemas</div>
+        <div class="button">Electricista</div>
+        <div class="button">Profesor Particular</div>
+        <div class="button">Programador Front-end y Back-end</div>
+        <div class="button">Programador Back-end</div>
+    </div>
+</div>
+<div class="arrow down" onclick="moveDown()">▼</div>
+<div class="arrow left" onclick="closeContent()">◄</div>
+<div class="arrow right" onclick="openContent()">►</div>
+
+<div class="content" id="contentTodos">Contenido de Todos</div>
+
+
+
+<div class="content admin" id="contentAdmin">
+    <h2>Administrador de Sistemas</h2>
+    <p>Gestión y mantenimiento de redes y sistemas operativos, con enfoque en servidores Linux.</p>
+    <p>Certificado en Administración de Redes y Ciberseguridad, especializado en sistemas Linux.</p>
+    <p>Ejemplos de trabajos realizados:</p>
+    <div class="scrollable-buttons">
+        <button class="job-button">Configuración de servidores Linux</button>
+        <button class="job-button">Gestión de usuarios y permisos</button>
+        <button class="job-button">Implementación de políticas de seguridad</button>
+        <button class="job-button">Configuración de VPN</button>
+        <button class="job-button">Monitoreo de redes</button>
+        <button class="job-button">Soporte técnico avanzado</button>
+        <button class="job-button">Automatización con scripts</button>
+        <button class="job-button">Gestión de backups</button>
+        <button class="job-button">Implementación de sistemas de virtualización</button>
+        <button class="job-button">Optimización de rendimiento de servidores</button>
+        <button class="job-button">Mantenimiento de firewalls</button>
+        <button class="job-button">Despliegue de aplicaciones</button>
+        <button class="job-button">Gestión de bases de datos</button>
+        <button class="job-button">Configuración de balanceadores de carga</button>
+        <button class="job-button">Auditorías de seguridad</button>
+        <button class="job-button">Soporte en migraciones</button>
+        <button class="job-button">Monitoreo de logs</button>
+        <button class="job-button">Diseño de redes empresariales</button>
+        <button class="job-button">Solución de problemas de conectividad</button>
+        <button class="job-button">Mantenimiento de hardware</button>
+        <button class="job-button">Despliegue de entornos de desarrollo</button>
+        <button class="job-button">Configuración de servidores web</button>
+        <button class="job-button">Gestión de dominios y DNS</button>
+        <button class="job-button">Implementación de sistemas de correo electrónico</button>
+        <button class="job-button">Capacitación a usuarios finales</button>
+        <button class="job-button">Configuración de sistemas de monitoreo</button>
+        <button class="job-button">Integración de servicios en la nube</button>
+        <button class="job-button">Gestión de incidentes críticos</button>
+        <button class="job-button">Soporte en proyectos de TI</button>
+        <button class="job-button">Configuración de políticas de acceso remoto</button>
+    </div>
+
+    <div id="job-main">
+    <!-- Configuración de VPN -->
+    <div class="job-content" data-job="Configuración de VPN">
+      <h2>Configuración de VPN</h2>
+      <p>Detalles sobre la configuración y optimización de redes privadas virtuales seguras.</p>
+      <img src="https://via.placeholder.com/150" alt="VPN Image">
+      <img src="https://via.placeholder.com/200" alt="VPN Image2">
+    </div>
+
+    <!-- Monitoreo de redes -->
+    <div class="job-content" data-job="Monitoreo de redes">
+      <h2>Monitoreo de redes</h2>
+      <p>Información sobre supervisión en tiempo real del tráfico de red y detección de anomalías.</p>
+      <img src="https://via.placeholder.com/180" alt="Monitoreo Image">
+    </div>
+    
+    <!-- Soporte técnico avanzado -->
+    <div class="job-content" data-job="Soporte técnico avanzado">
+      <h2>Soporte técnico avanzado</h2>
+      <p>Resolución de problemas complejos en entornos de infraestructura tecnológica.</p>
+      <img src="https://via.placeholder.com/120" width="200px" height="200px" alt="Soporte Image">
+      <img src="https://via.placeholder.com/160" alt="Soporte Image2">
+    </div>
+
+    <!-- ... y así para cada tarea/trabajo ... -->
+  </div>
+
+
+</div>
+
+
+
+<div class="content" id="contentElectricista">
+    <h2>Electricista</h2>
+    <div id="electricista-info-container"></div>
+
+    <p>Especialista en instalaciones eléctricas residenciales e industriales. Experiencia en mantenimiento preventivo y solución de problemas eléctricos.</p>
+    <p>Ejemplos de trabajos realizados:</p>
+    <div class="scrollable-buttons">
+        <button class="job-button">Instalación de sistemas eléctricos residenciales</button>
+        <button class="job-button">Mantenimiento de tableros eléctricos</button>
+        <button class="job-button">Instalación de iluminación LED</button>
+        <button class="job-button">Cableado estructurado para oficinas</button>
+        <button class="job-button">Reparación de electrodomésticos</button>
+        <button class="job-button">Diseño de redes eléctricas</button>
+        <button class="job-button">Instalación de sistemas de puesta a tierra</button>
+        <button class="job-button">Mantenimiento preventivo en fábricas</button>
+        <button class="job-button">Automatización de sistemas eléctricos</button>
+        <button class="job-button">Instalación de generadores eléctricos</button>
+        <button class="job-button">Supervisión de proyectos eléctricos</button>
+        <button class="job-button">Reparación de fallos eléctricos</button>
+        <button class="job-button">Instalación de sistemas de energía solar</button>
+        <button class="job-button">Asesoría en ahorro energético</button>
+        <button class="job-button">Reemplazo de interruptores y tomacorrientes</button>
+        <button class="job-button">Instalación de transformadores</button>
+        <button class="job-button">Monitoreo y optimización del consumo eléctrico</button>
+        <button class="job-button">Configuración de sistemas de automatización</button>
+        <button class="job-button">Inspección de redes eléctricas industriales</button>
+        <button class="job-button">Diagnóstico y solución de cortocircuitos</button>
+    </div>
+</div>
+
+
+
+<div class="content" id="contentProfesor">
+    <h2 class="ala">Profesor Particular</h2>
+   
+    <div class="subject-list">
+        <button class="subject-button" data-subject="Estática">Estática</button>
+        <button class="subject-button" data-subject="Matemática">Matemática</button>
+        <button class="subject-button" data-subject="Física">Física</button>
+        <button class="subject-button" data-subject="Química">Química</button>
+        <button class="subject-button" data-subject="Físico-Química">Físico-Química</button>
+        <button class="subject-button" data-subject="Tecnología">Tecnología</button>
+        <button class="subject-button" data-subject="Programación (Nivel Inicial)">Programación (Nivel Inicial)</button>
+        <button class="subject-button" data-subject="Resistencia de Materiales">Resistencia de Materiales</button>
+    </div>
+
+    <div id="subject-info" class="subject-info">
+        <h3 class="subject-title"></h3>
+        <p class="subject-description"></p>
+        <div class="subject-images"></div>
+        <div class="subject-links"></div>
+    </div>
+
+    <div class="schedule-grid">
+        <div class="grid-item"></div>
+        <div class="grid-item">Lunes</div>
+        <div class="grid-item">Martes</div>
+        <div class="grid-item">Miércoles</div>
+        <div class="grid-item">Jueves</div>
+        <div class="grid-item">Viernes</div>
+        <div class="grid-item">Sábado</div>
+        <div class="grid-item">Domingo</div>
+        <div class="grid-item">8-10</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item">10-12</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item">13-15</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item">15-18</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item occupied">Disponible</div>
+        <div class="grid-item available">Ocupado</div>
+        <div class="grid-item available">Ocupado</div>
+    </div>
+
+
+</div>
+
+
+
+
+<div class="content" id="contentProgramador">Contenido de Programador Front-end y Back-end</div>
+<div class="content" id="contentOpcion6">Contenido de Opción 6</div>
+
+<script>
+  let currentListIndex = -1; // Índice actual en la lista de botones
+let currentIndex = 0; // Índice general para navegación global
+const buttons = document.querySelectorAll('.button');
+const buttonList = document.getElementById('buttonList');
+const contents = document.querySelectorAll('.content');
+
+document.addEventListener('keydown', function(event) {
+    const activeContent = document.querySelector('.content.active'); // Div actualmente abierto
+    const listButtons = activeContent ? activeContent.querySelectorAll('.job-button') : null; // Botones dentro del div abierto
+
+    if (event.key === "ArrowUp") {
+        if (listButtons && listButtons.length > 0) {
+            // Navegación en la lista del div
+            event.preventDefault();
+            currentListIndex = (currentListIndex - 1 + listButtons.length) % listButtons.length;
+            updateListSelection(listButtons, currentListIndex);
+        } else {
+            // Navegación general
+            document.querySelector('.arrow.up').click();
+        }
+    } else if (event.key === "ArrowDown") {
+        if (listButtons && listButtons.length > 0) {
+            // Navegación en la lista del div
+            event.preventDefault();
+            currentListIndex = (currentListIndex + 1) % listButtons.length;
+            updateListSelection(listButtons, currentListIndex);
+        } else {
+            // Navegación general
+            document.querySelector('.arrow.down').click();
+        }
+    } else if (event.key === "ArrowLeft") {
+        document.querySelector('.arrow.left').click(); // Simula clic en "arrow-left"
+    } else if (event.key === "ArrowRight") {
+        document.querySelector('.arrow.right').click(); // Simula clic en "arrow-right"
+    }
+});
+
+document.addEventListener('wheel', function(event) {
+    if (event.deltaY < 0) {
+        // Rueda del mouse hacia arriba
+        document.querySelector('.arrow.up').click();
+    } else if (event.deltaY > 0) {
+        // Rueda del mouse hacia abajo
+        document.querySelector('.arrow.down').click();
+    }
+});
+
+// Selecciona el contenedor principal que incluye la lista de botones
+const container = document.querySelector('.container');
+
+// Agrega el evento de clic al contenedor principal
+container.addEventListener('click', function(event) {
+    // Simula un clic en "arrow-right" si se hace clic dentro del contenedor principal
+    document.querySelector('.arrow.right').click();
+});
+
+
+ // Seleccionamos todos los botones de trabajos
+ const jobButtons = document.querySelectorAll('.job-button');
+
+jobButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    // Obtenemos el texto del botón
+    const selectedJob = button.textContent.trim();
+
+    // 1) Ocultamos todo
+    document.querySelectorAll('.job-content').forEach(content => {
+      content.style.display = 'none';
+    });
+
+    // 2) Mostramos solo las secciones que coincidan con ese "data-job"
+    document.querySelectorAll(`.job-content[data-job="${selectedJob}"]`).forEach(content => {
+      content.style.display = 'block';
+    });
+  });
+});
+
+
+function updateButtons() {
+    buttons.forEach((button, index) => {
+        button.classList.remove('active');
+        if (index === currentIndex) {
+            button.classList.add('active');
+        }
+    });
+    const offset = -(currentIndex * buttons[0].offsetHeight + 10 * currentIndex - buttonList.offsetHeight / 2 + buttons[0].offsetHeight / 2);
+    buttonList.style.transform = `translateY(${offset}px)`;
+}
+
+function updateListSelection(buttons, index) {
+    buttons.forEach((button, i) => {
+        if (i === index) {
+            button.classList.add('active'); // Marca el botón seleccionado
+            button.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Desplaza la lista si es necesario
+        } else {
+            button.classList.remove('active'); // Quita la selección de los demás botones
+        }
+    });
+}
+
+function openContent() {
+    contents.forEach(content => content.classList.remove('active'));
+    const activeContent = contents[currentIndex];
+    activeContent.classList.add('active');
+    currentListIndex = -1; // Reinicia el índice de la lista al abrir un nuevo div
+}
+
+function closeContent() {
+    contents.forEach(content => content.classList.remove('active'));
+    currentListIndex = -1; // Reinicia el índice de la lista al cerrar el div
+}
+
+const subjects = {
+    "Estática": {
+        description: "La estática es una rama de la mecánica que estudia el equilibrio de los cuerpos bajo la acción de fuerzas. Se enfoca en analizar sistemas en reposo o con movimiento constante, aplicando principios como las leyes de Newton y el equilibrio de fuerzas y momentos. Es fundamental en ingeniería para el diseño de estructuras, maquinarias y otros sistemas que requieren estabilidad y balance.",
+        images: ["static1.jpg", "static2.jpg"],
+        links: [
+            { text: "Ver más", url: "https://example.com/estatica" }
+        ]
+    },
+    "Matemática": {
+        description: "La ciencia de los números y las relaciones.",
+        images: ["math1.jpg", "math2.jpg"],
+        links: [
+            { text: "Ver más", url: "https://example.com/matematica" }
+        ]
+    },
+    "Física": {
+        description: "La ciencia que estudia el comportamiento de la materia y la energía.",
+        images: ["physics1.jpg", "physics2.jpg"],
+        links: [
+            { text: "Ver más", url: "https://example.com/fisica" }
+        ]
+    },
+    "Química": {
+        description: "La ciencia que estudia la composición, estructura y propiedades de la materia.",
+        images: ["chemistry1.jpg", "chemistry2.jpg"],
+        links: [
+            { text: "Ver más", url: "https://example.com/quimica" }
+        ]
+    },
+    "Físico-Química": {
+        description: "Una combinación de física y química para entender las propiedades de la materia.",
+        images: ["physchem1.jpg", "physchem2.jpg"],
+        links: [
+            { text: "Ver más", url: "https://example.com/fisicoquimica" }
+        ]
+    },
+    "Tecnología": {
+        description: "La tecnología es la aplicación del conocimiento científico y técnico para resolver problemas prácticos y mejorar la calidad de vida. Abarca desde herramientas simples hasta sistemas complejos como la inteligencia artificial, la robótica y las telecomunicaciones. Su evolución constante impulsa el progreso en áreas como la medicina, la industria, la educación y el entretenimiento, transformando la manera en que vivimos, trabajamos y nos relacionamos. La tecnología no solo se enfoca en la creación de dispositivos, sino también en optimizar procesos y encontrar soluciones innovadoras a los desafíos globales.",
+        images: ["tech1.jpg", "tech2.jpg"],
+        links: [
+            { text: "Ver más", url: "https://example.com/tecnologia" }
+        ]
+    },
+    "Programación (Nivel Inicial)": {
+        description: "Introducción al mundo de la programación para principiantes.",
+        images: ["coding1.jpg", "coding2.jpg"],
+        links: [
+            { text: "Ver más", url: "https://example.com/programacion" }
+        ]
+    },
+    "Resistencia de Materiales": {
+        description: "El estudio de cómo los materiales soportan cargas y fuerzas.",
+        images: ["materials1.jpg", "materials2.jpg"],
+        links: [
+            { text: "Ver más", url: "https://example.com/resistencia" }
+        ]
+    }
+};
+
+
+
+
+
+
+
+
+
+
+const subjectButtons = document.querySelectorAll('.subject-button');
+const subjectInfo = document.getElementById('subject-info');
+const subjectTitle = document.querySelector('.subject-title');
+const subjectDescription = document.querySelector('.subject-description');
+const subjectImages = document.querySelector('.subject-images');
+const subjectLinks = document.querySelector('.subject-links');
+
+subjectButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const subject = subjects[button.dataset.subject];
+        if (subject) {
+            subjectTitle.textContent = button.dataset.subject;
+            subjectDescription.textContent = subject.description;
+
+            // Cargar imágenes
+            subjectImages.innerHTML = '';
+            subject.images.forEach(image => {
+                const img = document.createElement('img');
+                img.src = image;
+                img.alt = button.dataset.subject;
+                subjectImages.appendChild(img);
+            });
+
+            // Cargar enlaces
+            subjectLinks.innerHTML = '';
+            subject.links.forEach(link => {
+                const linkButton = document.createElement('button');
+                linkButton.textContent = link.text;
+                linkButton.onclick = () => window.open(link.url, '_blank');
+                subjectLinks.appendChild(linkButton);
+            });
+
+            subjectInfo.classList.add('active');
+        }
+    });
+});
+
+
+function moveUp() {
+    currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+    updateButtons();
+}
+
+function moveDown() {
+    currentIndex = (currentIndex + 1) % buttons.length;
+    updateButtons();
+}
+
+
+
+
+
+updateButtons();
+
+
+
+</script>
+
+</body>
+</html>
