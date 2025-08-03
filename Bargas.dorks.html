@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>BargasLautaro – Buscador de Personas / Google Dorks</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+/* ------------- FONDO Y LAYOUT BÁSICO ------------- */
+:root{
+  --verde:#00ff88;
+  --negro:#111;
+}
+body{
+  margin:0; padding:0 0 80px;
+  font-family:Arial,Helvetica,sans-serif;
+  color:#eee;
+  background:var(--negro) url("https://i.imgur.com/D4t9Ntn.png") no-repeat center/cover fixed;
+}
+.backdrop{               /* capa oscura para legibilidad */
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:-1;
+}
+h1{color:var(--verde);margin:25px 0;text-align:center}
+
+/* ------------- CONTENEDOR & PASOS ------------- */
+.contenedor{
+  max-width:600px;margin:auto;background:rgba(0, 51, 58, 0.3);padding:25px;border:3px solid var(--verde);
+  backdrop-filter:blur(4px);border-radius:12px
+}
+.step{display:none}
+label{display:block;margin-top:12px;font-weight:bold}
+input[type=text],input[type=date]{width:100%;padding:10px;border:2px solid var(--verde);background:rg;color:#000000;border-radius:6px;margin-top:4px}
+button{
+  margin-top:22px;padding:10px 28px;border:none;font-weight:bold;
+  background:var(--verde);color:#000;border-radius:6px;cursor:pointer
+}
+button:hover{background:#00d46d}
+.netlist{display:flex;flex-wrap:wrap;gap:9px;margin-top:8px;}
+.netlist label{background:#222;border:2px solid var(--verde);padding:5px 8px;border-radius:6px;cursor:pointer}
+.netlist input{margin-right:4px}
+.preview{background:#222;border:2px solid var(--verde);padding:12px;margin-top:20px;font-size:14px;word-break:break-all;border-radius:6px}
+
+/* ------------- FOOTER ------------- */
+.footer{
+  position:fixed;bottom:0;left:0;right:0;text-align:center;padding:6px 0;
+  background:#000;border-top:3px solid var(--verde);color:#fff;font-size:12px
+}
+
+/* ------------- RESPONSIVE DESKTOP ------------- */
+@media (min-width:701px){
+  .contenedor{max-width:900px}
+  input[type=text],input[type=date]{font-size:18px}
+  button{font-size:17px}
+  h1{font-size:34px}
+}
+</style>
+</head>
+<body>
+<div class="backdrop"></div>
+<h1>Generador de Google Dorks (Vista previa)</h1>
+
+<div class="contenedor">
+  <!-- PASO 1 -->
+  <div id="s1" class="step" style="display:block">
+    <label>Nombre principal</label>
+    <input id="nombrePrincipal" type="text" placeholder="Ej.: John Doe">
+
+    <label><input type="checkbox" id="exactName" checked> Frase exacta</label>
+
+    <label>Variantes de nombre (separá con ;)</label>
+    <input id="nombreAlternativo" type="text" placeholder="Ej.: J. Doe ; Johnny">
+
+    <button onclick="nextStep(1)">Siguiente</button>
+  </div>
+
+  <!-- PASO 2 -->
+  <div id="s2" class="step">
+    <label>Redes a buscar</label>
+    <div class="netlist">
+      <label><input type="checkbox" class="net" value="facebook.com">Facebook</label>
+      <label><input type="checkbox" class="net" value="twitter.com">Twitter</label>
+      <label><input type="checkbox" class="net" value="instagram.com">Instagram</label>
+      <label><input type="checkbox" class="net" value="linkedin.com">LinkedIn</label>
+      <label><input type="checkbox" class="net" value="youtube.com">YouTube</label>
+      <label><input type="checkbox" class="net" value="reddit.com">Reddit</label>
+    </div>
+    <label><input type="checkbox" id="selectAll"> Seleccionar todas</label>
+    <button onclick="nextStep(2)">Siguiente</button>
+  </div>
+
+  <!-- PASO 3 -->
+  <div id="s3" class="step">
+    <label>Rango de fechas (opcional)</label>
+    <input id="desde" type="date"> desde<br>
+    <input id="hasta" type="date"> hasta<br>
+    <label><input type="checkbox" id="noFecha"> Ignorar fechas</label>
+    <button onclick="nextStep(3)">Siguiente</button>
+  </div>
+
+  <!-- PASO 4 -->
+  <div id="s4" class="step">
+    <label>Nombre de usuario (opcional)</label>
+    <input id="usuario" type="text" placeholder="Ej.: johnny_d">
+
+    <label>Teléfono (opcional)</label>
+    <input id="telefono" type="text" placeholder="Ej.: +1 555 123 4567">
+
+    <button onclick="nextStep(4)">Siguiente</button>
+  </div>
+
+  <!-- PASO 5 -->
+  <div id="s5" class="step">
+    <label>Ubicación</label>
+    <input id="pais"   type="text" placeholder="País – ej.: USA">
+    <input id="prov"   type="text" placeholder="Estado/Provincia – ej.: California">
+    <input id="ciudad" type="text" placeholder="Ciudad – ej.: Los Angeles">
+    <label><input type="checkbox" id="exactLoc"> Ubicación exacta (frase)</label>
+    <button onclick="mostrarPreview()">Vista previa</button>
+  </div>
+
+  <!-- PREVIEW -->
+  <div id="previewCard" class="preview" style="display:none"></div>
+  <button id="buscarBtn" style="display:none" onclick="lanzar()">Buscar</button>
+</div>
+
+<script>
+function nextStep(n){
+  if(n===2 && document.getElementById('selectAll').checked)
+    document.querySelectorAll('.net').forEach(c=>c.checked=true);
+  document.getElementById('s'+n).style.display='none';
+  document.getElementById('s'+(n+1)).style.display='block';
+}
+function construirDork(){
+  const partes=[];
+  /* nombres */
+  const p=document.getElementById('nombrePrincipal').value.trim();
+  const alt=document.getElementById('nombreAlternativo').value.split(';')
+              .map(x=>x.trim()).filter(Boolean);
+  const exact=document.getElementById('exactName').checked;
+  const nom=[...alt.map(n=>exact?`"${n}"`:n)];
+  if(p)nom.unshift(exact?`"${p}"`:p);
+  if(nom.length)partes.push('('+nom.join(' OR ')+')');
+
+  /* redes */
+  const sites=[...document.querySelectorAll('.net:checked')].map(c=>'site:'+c.value);
+  if(sites.length)partes.push('('+sites.join(' OR ')+')');
+
+  /* usuario */
+  const user=document.getElementById('usuario').value.trim();
+  if(user)partes.push(`(inurl:${user} OR intext:${user})`);
+
+  /* teléfono */
+  const tel=document.getElementById('telefono').value.trim();
+  if(tel)partes.push(`intext:"${tel}"`);
+
+  /* ubicación */
+  const loc=[pais.value.trim(),prov.value.trim(),ciudad.value.trim()].filter(Boolean);
+  if(loc.length){
+    if(document.getElementById('exactLoc').checked)
+      partes.push(`intext:"${loc.join(' ')}"`);
+    else
+      partes.push('('+loc.map(x=>'intext:"'+x+'"').join(' OR ')+')');
+  }
+  return partes.join(' ');
+}
+function mostrarPreview(){
+  const dork=construirDork();
+  if(!dork){alert('Completa al menos un dato');return;}
+  previewCard.innerText=dork;
+  previewCard.style.display='block';
+  buscarBtn.style.display='inline-block';
+}
+function lanzar(){
+  const dork=construirDork();
+  let url='https://www.google.com/search?q='+encodeURIComponent(dork);
+
+  if(!noFecha.checked){
+    const d=desde.value,h=hasta.value;
+    if(d||h){
+      let tbs='cdr:1';
+      if(d){const [y,m,da]=d.split('-');tbs+=`,cd_min:${m}/${da}/${y}`;}
+      if(h){const [y2,m2,da2]=h.split('-');tbs+=`,cd_max:${m2}/${da2}/${y2}`;}
+      url+='&tbs='+encodeURIComponent(tbs);
+    }
+  }
+  window.open(url,'_blank');
+}
+</script>
+
+<div class="footer">Bargas Nehuen Lautaro – 03/08/2025</div>
+</body>
+</html>
