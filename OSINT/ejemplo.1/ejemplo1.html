@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BargasLautaro — Guía OSINT: geolocalización de un video meme</title>
+<style>
+:root{
+  --bg:#0e0f12; --card:#16181d; --muted:#9aa4b2; --text:#e8eef5;
+  --accent:#4ade80; --danger:#ef4444; --ring:0 0 0 3px rgba(74,222,128,.35);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background: radial-gradient(1200px 800px at 10% -10%, #16202a 0%, #0e0f12 40%, #0e0f12 100%);
+  color:var(--text);
+  font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+  padding-bottom:90px;
+  transition:overflow .2s ease;
+}
+body.no-scroll{overflow:hidden}
+header{padding:28px 18px 8px;max-width:1100px;margin:0 auto}
+h1{margin:0 0 8px;font-size:clamp(1.4rem,2.8vw,2.2rem);letter-spacing:.3px}
+.sub{color:var(--muted);font-size:.98rem}
+.container{
+  max-width:1100px;margin:16px auto 80px;padding:0 18px 24px;
+  display:grid;grid-template-columns:1fr;gap:16px
+}
+@media(min-width:900px){.container{grid-template-columns:1fr 1fr}}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  overflow:hidden
+}
+.card .body{padding:18px}
+.card h2{margin:0;font-size:1.15rem;display:flex;align-items:center;gap:10px}
+.step{
+  display:inline-grid;place-items:center;width:28px;height:28px;border-radius:999px;
+  background:var(--accent);color:#0b120e;font-weight:700
+}
+.meta{color:var(--muted);font-size:.9rem;margin-top:6px}
+.media{position:relative;background:#0a0c10;display:block;width:100%;aspect-ratio:16/9;overflow:hidden}
+.media>img,.media>video{width:100%;height:100%;object-fit:cover;display:block}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{
+  appearance:none;border:0;padding:10px 14px;border-radius:999px;
+  background:#1a2a1f;color:var(--accent);font-weight:600;cursor:pointer;transition:.15s transform ease
+}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--ring)}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:#102d19;color:var(--accent);font-size:.8rem;font-weight:700}
+.hr{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
+.grid-1col{grid-column:1 / -1}
+.note{
+  border-left:4px solid var(--accent);
+  background:linear-gradient(90deg, rgba(74,222,128,.08), transparent);
+  padding:14px;border-radius:10px;color:#d7ffe6
+}
+.small{font-size:.9rem;color:var(--muted)}
+.gallery{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:700px){.gallery{grid-template-columns:repeat(3,1fr)}}
+
+/* --- Zoom por click (sin modales) --- */
+#backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.9);
+  display:none;z-index:900;opacity:0;transition:opacity .2s ease
+}
+.show-backdrop #backdrop{display:block;opacity:1}
+.img-zoom{cursor:zoom-in}
+.img-zoom.full{
+  position:fixed;inset:0;margin:auto;z-index:1000;
+  width:100vw;height:100vh;object-fit:contain;background:transparent;
+  cursor:zoom-out;transition:transform .2s ease
+}
+
+/* Comparador */
+.compare{position:relative;aspect-ratio:16/9;background:#0a0c10;overflow:hidden;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.compare .top{clip-path:inset(0 50% 0 0)}
+.range{width:100%;appearance:none;height:4px;background:#1f2937;border-radius:999px;outline:none}
+.range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 3px rgba(74,222,128,.3)}
+
+footer.h4bar{
+  position:fixed;left:0;right:0;bottom:0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:#000;color:#fff;border-top:3px solid #22c55e;z-index:1100
+}
+footer.h4bar h4{margin:0;font-weight:800}
+.tag{border:1px solid rgba(255,255,255,.14);padding:3px 8px;border-radius:999px;font-size:.8rem;color:#cbd5e1}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Guía OSINT paso a paso: geolocalización de un video tipo “meme”</h1>
+  <div class="sub">De la observación al hallazgo: señales visuales, captura, búsqueda, verificación en LinkedIn y validación en Google Maps.</div>
+</header>
+
+<main class="container">
+
+  <section class="card grid-1col">
+    <div class="body">
+      <span class="badge">Ética primero</span>
+      <div class="hr"></div>
+      <div class="note">
+        Este ejemplo es con fines educativos. Evitá publicar datos sensibles o que identifiquen personas vulnerables. Practicá <strong>OSINT responsable</strong> y respetá leyes y Términos de Servicio de cada plataforma.
+      </div>
+      <div class="btns" style="margin-top:10px">
+        <span class="tag">OSINT</span><span class="tag">Geolocalización</span><span class="tag">LinkedIn</span><span class="tag">Google Maps</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paso 1: Video -->
+  <section class="card">
+    <div class="media">
+      <video src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/video-meme.mp4"
+             controls preload="metadata"
+             poster="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/captura.2.jpg"></video>
+    </div>
+    <div class="body">
+      <h2><span class="step">1</span> Observé un video tipo meme</h2>
+      <p class="meta">Revisé fotograma a fotograma para detectar pistas visuales útiles, buscando algún punto de referencia que me permitiera ubicar la imagen. En ese proceso identifiqué varios carteles, entre ellos el de “MOLA!”, que fue la pista principal con la que comencé mi investigación.</p>
+    </div>
+  </section>
+
+  <!-- Paso 2: Cartel MOLA! -->
+  <section class="card">
+    <div class="media">
+      <img class="img-zoom" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/captura.1.jpg" alt="Captura del cartel 'MOLA!'">
+    </div>
+    <div class="body">
+      <h2><span class="step">2</span> Detecté un local con un cartel distintivo (“MOLA!”)</h2>
+      <p class="meta">El texto del cartel funcionó como una pista para la búsqueda posterior.</p>
+    </div>
+  </section>
+
+  <!-- Paso 3: (Recorte/Análisis de la captura) -->
+  <section class="card">
+    <div class="media">
+      <img class="img-zoom" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/captura.2.jpg" alt="Recorte de la captura para lectura nítida del cartel">
+    </div>
+    <div class="body">
+      <h2><span class="step">3</span> Hice una captura enfocando el cartel</h2>
+      <p class="meta">Recorté para que el texto fuera legible y apto para búsqueda por imagen.</p>
+    </div>
+  </section>
+
+  <!-- Paso 4: LinkedIn (info del hotel) -->
+  <section class="card">
+    <div class="media">
+      <img class="img-zoom" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/captura.3.jpg" alt="Información del hotel en LinkedIn">
+    </div>
+    <div class="body">
+      <h2><span class="step">4</span> Verifiqué datos del hotel en LinkedIn</h2>
+      <p class="meta">Tras buscar el nombre, confirmé el rubro y la marca en el perfil.</p>
+    </div>
+  </section>
+
+  <!-- Paso 5: Foto con nombre del hotel subida a LinkedIn -->
+  <section class="card">
+    <div class="media">
+      <img class="img-zoom" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/captura.4.jpg" alt="Foto en LinkedIn con el nombre del hotel">
+    </div>
+    <div class="body">
+      <h2><span class="step">5</span> Hallé una foto pública con el nombre del hotel</h2>
+      <p class="meta">La coincidencia visual reforzó la hipótesis de identidad del local.</p>
+    </div>
+  </section>
+
+  <!-- Paso 6: Google Maps búsqueda -->
+  <section class="card">
+    <div class="media">
+      <img class="img-zoom" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/captura.5.jpg" alt="Resultados de búsqueda del hotel en Google Maps">
+    </div>
+    <div class="body">
+      <h2><span class="step">6</span> Busqué el hotel en Google Maps</h2>
+      <p class="meta">Con el nombre exacto ubiqué la dirección y confirmé que estaba en Madrid.</p>
+    </div>
+  </section>
+
+  <!-- Paso 7: Street View / Validación visual con comparador -->
+  <section class="card grid-1col">
+    <div class="body">
+      <h2><span class="step">7</span> Validé el punto exacto de grabación (Street View)</h2>
+      <p class="meta">Comparé fachadas, ángulos y cartelería entre el frame del video y Street View.</p>
+
+      <div class="compare" id="cmp">
+        <img class="base" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/captura.6.jpg" alt="Street View 1 (base)">
+        <img class="top"  src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.1/captura.7.jpg" alt="Street View 2 (comparación)">
+      </div>
+      <input class="range" id="slider" type="range" min="0" max="100" value="50" aria-label="Deslizador de comparación" />
+      <div class="hr"></div>
+      <div class="small">Deslizá para comparar las dos vistas de Street View.</div>
+    </div>
+  </section>
+
+  <!-- Resumen -->
+  <section class="card grid-1col">
+    <div class="body">
+      <h2><span class="step">8</span> Resumen de procedimiento</h2>
+      <ul>
+        <li>Identificación de pistas visuales en el video.</li>
+        <li>Captura/recorte del elemento distintivo (“MOLA!”).</li>
+        <li>Verificación del nombre y rubro en LinkedIn.</li>
+        <li>Confirmación de ciudad/dirección en Google Maps.</li>
+        <li>Validación final con Street View por pareo visual.</li>
+      </ul>
+      <div class="hr"></div>
+      <div class="note">
+        Publicación responsable: despersonalizá datos, difuminá rostros y evitá exponer personas en situación de vulnerabilidad.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Backdrop para zoom -->
+<div id="backdrop" aria-hidden="true"></div>
+
+<footer class="h4bar">
+  <h4>Bargas Nehuen Lautaro</h4>
+  <div id="fecha"></div>
+</footer>
+
+<script>
+// Fecha en footer (dd/mm/aaaa)
+const f2=n=>n<10?'0'+n:n; const d=new Date();
+document.getElementById('fecha').textContent=`${f2(d.getDate())}/${f2(d.getMonth()+1)}/${d.getFullYear()}`;
+
+// Comparador (Street View)
+const slider=document.getElementById('slider');
+const cmp=document.getElementById('cmp');
+if (slider && cmp){
+  const topImg=cmp.querySelector('.top');
+  const updateClip=v=> topImg.style.clipPath=`inset(0 ${100-v}% 0 0)`;
+  slider.addEventListener('input',e=>updateClip(+e.target.value));
+  updateClip(50);
+}
+
+// Zoom por click (toggle fullscreen sin modal)
+const body=document.body;
+const backdrop=document.getElementById('backdrop');
+function toggleFull(e){
+  const img=e.currentTarget;
+  const isFull=img.classList.contains('full');
+  if(!isFull){
+    img.classList.add('full');
+    body.classList.add('no-scroll','show-backdrop');
+  }else{
+    img.classList.remove('full');
+    body.classList.remove('no-scroll','show-backdrop');
+  }
+}
+document.querySelectorAll('.img-zoom').forEach(img=>{
+  img.addEventListener('click',toggleFull,{passive:true});
+});
+</script>
+</body>
+</html>
