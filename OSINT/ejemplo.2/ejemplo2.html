@@ -1,1 +1,173 @@
-w
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BargasLautaro — OSINT: geolocalización de un meme (Lucca, Italia)</title>
+<style>
+:root{--bg:#0e0f12;--card:#16181d;--muted:#9aa4b2;--text:#e8eef5;--accent:#4ade80;--ring:0 0 0 3px rgba(74,222,128,.35)}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(1200px 800px at 10% -10%,#16202a 0%,#0e0f12 40%,#0e0f12 100%);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;padding-bottom:90px;transition:overflow .2s ease}
+body.no-scroll{overflow:hidden}
+header{padding:28px 18px 8px;max-width:1100px;margin:0 auto}
+h1{margin:0 0 8px;font-size:clamp(1.4rem,2.8vw,2.2rem);letter-spacing:.3px}
+.sub{color:var(--muted);font-size:.98rem}
+.container{max-width:1100px;margin:16px auto 80px;padding:0 18px 24px;display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:900px){.container{grid-template-columns:1fr 1fr}}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.06);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.35);overflow:hidden}
+.card .body{padding:18px}
+.card h2{margin:0;font-size:1.15rem;display:flex;align-items:center;gap:10px}
+.step{display:inline-grid;place-items:center;width:28px;height:28px;background:var(--accent);color:#0b120e;font-weight:700;border-radius:999px}
+.meta{color:var(--muted);font-size:.95rem;margin-top:6px}
+.media{position:relative;background:#0a0c10;display:block;width:100%;aspect-ratio:16/9;overflow:hidden}
+.media>img,.media>video{width:100%;height:100%;object-fit:cover;display:block}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:#102d19;color:var(--accent);font-size:.8rem;font-weight:700}
+.hr{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
+.grid-1col{grid-column:1 / -1}
+.note{border-left:4px solid var(--accent);background:linear-gradient(90deg,rgba(74,222,128,.08),transparent);padding:14px;border-radius:10px;color:#d7ffe6}
+.small{font-size:.9rem;color:var(--muted)}
+/* Zoom por click */
+#backdrop{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;z-index:900;opacity:0;transition:opacity .2s ease}
+.show-backdrop #backdrop{display:block;opacity:1}
+.zoomable{cursor:zoom-in}
+.zoomable.full{position:fixed;inset:0;margin:auto;z-index:1000;width:100vw;height:100vh;object-fit:contain;background:transparent;cursor:zoom-out;transition:transform .2s ease}
+footer.h4bar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#000;color:#fff;border-top:3px solid #22c55e;z-index:1100}
+footer.h4bar h4{margin:0;font-weight:800}
+.tag{border:1px solid rgba(255,255,255,.14);padding:3px 8px;border-radius:999px;font-size:.8rem;color:#cbd5e1}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Geolocalización OSINT de un meme — Lucca (Italia)</h1>
+  <div class="sub">Orden de análisis: Meme → Info → Mapas → Auto (1ª imagen) → Auto (detalle) → Video TikTok</div>
+</header>
+
+<main class="container">
+
+  <!-- Ética -->
+  <section class="card grid-1col">
+    <div class="body">
+      <span class="badge">Ética primero</span>
+      <div class="hr"></div>
+      <div class="note">
+        Caso educativo. Al publicar, difuminá <strong>patentes y rostros</strong> y evitá exponer datos innecesarios. Respetá leyes y Términos de Servicio.
+      </div>
+    </div>
+  </section>
+
+  <!-- 1) Captura del meme -->
+  <section class="card">
+    <div class="media">
+      <img class="zoomable" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.2/meme.jpg" alt="Meme original (Lucca, Italia)">
+    </div>
+    <div class="body">
+      <h2><span class="step">1</span> Captura del meme</h2>
+      <p class="meta">Meme con patrulla Citroën de la <strong>Polizia Municipale</strong> de Lucca y dos cosplayers.</p>
+    </div>
+  </section>
+
+  <!-- 2) Recopilación de su información -->
+  <section class="card">
+    <div class="media">
+      <img class="zoomable" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.2/captura1.jpg" alt="Recopilación de información relevante del meme">
+    </div>
+    <div class="body">
+      <h2><span class="step">2</span> Recopilación de información</h2>
+      <p class="meta">
+        Extraje elementos clave: rótulos “<strong>POLIZIA MUNICIPALE</strong>”, posible mención a <strong>Comune di Lucca</strong>, modelo Citroën, numeración <strong>19</strong> y accesorios visibles.
+      </p>
+    </div>
+  </section>
+
+  <!-- 3) Google Maps: provincia y país -->
+  <section class="card">
+    <div class="media">
+      <img class="zoomable" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.2/captura2.jpg" alt="Google Maps: Lucca, Toscana, Italia">
+    </div>
+    <div class="body">
+      <h2><span class="step">3</span> Ubicación (provincia y país)</h2>
+      <p class="meta">Contextualicé <strong>Lucca (Toscana, Italia)</strong> en Google Maps para validar jurisdicción y coherencia geográfica.</p>
+    </div>
+  </section>
+
+  <!-- 4) Primera imagen del auto que los detuvo -->
+  <section class="card">
+    <div class="media">
+      <img class="zoomable" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.2/captura3.jpg" alt="Primera imagen del auto coincidente (Lucca)">
+    </div>
+    <div class="body">
+      <h2><span class="step">4</span> Primera imagen del auto coincidente</h2>
+      <p class="meta">Foto pública del patrullero de Lucca con rotulado y estética coincidentes con el meme.</p>
+    </div>
+  </section>
+
+  <!-- 5) Captura del auto donde se ve la información del vehículo -->
+  <section class="card">
+    <div class="media">
+      <img class="zoomable" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.2/captura4.jpg" alt="Detalle del vehículo: información visible">
+    </div>
+    <div class="body">
+      <h2><span class="step">5</span> Información del vehículo (detalle)</h2>
+      <p class="meta">
+        Se aprecian datos específicos (modelo <em>Citroën</em>, rotulado, numeración <strong>19</strong> y otros detalles). 
+        Sugerencia: <em>difuminar patentes</em> si aparecen en la imagen al publicar.
+      </p>
+    </div>
+  </section>
+
+  <!-- 6) Video TikTok -->
+  <section class="card grid-1col">
+    <div class="media">
+      <video class="zoomable" src="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.2/video.mp4" controls preload="metadata" poster="https://raw.githubusercontent.com/bargas-lautaro/Bargas-portafolio/main/OSINT/ejemplo.2/meme.jpg"></video>
+    </div>
+    <div class="body">
+      <h2><span class="step">6</span> Video de los cosplayers (TikTok)</h2>
+      <p class="meta">
+        Con la información del vehículo, rastreé a los cosplayers y encontré un video grabado en <strong>Lucca, Italia</strong>.  
+        👉 En los <strong>últimos segundos</strong> se ve un <em>juguete del Pokémon del Equipo Rocket</em>, el mismo que aparece sobre el patrullero en el <strong>meme original</strong>.  
+        Esta coincidencia visual refuerza la autenticidad del caso.
+      </p>
+    </div>
+  </section>
+
+  <!-- Conclusión -->
+  <section class="card grid-1col">
+    <div class="body">
+      <h2><span class="step">Conclusión</span></h2>
+      <ul>
+        <li>Meme + extracción de indicios → hipótesis (Lucca, Italia).</li>
+        <li>Mapas → validación de provincia y país.</li>
+        <li>Fotos del patrullero → coincidencias visuales (Citroën, rotulado, “19”).</li>
+        <li>Video TikTok → confirmación cruzada por el juguete del Equipo Rocket.</li>
+      </ul>
+      <div class="note">Publicación responsable: difuminá patentes/rostros, citá fuentes públicas y evitá datos innecesarios.</div>
+    </div>
+  </section>
+
+</main>
+
+<div id="backdrop" aria-hidden="true"></div>
+
+<footer class="h4bar">
+  <h4>Bargas Nehuen Lautaro</h4>
+  <div id="fecha"></div>
+</footer>
+
+<script>
+// Fecha dd/mm/aaaa
+const f2=n=>n<10?'0'+n:n;const d=new Date();
+document.getElementById('fecha').textContent=`${f2(d.getDate())}/${f2(d.getMonth()+1)}/${d.getFullYear()}`;
+
+// Zoom por click (imágenes y video)
+const body=document.body, backdrop=document.getElementById('backdrop');
+function toggleFull(e){
+  const el=e.currentTarget, full=el.classList.contains('full');
+  if(!full){el.classList.add('full');body.classList.add('no-scroll','show-backdrop');}
+  else{el.classList.remove('full');body.classList.remove('no-scroll','show-backdrop');}
+}
+document.querySelectorAll('.zoomable').forEach(el=>el.addEventListener('click',toggleFull,{passive:true}));
+</script>
+</body>
+</html>
